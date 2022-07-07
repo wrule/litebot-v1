@@ -8,6 +8,7 @@ implements ISpotExecutor {
   public constructor(
     private readonly symbol: string,
     private readonly client: binance,
+    private readonly retries = 5,
   ) {
     this.target_name = this.symbol.split('/')[0].trim();
     this.source_name = this.symbol.split('/')[1].trim();
