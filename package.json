@@ -9,5 +9,8 @@
   },
   "repository": "https://github.com/wrule/litebot.git",
   "license": "MIT",
-  "private": false
+  "private": false,
+  "dependencies": {
+    "ccxt": "^1.90.29"
+  }
 }

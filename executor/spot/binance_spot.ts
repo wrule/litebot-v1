@@ -1,7 +1,6 @@
 import { binance } from 'ccxt';
 import { ISpotExecutor } from '.';
-import fs from 'fs';
-import { ITransaction } from './transaction';
+import { ITransaction } from '../../common/transaction';
 
 export
 class BinanceSpot
