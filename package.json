@@ -11,6 +11,7 @@
   "license": "MIT",
   "private": false,
   "dependencies": {
-    "ccxt": "^1.90.29"
+    "ccxt": "^1.90.29",
+    "tulind": "^0.8.20"
   }
 }
