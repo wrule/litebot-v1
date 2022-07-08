@@ -56,7 +56,7 @@ implements ISpotExecutor {
     price?: number,
   ) {
     let count = this.retries;
-    while (count > 0) {
+    while (count >= 0) {
       try {
         const tn = await this.buy(in_assets, price);
         return tn;
