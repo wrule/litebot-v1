@@ -1,4 +1,4 @@
-import { binance } from 'ccxt';
+import cctx, { binance } from 'ccxt';
 import { ISpotExecutor } from '.';
 import { ITransaction } from '../../common/transaction';
 
@@ -19,11 +19,10 @@ implements ISpotExecutor {
   private source_name!: string;
   private transactions!: ITransaction[];
 
-  public async Buy(
+  private async buy(
     in_assets: number,
     price?: number,
   ) {
-    try {
     const request_time = Number(new Date());
     const order = await this.client.createMarketOrder(
       this.symbol,
@@ -49,10 +48,25 @@ implements ISpotExecutor {
       out_amount: order.amount - (order.fee.currency === this.target_name ? order.fee.cost : 0),
     };
     this.transactions.push(tn);
-    console.log(tn);
     return tn;
-    } catch (e) {
-      console.error(e);
+  }
+
+  public async Buy(
+    in_assets: number,
+    price?: number,
+  ) {
+    let count = this.retries;
+    while (count > 0) {
+      try {
+        const tn = await this.buy(in_assets, price);
+        return tn;
+      } catch (e) {
+        if (e instanceof cctx.NetworkError) {
+          count--;
+        } else {
+          break;
+        }
+      }
     }
     return null;
   }
