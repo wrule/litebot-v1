@@ -1,6 +1,7 @@
 import cctx, { binance } from 'ccxt';
 import { ISpotExecutor } from '.';
 import { ITransaction } from '../../common/transaction';
+import { retryer } from '../../utils/retryer';
 
 export
 class BinanceSpot
@@ -51,56 +52,31 @@ implements ISpotExecutor {
     return tn;
   }
 
-  private async retryer<ReturnType>(
-    func: (...args: any[]) => ReturnType,
-    args: any[],
-    retries: number = 2,
-    retry_rule?: (error: any) => boolean,
-  ) {
-    let count = retries;
-    const errors: any[] = [];
-    while (count >= 0) {
-      try {
-        return await func(...args);
-      } catch (error) {
-        errors.push(error);
-        if (!retry_rule || retry_rule(error)) {
-          count--;
-        } else {
-          break;
-        }
-      }
-    }
-    throw errors;
-  }
-
   public async Buy(
     in_assets: number,
     price?: number,
   ) {
-    let count = this.retries;
-    while (count >= 0) {
-      try {
-        const tn = await this.buy(in_assets, price);
-        return tn;
-      } catch (e) {
-        if (e instanceof cctx.NetworkError) {
-          count--;
-        } else {
-          break;
-        }
-      }
-    }
-    return null;
+    return await retryer(
+      this.buy,
+      [in_assets, price],
+      this.retries,
+      (error) => error instanceof cctx.NetworkError,
+    );
+  }
+
+  public async buy_all(price?: number) {
+    const balance = await this.client.fetchBalance();
+    const free: number = balance[this.source_name].free;
+    return await this.buy(free, price);
   }
 
   public async BuyAll(price?: number) {
-    const balance = await this.client.fetchBalance();
-    const free: number = balance[this.source_name].free;
-    if (free > 0) {
-      return await this.Buy(free, price);
-    }
-    return null;
+    return await retryer(
+      this.buy_all,
+      [price],
+      this.retries,
+      (error) => error instanceof cctx.NetworkError,
+    );
   }
 
   public async Sell(
