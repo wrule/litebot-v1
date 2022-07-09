@@ -4,6 +4,13 @@ import { ISpotExecutor } from '@/executor/spot';
 import { SpotRobot } from '.';
 
 export
+interface IFastTestData
+extends IOHLCV {
+  buy?: boolean;
+  sell?: boolean;
+}
+
+export
 class Turtle
 extends SpotRobot {
   public constructor(
@@ -23,7 +30,7 @@ extends SpotRobot {
     ) + 1;
   }
 
-  private exit_price = -1;
+  private exit_price = -Infinity;
 
   public CheckKLine(
     kline: KLine,
@@ -31,7 +38,7 @@ extends SpotRobot {
     const confirmed_kline = kline.filter((item) => item.confirmed);
 
     const lows = confirmed_kline.map((item) => item.low);
-    this.exit_price = Math.min(...(lows.splice()));
+    // this.exit_price = Math.min(...(lows.splice()));
 
     const closes = confirmed_kline.map((item) => item.close);
     const last = kline[kline.length - 1];
@@ -66,6 +73,16 @@ extends SpotRobot {
   public CheckPrice(
     price: number,
   ) {
+    if (price < this.exit_price) {
+      this.executor.SellAll(price, Number(new Date()));
+    }
+  }
 
+  public CheckFastTest(data: IFastTestData) {
+    if (data.buy) {
+      this.executor.BuyAll(data.close, data.time);
+    } else if (data.sell) {
+      this.executor.SellAll(data.close, data.time);
+    }
   }
 }
