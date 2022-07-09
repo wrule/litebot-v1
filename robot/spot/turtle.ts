@@ -22,6 +22,8 @@ extends SpotRobot {
     super(executor);
   }
 
+  private held = false;
+
   public get KLineReadyLength() {
     return Math.max(
       this.fast_ma,
@@ -30,7 +32,8 @@ extends SpotRobot {
     ) + 1;
   }
 
-  private exit_price = -Infinity;
+  private last_time = -1;
+  private exit_price = -1;
 
   public CheckKLine(
     kline: KLine,
@@ -70,11 +73,12 @@ extends SpotRobot {
     }
   }
 
-  public CheckPrice(
+  public async CheckPrice(
     price: number,
   ) {
-    if (price < this.exit_price) {
-      this.executor.SellAll(price, Number(new Date()));
+    if (this.held && price < this.exit_price) {
+      await this.executor.SellAll(price, Number(new Date()));
+      this.held = false;
     }
   }
 
