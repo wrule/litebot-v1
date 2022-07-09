@@ -23,11 +23,16 @@ extends SpotRobot {
     ) + 1;
   }
 
+  private exit_price = -1;
+
   public CheckKLine(
     kline: KLine,
   ) {
     const confirmed_kline = kline.filter((item) => item.confirmed);
+
     const lows = confirmed_kline.map((item) => item.low);
+    this.exit_price = Math.min(...(lows.splice()));
+
     const closes = confirmed_kline.map((item) => item.close);
     const last = kline[kline.length - 1];
     let fast_line: number[] = [];
