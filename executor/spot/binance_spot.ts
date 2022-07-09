@@ -79,11 +79,10 @@ implements ISpotExecutor {
     );
   }
 
-  public async Sell(
+  public async sell(
     in_assets: number,
     price?: number,
   ) {
-    try {
     const request_time = Number(new Date());
     const order = await this.client.createMarketOrder(
       this.symbol,
@@ -105,20 +104,33 @@ implements ISpotExecutor {
       out_amount: order.cost - (order.fee.currency === this.source_name ? order.fee.cost : 0),
     };
     this.transactions.push(tn);
-    console.log(tn);
     return tn;
-    } catch (e) {
-      console.error(e);
-    }
-    return null;
+  }
+
+  public async Sell(
+    in_assets: number,
+    price?: number,
+  ) {
+    return await retryer(
+      this.sell,
+      [in_assets, price],
+      this.retries,
+      (error) => error instanceof cctx.NetworkError,
+    );
+  }
+
+  public async sell_all(price?: number) {
+    const balance = await this.client.fetchBalance();
+    const free: number = balance[this.target_name].free;
+    return await this.sell(free, price);
   }
 
   public async SellAll(price?: number) {
-    const balance = await this.client.fetchBalance();
-    const free: number = balance[this.target_name].free;
-    if (free > 0) {
-      return await this.Sell(free, price);
-    }
-    return null;
+    return await retryer(
+      this.sell_all,
+      [price],
+      this.retries,
+      (error) => error instanceof cctx.NetworkError,
+    );
   }
 }
