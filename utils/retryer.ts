@@ -7,9 +7,8 @@ interface IErrorDetail {
 }
 
 export
-async function retryer<ArgsType extends unknown[], ReturnType>(
-  func: (...args: ArgsType) => ReturnType,
-  args: ArgsType,
+async function retryer<ReturnType>(
+  func: () => ReturnType,
   retries = 2,
   retry_rule?: (error: any) => boolean,
 ) {
@@ -19,7 +18,7 @@ async function retryer<ArgsType extends unknown[], ReturnType>(
     let call_time = 0;
     try {
       call_time = Number(new Date());
-      return await func(...args);
+      return await func();
     } catch (error) {
       errors.push({
         call_time,
