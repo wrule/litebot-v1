@@ -15,12 +15,10 @@ implements ISpotExecutor {
   ) {
     this.target_name = this.symbol.split('/')[0].trim();
     this.source_name = this.symbol.split('/')[1].trim();
-    this.transactions = [];
   }
 
   private target_name!: string;
   private source_name!: string;
-  private transactions!: ITransaction[];
 
   private async buy(
     in_assets: number,
@@ -51,7 +49,6 @@ implements ISpotExecutor {
       out_amount: order.amount - (order.fee.currency === this.target_name ? order.fee.cost : 0),
     };
     append_list(this.transactions_file, tn);
-    this.transactions.push(tn);
     return tn;
   }
 
