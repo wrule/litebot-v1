@@ -31,3 +31,23 @@ function delete_list<T>(
       .filter((item) => !filter(item)),
   );
 }
+
+export
+function update_list<T>(
+  file: string,
+  filter: (item: T) => boolean,
+  ...items: T[]
+) {
+  const replace_items = items.slice(0);
+  const list = read_list<T>(file);
+  while (true) {
+    const index = list.findIndex((item) => filter(item));
+    const replace_item = replace_items.pop();
+    if (index > -1 && replace_item) {
+      list.splice(index, 1, replace_item);
+    } else {
+      break;
+    }
+  }
+  write_list<T>(file, list);
+}
