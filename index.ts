@@ -15,4 +15,15 @@ async function main() {
   await executor.BuyAll();
 }
 
-main();
+// main();
+
+function test() {
+  try {
+    throw '你好';
+  } catch (e: any) {
+    console.log(e);
+  }
+  console.log(1123);
+}
+
+test();

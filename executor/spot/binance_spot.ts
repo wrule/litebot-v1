@@ -51,6 +51,29 @@ implements ISpotExecutor {
     return tn;
   }
 
+  private async retryer<ReturnType>(
+    func: (...args: any[]) => ReturnType,
+    args: any[],
+    retries: number = 2,
+    retry_rule?: (error: any) => boolean,
+  ) {
+    let count = retries;
+    const errors: any[] = [];
+    while (count >= 0) {
+      try {
+        return await func(...args);
+      } catch (error) {
+        errors.push(error);
+        if (!retry_rule || retry_rule(error)) {
+          count--;
+        } else {
+          break;
+        }
+      }
+    }
+    throw errors;
+  }
+
   public async Buy(
     in_assets: number,
     price?: number,
