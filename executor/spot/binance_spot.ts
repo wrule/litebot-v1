@@ -57,8 +57,9 @@ implements ISpotExecutor {
     price?: number,
   ) {
     return await retryer(
-      this.buy,
-      [in_assets, price],
+      async () => {
+        return await this.buy(in_assets, price);
+      },
       this.retries,
       (error) => error instanceof cctx.NetworkError,
     );
@@ -72,8 +73,9 @@ implements ISpotExecutor {
 
   public async BuyAll(price?: number) {
     return await retryer(
-      this.buy_all,
-      [price],
+      async () => {
+        return await this.buy_all(price);
+      },
       this.retries,
       (error) => error instanceof cctx.NetworkError,
     );
@@ -112,8 +114,9 @@ implements ISpotExecutor {
     price?: number,
   ) {
     return await retryer(
-      this.sell,
-      [in_assets, price],
+      async () => {
+        return await this.sell(in_assets, price);
+      },
       this.retries,
       (error) => error instanceof cctx.NetworkError,
     );
@@ -127,8 +130,9 @@ implements ISpotExecutor {
 
   public async SellAll(price?: number) {
     return await retryer(
-      this.sell_all,
-      [price],
+      async () => {
+        return await this.sell_all(price);
+      },
       this.retries,
       (error) => error instanceof cctx.NetworkError,
     );

@@ -15,7 +15,7 @@ async function main() {
   console.log('客户端加载完成');
   const executor = new BinanceSpot('LINK/USDT', client, 3, 'tn_log.json');
   try {
-    await executor.BuyAll();
+    await executor.SellAll();
   } catch (e) {
     console.log(e);
   }
