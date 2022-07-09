@@ -2,7 +2,7 @@ import { binance } from 'ccxt';
 import secret from './.secret.json';
 import { BinanceSpot } from './executor/spot/binance_spot';
 import { retryer } from './utils/retryer';
-import { write_list, read_list, append_list } from './utils/json_list';
+import { write_list, read_list, append_list, delete_list } from './utils/json_list';
 
 async function main() {
   console.log('加载客户端...');
@@ -21,12 +21,9 @@ async function main() {
 
 async function test() {
 
-  write_list('a.json', [
-    { name: '阿萨德', },
-    { name: '士大夫', }
-  ]);
+  // append_list('a.json', { name: '大傻逼', })
 
-  append_list('a.json', { name: '似的是', })
+  delete_list('a.json', (item: any) => item.name === '似的是');
 
   const list = read_list('a.json');
   console.log(list);
