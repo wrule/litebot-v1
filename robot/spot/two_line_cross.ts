@@ -1,6 +1,6 @@
-import { IOHLCV } from '../../common/kline';
-import { SpotRobot } from '.';
 import moment from 'moment';
+import { IOHLCV } from '@/common/kline';
+import { SpotRobot } from '.';
 
 export
 class TwoLineCross
