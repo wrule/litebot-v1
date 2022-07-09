@@ -51,3 +51,11 @@ function update_list<T>(
   }
   write_list<T>(file, list);
 }
+
+export
+function query_list<T>(
+  file: string,
+  filter: (item: T) => boolean,
+) {
+  return read_list<T>(file).filter((item) => filter(item));
+}
