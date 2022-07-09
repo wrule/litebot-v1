@@ -1,6 +1,7 @@
 import cctx, { binance } from 'ccxt';
 import { ISpotExecutor } from '.';
 import { ITransaction } from '../../common/transaction';
+import { append_list } from '../../utils/json_list';
 import { retryer } from '../../utils/retryer';
 
 export
@@ -10,6 +11,7 @@ implements ISpotExecutor {
     private readonly symbol: string,
     private readonly client: binance,
     private readonly retries = 5,
+    private readonly transactions_file: string,
   ) {
     this.target_name = this.symbol.split('/')[0].trim();
     this.source_name = this.symbol.split('/')[1].trim();
@@ -48,6 +50,7 @@ implements ISpotExecutor {
       out_name: this.target_name,
       out_amount: order.amount - (order.fee.currency === this.target_name ? order.fee.cost : 0),
     };
+    append_list(this.transactions_file, tn);
     this.transactions.push(tn);
     return tn;
   }
@@ -103,7 +106,7 @@ implements ISpotExecutor {
       out_name: this.source_name,
       out_amount: order.cost - (order.fee.currency === this.source_name ? order.fee.cost : 0),
     };
-    this.transactions.push(tn);
+    append_list(this.transactions_file, tn);
     return tn;
   }
 
