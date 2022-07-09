@@ -13,6 +13,7 @@
   "dependencies": {
     "@types/node": "^18.0.3",
     "ccxt": "^1.90.29",
+    "moment": "^2.29.4",
     "tulind": "^0.8.20"
   }
 }
