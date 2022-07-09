@@ -11,6 +11,7 @@
   "license": "MIT",
   "private": false,
   "dependencies": {
+    "@types/node": "^18.0.3",
     "ccxt": "^1.90.29",
     "tulind": "^0.8.20"
   }
