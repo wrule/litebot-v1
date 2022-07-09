@@ -20,7 +20,7 @@ implements ISpotExecutor {
   private target_name!: string;
   private source_name!: string;
 
-  private async buy(
+  public async buy(
     in_assets: number,
     price?: number,
   ) {

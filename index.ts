@@ -14,32 +14,7 @@ async function main() {
   await client.loadMarkets();
   console.log('客户端加载完成');
   const executor = new BinanceSpot('LINK/USDT', client, 3, 'tn_log.json');
-  await executor.BuyAll();
+  await executor.buy(11);
 }
 
-// main();
-
-async function test() {
-
-  // append_list('a.json', { name: '大傻逼', })
-
-  delete_list('a.json', (item: any) => item.name === '似的是');
-
-  const list = read_list('a.json');
-  console.log(list);
-
-  // function func(a: number, b: string, c: string) {
-  //   console.log(`调用：${a} + ${b} = ${a + b}`);
-  //   throw '错误';
-  //   return a + b;
-  // }
-
-  // try {
-  //   const result = await retryer(func, [1, 'string', 'dd'], 2);
-  //   console.log(`结果：${result}`);
-  // } catch (error) {
-  //   console.log(error);
-  // }
-}
-
-test();
+main();
