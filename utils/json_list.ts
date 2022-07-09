@@ -19,3 +19,15 @@ export
 function append_list<T>(file: string, item: T) {
   fs.appendFileSync(file, JSON.stringify(item, null, 2) + ',\n', 'utf-8');
 }
+
+export
+function delete_list<T>(
+  file: string,
+  filter: (item: T) => boolean,
+) {
+  write_list<T>(
+    file,
+    read_list<T>(file)
+      .filter((item) => !filter(item)),
+  );
+}
