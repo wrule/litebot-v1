@@ -3,7 +3,7 @@ import { ISpotExecutor } from '@/executor/spot';
 import { SpotRobot } from '.';
 
 export
-class Turtle
+class TwoMaCross
 extends SpotRobot {
   public constructor(
     protected readonly executor: ISpotExecutor,
