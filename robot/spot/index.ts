@@ -8,11 +8,30 @@ abstract class SpotRobot {
     protected executor: ISpotExecutor,
   ) { }
 
-  public abstract CheckKLine<T extends KLine>(kline: T): void;
+  public abstract KLineReadyLength: number;
+
+  protected kline_last_time = -1;
+
+  public CheckKLine<T extends KLine>(kline: T) {
+    if (kline.length >= this.KLineReadyLength) {
+      const last = kline[kline.length - 1];
+      if (last.time > this.kline_last_time) {
+        this.kline_last_time = last.time;
+        const confirmed_kline = kline.filter((item) => item.confirmed);
+        this.checkKLine(confirmed_kline, last, kline);
+      }
+    }
+  }
+
+  public abstract checkKLine<T extends IOHLCV>(
+    confirmed_kline: T[],
+    last: T,
+    kline: T[],
+  ): void;
 
   // public abstract CheckLastKLine<T extends IOHLCV>(data: T): void;
 
-  public abstract CheckFastTest<T extends IOHLCV>(data: T): void;
+  // public abstract CheckFastTest<T extends IOHLCV>(data: T): void;
 
   public Buy(
     in_asset: number,
