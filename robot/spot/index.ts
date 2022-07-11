@@ -1,4 +1,3 @@
-const tulind = require('tulind');
 import { IOHLCV, KLine } from '@/common/kline';
 import { ISpotExecutor } from '../../executor/spot';
 
@@ -79,20 +78,5 @@ abstract class SpotRobot {
     const fast_last = fast_line[fast_line.length - 1];
     const slow_last = slow_line[slow_line.length - 1];
     return (fast_prev >= slow_prev) && (fast_last < slow_last);
-  }
-
-  protected sma(closes: number[], size: number) {
-    let result: number[] = [];
-    tulind.indicators.sma.indicator(
-      [closes],
-      [size],
-      (error: any, data: any) => {
-        if (error) {
-          throw error;
-        }
-        result = data[0];
-      },
-    );
-    return result;
   }
 }

@@ -22,13 +22,13 @@ extends SpotRobot {
     last: IOHLCV,
     kline: KLine,
   ) {
-    const closes = confirmed_kline.map((item) => item.close);
-    const fast_line = this.sma(closes, this.fast_ma);
-    const slow_line = this.sma(closes, this.slow_ma);
-    if (this.gold_cross(fast_line, slow_line)) {
-      this.BuyAll(last.close, Number(new Date()));
-    } else if (this.dead_cross(fast_line, slow_line)) {
-      this.SellAll(last.close, Number(new Date()));
-    }
+    // const closes = confirmed_kline.map((item) => item.close);
+    // const fast_line = this.sma(closes, this.fast_ma);
+    // const slow_line = this.sma(closes, this.slow_ma);
+    // if (this.gold_cross(fast_line, slow_line)) {
+    //   this.BuyAll(last.close, Number(new Date()));
+    // } else if (this.dead_cross(fast_line, slow_line)) {
+    //   this.SellAll(last.close, Number(new Date()));
+    // }
   }
 }
