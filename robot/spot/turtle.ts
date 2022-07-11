@@ -38,38 +38,21 @@ extends SpotRobot {
   public CheckKLine(
     kline: KLine,
   ) {
-    const confirmed_kline = kline.filter((item) => item.confirmed);
+    if (kline.length >= this.KLineReadyLength) {
+      const last = kline[kline.length - 1];
+      if (last.time > this.last_time) {
+        this.last_time = last.time;
+        const confirmed_kline = kline.filter((item) => item.confirmed);
+        const lows = confirmed_kline.map((item) => item.low);
 
-    const lows = confirmed_kline.map((item) => item.low);
-    // this.exit_price = Math.min(...(lows.splice()));
-
-    const closes = confirmed_kline.map((item) => item.close);
-    const last = kline[kline.length - 1];
-    let fast_line: number[] = [];
-    let slow_line: number[] = [];
-    tulind.indicators.sma.indicator(
-      [closes],
-      [this.fast_ma],
-      (err: any, result: any) => {
-        fast_line = result[0];
-      },
-    );
-    tulind.indicators.sma.indicator(
-      [closes],
-      [this.slow_ma],
-      (err: any, result: any) => {
-        slow_line = result[0];
-      },
-    );
-    const fast_prev = fast_line[fast_line.length - 2];
-    const slow_prev = slow_line[slow_line.length - 2];
-    const fast_last = fast_line[fast_line.length - 1];
-    const slow_last = slow_line[slow_line.length - 1];
-    if (
-      (fast_prev <= slow_prev) &&
-      (fast_last > slow_last)
-    ) {
-      this.executor.BuyAll(last.close, Number(new Date()));
+        // 金叉判断
+        const closes = confirmed_kline.map((item) => item.close);
+        const fast_line = this.sma(closes, this.fast_ma);
+        const slow_line = this.sma(closes, this.slow_ma);
+        if (this.gold_cross(fast_line, slow_line)) {
+          console.log('买信号');
+        }
+      }
     }
   }
 
