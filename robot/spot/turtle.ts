@@ -17,23 +17,18 @@ extends SpotRobot {
     protected readonly executor: ISpotExecutor,
     private readonly fast_ma: number,
     private readonly slow_ma: number,
-    private readonly exit_candle_number: number,
   ) {
     super(executor);
   }
-
-  private held = false;
 
   public get KLineReadyLength() {
     return Math.max(
       this.fast_ma,
       this.slow_ma,
-      this.exit_candle_number,
     ) + 1;
   }
 
   private last_time = -1;
-  private exit_price = -1;
 
   public CheckKLine(
     kline: KLine,
@@ -42,26 +37,17 @@ extends SpotRobot {
       const last = kline[kline.length - 1];
       if (last.time > this.last_time) {
         this.last_time = last.time;
+        // 判断
         const confirmed_kline = kline.filter((item) => item.confirmed);
-        const lows = confirmed_kline.map((item) => item.low);
-
-        // 金叉判断
         const closes = confirmed_kline.map((item) => item.close);
         const fast_line = this.sma(closes, this.fast_ma);
         const slow_line = this.sma(closes, this.slow_ma);
         if (this.gold_cross(fast_line, slow_line)) {
           console.log('买信号');
+        } else if (this.dead_cross(fast_line, slow_line)) {
+          console.log('卖信号');
         }
       }
-    }
-  }
-
-  public async CheckPrice(
-    price: number,
-  ) {
-    if (this.held && price < this.exit_price) {
-      await this.executor.SellAll(price, Number(new Date()));
-      this.held = false;
     }
   }
 
