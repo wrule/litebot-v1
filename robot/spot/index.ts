@@ -2,7 +2,7 @@ import { IOHLCV, KLine } from '@/common/kline';
 import { ISpotExecutor } from '../../executor/spot';
 
 export
-abstract class SpotRobot {
+abstract class SpotRobot<TestData extends IOHLCV> {
   public constructor(
     protected executor: ISpotExecutor,
   ) { }
@@ -27,6 +27,29 @@ abstract class SpotRobot {
     last: T,
     kline: T[],
   ): void;
+
+
+  private testKLine: TestData[] = [];
+  private current = 0;
+
+  protected last(offset = 0) {
+    const dstIndex = this.current - offset;
+    return this.testKLine[dstIndex];
+  }
+
+  protected prev() {
+    return this.last(1);
+  }
+
+  public BackTesting(kline: TestData[]) {
+    this.testKLine = kline;
+    for (let i = 0; i < kline.length; ++i) {
+      this.current = i;
+      this.checkBackTesting(this.last());
+    }
+  }
+
+  protected abstract checkBackTesting(data: TestData): void;
 
   public Buy(
     in_asset: number,

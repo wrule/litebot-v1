@@ -5,8 +5,15 @@ import { SpotRobot } from '.';
 import moment from 'moment';
 
 export
+interface ITestData
+extends IOHLCV {
+  buy?: number;
+  sell?: number;
+}
+
+export
 class TwoMaCross
-extends SpotRobot {
+extends SpotRobot<ITestData> {
   public constructor(
     protected readonly executor: ISpotExecutor,
     private readonly fast_ma: number,
@@ -55,6 +62,14 @@ extends SpotRobot {
       this.BuyAll(last.close, Number(new Date()));
     } else if (this.dead_cross(fast_line, slow_line)) {
       this.SellAll(last.close, Number(new Date()));
+    }
+  }
+
+  protected checkBackTesting(data: ITestData) {
+    if (data.buy) {
+      this.BuyAll(data.close, data.time);
+    } else if (data.sell) {
+      this.SellAll(data.close, data.time);
     }
   }
 }
