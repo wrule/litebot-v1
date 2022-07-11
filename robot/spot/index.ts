@@ -1,4 +1,4 @@
-import { IOHLCV } from '@/common/kline';
+import { IOHLCV, KLine } from '@/common/kline';
 import { ISpotExecutor } from '../../executor/spot';
 
 export
@@ -6,6 +6,12 @@ abstract class SpotRobot {
   public constructor(
     protected executor: ISpotExecutor,
   ) { }
+
+  public abstract CheckKLine<T extends KLine>(kline: T): void;
+
+  public abstract CheckLastKLine<T extends IOHLCV>(data: T): void;
+
+  public abstract CheckFastTest<T extends IOHLCV>(data: T): void;
 
   public Buy(
     in_asset: number,
@@ -36,6 +42,4 @@ abstract class SpotRobot {
   ) {
     return this.executor.SellAll(price, time);
   }
-
-  public abstract CheckFastTest<T extends IOHLCV>(data: T): void;
 }
