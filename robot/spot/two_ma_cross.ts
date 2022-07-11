@@ -34,7 +34,7 @@ extends SpotRobot {
     return Math.max(this.fast_ma, this.slow_ma) + 2;
   }
 
-  public checkKLine(
+  protected checkKLine(
     confirmed_kline: KLine,
     last: IOHLCV,
     kline: KLine,

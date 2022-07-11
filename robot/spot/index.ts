@@ -22,7 +22,7 @@ abstract class SpotRobot {
     }
   }
 
-  public abstract checkKLine<T extends IOHLCV>(
+  protected abstract checkKLine<T extends IOHLCV>(
     confirmed_kline: T[],
     last: T,
     kline: T[],

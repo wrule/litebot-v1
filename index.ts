@@ -17,16 +17,15 @@ async function main() {
   console.log('客户端加载完成');
   const executor = new BinanceSpot('BTC/USDT', client, 3, 'tn_log.json');
   const robot = new TwoMaCross(executor, 10, 30);
-  await robot.SellAll();
-  // setInterval(async () => {
-  //   try {
-  //     const list = await client.fetchOHLCV('BTC/USDT', '1m', undefined, robot.KLineReadyLength);
-  //     const kline = ArrayToKLine(list);
-  //     robot.CheckKLine(kline);
-  //   } catch (e) {
-  //     console.error(e);
-  //   }
-  // }, 1000);
+  setInterval(async () => {
+    try {
+      const list = await client.fetchOHLCV('BTC/USDT', '1m', undefined, robot.KLineReadyLength);
+      const kline = ArrayToKLine(list);
+      robot.CheckKLine(kline);
+    } catch (e) {
+      console.error(e);
+    }
+  }, 1000);
 }
 
 main();
