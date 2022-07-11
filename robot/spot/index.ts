@@ -1,6 +1,6 @@
+const tulind = require('tulind');
 import { IOHLCV, KLine } from '@/common/kline';
 import { ISpotExecutor } from '../../executor/spot';
-const tulind = require('tulind');
 
 export
 abstract class SpotRobot {
@@ -8,9 +8,9 @@ abstract class SpotRobot {
     protected executor: ISpotExecutor,
   ) { }
 
-  public abstract KLineReadyLength: number;
+  private kline_last_time = -1;
 
-  protected kline_last_time = -1;
+  public abstract KLineReadyLength: number;
 
   public CheckKLine<T extends KLine>(kline: T) {
     if (kline.length >= this.KLineReadyLength) {
@@ -28,10 +28,6 @@ abstract class SpotRobot {
     last: T,
     kline: T[],
   ): void;
-
-  // public abstract CheckLastKLine<T extends IOHLCV>(data: T): void;
-
-  // public abstract CheckFastTest<T extends IOHLCV>(data: T): void;
 
   public Buy(
     in_asset: number,
