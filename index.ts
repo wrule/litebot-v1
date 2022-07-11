@@ -21,7 +21,6 @@ async function main() {
     try {
       const list = await client.fetchOHLCV('BTC/USDT', '1m', undefined, robot.KLineReadyLength);
       const kline = ArrayToKLine(list);
-      console.log(new Date(), kline.length);
       robot.CheckKLine(kline);
     } catch (e) {
       console.error(e);
