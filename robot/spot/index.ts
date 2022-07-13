@@ -1,11 +1,19 @@
 import { IOHLCV, KLine } from '@/common/kline';
+import { INotifier } from '@/notifier';
 import { ISpotExecutor } from '../../executor/spot';
 
 export
 abstract class SpotRobot<TestData extends IOHLCV> {
   public constructor(
     protected executor: ISpotExecutor,
+    protected notifier?: INotifier,
   ) { }
+
+  public async SendMessage(message: string) {
+    if (this.notifier) {
+      await this.notifier.SendMessage(message);
+    }
+  }
 
   private kline_last_time = -1;
 

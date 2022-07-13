@@ -60,8 +60,10 @@ extends SpotRobot<ITestData> {
     );
     if (this.gold_cross(fast_line, slow_line)) {
       this.BuyAll(last.close, Number(new Date()));
+      this.SendMessage('买了');
     } else if (this.dead_cross(fast_line, slow_line)) {
       this.SellAll(last.close, Number(new Date()));
+      this.SendMessage('卖了');
     }
   }
 
