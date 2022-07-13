@@ -3,6 +3,7 @@ import { IOHLCV, KLine } from '@/common/kline';
 import { ISpotExecutor } from '@/executor/spot';
 import { SpotRobot } from '.';
 import moment from 'moment';
+import { INotifier } from '@/notifier';
 
 export
 interface ITestData
@@ -18,8 +19,9 @@ extends SpotRobot<ITestData> {
     protected readonly executor: ISpotExecutor,
     private readonly fast_ma: number,
     private readonly slow_ma: number,
+    notifier?: INotifier,
   ) {
-    super(executor);
+    super(executor, notifier);
   }
 
   private sma(closes: number[], size: number) {
