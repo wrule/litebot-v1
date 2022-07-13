@@ -6,6 +6,7 @@ export
 interface IDingTalkConfig {
   access_token: string;
   secret: string;
+  at_mobiles?: string[];
 }
 
 export
@@ -30,6 +31,10 @@ implements INotifier {
         msgtype: 'text',
         text: {
           content: message,
+        },
+        at: {
+          atMobiles: this.config.at_mobiles,
+          isAtAll: false,
         },
       },
       {

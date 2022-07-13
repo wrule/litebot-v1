@@ -17,12 +17,9 @@ async function main() {
   const notifier = new DingTalk({
     access_token: secret.DING2,
     secret: secret.DING,
+    at_mobiles: secret.at_mobiles,
   });
-  notifier.SendMessage(`
-千古风流人物
-故垒西边
-人倒是三国周郎赤壁
-  `.trim());
+  notifier.SendMessage(`老婆好`.trim());
 
   // console.log('加载客户端...');
   // const client = new binance({
