@@ -1,23 +1,13 @@
 import { binance } from 'ccxt';
 import secret from './.secret.json';
-import { BinanceSpot } from './executor/spot/binance_spot';
-import { retryer } from './utils/retryer';
-import { write_list, read_list, append_list, delete_list } from './utils/json_list';
-import { TwoMaCross } from './robot/spot/two_ma_cross';
-import { ArrayToKLine } from './common/kline';
-import axios from 'axios';
-import HMACSHA256 from 'crypto-js/hmac-sha256';
-import BASE64URL from 'crypto-js/enc-base64url';
-import crypto from 'crypto';
+import dingtalk from './.dingtalk.json';
 import { DingTalk } from './notifier/ding_talk';
 
 async function main() {
-  console.log(1234);
-
   const notifier = new DingTalk({
-    access_token: secret.DING2,
-    secret: secret.DING,
-    at_mobiles: secret.at_mobiles,
+    access_token: dingtalk.ACCESS_TOKEN,
+    secret: dingtalk.SECRET,
+    at_mobiles: dingtalk.AT_MOBILES,
   });
   notifier.SendMessage(`测试`.trim());
 
