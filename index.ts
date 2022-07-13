@@ -19,7 +19,7 @@ async function main() {
     secret: secret.DING,
     at_mobiles: secret.at_mobiles,
   });
-  notifier.SendMessage(`老婆好`.trim());
+  notifier.SendMessage(`测试`.trim());
 
   // console.log('加载客户端...');
   // const client = new binance({
