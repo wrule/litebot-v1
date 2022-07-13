@@ -43,7 +43,7 @@ extends SpotRobot<ITestData> {
     return Math.max(this.fast_ma, this.slow_ma) + 2;
   }
 
-  protected checkKLine(
+  protected async checkKLine(
     confirmed_kline: KLine,
     last: IOHLCV,
     kline: KLine,
@@ -61,11 +61,35 @@ extends SpotRobot<ITestData> {
       '现均线差', fast_last - slow_last,
     );
     if (this.gold_cross(fast_line, slow_line)) {
-      this.BuyAll(last.close, Number(new Date()));
-      this.SendMessage('买了');
+      const tn = await this.BuyAll(last.close, Number(new Date()));
+      if (tn) {
+        this.SendMessage(`[买] ${
+          moment(new Date(tn.transaction_time)).format('HH:mm:ss')
+        }: 使用 ${
+          tn.in_amount
+        } 个 ${
+          tn.in_name
+        } 买了 ${
+          tn.out_amount
+        } 个 ${
+          tn.out_name
+        }`);
+      }
     } else if (this.dead_cross(fast_line, slow_line)) {
-      this.SellAll(last.close, Number(new Date()));
-      this.SendMessage('卖了');
+      const tn = await this.SellAll(last.close, Number(new Date()));
+      if (tn) {
+        this.SendMessage(`[卖] ${
+          moment(new Date(tn.transaction_time)).format('HH:mm:ss')
+        }: 使用 ${
+          tn.in_amount
+        } 个 ${
+          tn.in_name
+        } 卖了 ${
+          tn.out_amount
+        } 个 ${
+          tn.out_name
+        }`);
+      }
     }
   }
 
