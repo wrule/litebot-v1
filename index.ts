@@ -15,16 +15,16 @@ async function main() {
   });
   await client.loadMarkets();
   console.log('客户端加载完成');
-  const executor = new BinanceSpot('BTC/USDT', client, 3, 'tn_log.json');
+  const executor = new BinanceSpot('ETH/USDT', client, 3, 'tn_log.json');
   const notifier = new DingTalk({
     access_token: dingtalk.ACCESS_TOKEN,
     secret: dingtalk.SECRET,
     at_mobiles: dingtalk.AT_MOBILES,
   });
-  const robot = new TwoMaCross(executor, 10, 30, notifier);
+  const robot = new TwoMaCross(executor, 11, 21, notifier);
   setInterval(async () => {
     try {
-      const list = await client.fetchOHLCV('BTC/USDT', '1m', undefined, robot.KLineReadyLength);
+      const list = await client.fetchOHLCV('ETH/USDT', '30m', undefined, robot.KLineReadyLength);
       const kline = ArrayToKLine(list);
       robot.CheckKLine(kline);
     } catch (e) {

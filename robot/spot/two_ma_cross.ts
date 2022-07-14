@@ -69,9 +69,9 @@ extends SpotRobot<IParams, ITestData> {
     if (this.gold_cross(fast_line, slow_line)) {
       const tn = await this.BuyAll(last.close, Number(new Date()));
       if (tn) {
-        this.SendMessage(`[买] ${
+        this.SendMessage(`[买 价格 ${tn.price}] ${
           moment(new Date(tn.transaction_time)).format('HH:mm:ss')
-        }: 使用 ${
+        }:\n使用 ${
           tn.in_amount
         } 个 ${
           tn.in_name
@@ -84,9 +84,9 @@ extends SpotRobot<IParams, ITestData> {
     } else if (this.dead_cross(fast_line, slow_line)) {
       const tn = await this.SellAll(last.close, Number(new Date()));
       if (tn) {
-        this.SendMessage(`[卖] ${
+        this.SendMessage(`[卖 价格 ${tn.price}] ${
           moment(new Date(tn.transaction_time)).format('HH:mm:ss')
-        }: 使用 ${
+        }:\n使用 ${
           tn.in_amount
         } 个 ${
           tn.in_name
