@@ -14,8 +14,8 @@ interface IParams {
 export
 interface ITestData
 extends IOHLCV {
-  buy?: number;
-  sell?: number;
+  buy?: boolean;
+  sell?: boolean;
 }
 
 export
@@ -66,7 +66,7 @@ extends SpotRobot<IParams, ITestData> {
       '前均线差', fast_prev - slow_prev,
       '现均线差', fast_last - slow_last,
     );
-    if (this.gold_cross(fast_line, slow_line)) {
+    if (this.gold_cross_line(fast_line, slow_line)) {
       const tn = await this.BuyAll(last.close, Number(new Date()));
       if (tn) {
         this.SendMessage(`[买 价格 ${tn.price}] ${
@@ -81,7 +81,7 @@ extends SpotRobot<IParams, ITestData> {
           tn.out_name
         }`);
       }
-    } else if (this.dead_cross(fast_line, slow_line)) {
+    } else if (this.dead_cross_line(fast_line, slow_line)) {
       const tn = await this.SellAll(last.close, Number(new Date()));
       if (tn) {
         this.SendMessage(`[卖 价格 ${tn.price}] ${
@@ -114,16 +114,10 @@ extends SpotRobot<IParams, ITestData> {
         const slow_last = slow_line[index];
         const fast_prev = fast_line[index - 1];
         const slow_prev = slow_line[index - 1];
-        if (
-          fast_prev <= slow_prev &&
-          fast_last > slow_last
-        ) {
-          result.buy = 1;
-        } else if (
-          fast_prev >= slow_prev &&
-          fast_last < slow_last
-        ) {
-          result.sell = 1;
+        if (this.gold_cross(fast_prev, slow_prev, fast_last, slow_last)) {
+          result.buy = true;
+        } else if (this.dead_cross(fast_prev, slow_prev, fast_last, slow_last)) {
+          result.sell = true;
         }
       }
       return result;
