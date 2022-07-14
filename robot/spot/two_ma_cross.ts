@@ -6,6 +6,12 @@ import moment from 'moment';
 import { INotifier } from '@/notifier';
 
 export
+interface IParams {
+  fast_ma: number;
+  slow_ma: number;
+}
+
+export
 interface ITestData
 extends IOHLCV {
   buy?: number;
@@ -14,7 +20,7 @@ extends IOHLCV {
 
 export
 class TwoMaCross
-extends SpotRobot<ITestData> {
+extends SpotRobot<IParams, ITestData> {
   public constructor(
     protected readonly executor: ISpotExecutor,
     private readonly fast_ma: number,
@@ -91,6 +97,39 @@ extends SpotRobot<ITestData> {
         }`);
       }
     }
+  }
+
+  protected generateTestData(
+    params: IParams,
+    kline: KLine,
+  ): ITestData[] {
+    const closes = kline.map((item) => item.close);
+    const fast_line = Array(params.fast_ma - 1).fill(null)
+      .concat(this.sma(closes, params.fast_ma));
+    const slow_line = Array(params.slow_ma - 1).fill(null)
+      .concat(this.sma(closes, params.slow_ma));
+    const effective_index = Math.max(params.fast_ma, params.slow_ma);
+    return kline.map((item, index) => {
+      const result: ITestData = { ...item };
+      if (index >= effective_index) {
+        const fast_last = fast_line[index];
+        const slow_last = slow_line[index];
+        const fast_prev = fast_line[index - 1];
+        const slow_prev = slow_line[index - 1];
+        if (
+          fast_prev <= slow_prev &&
+          fast_last > slow_last
+        ) {
+          result.buy = 1;
+        } else if (
+          fast_prev >= slow_prev &&
+          fast_last < slow_last
+        ) {
+          result.sell = 1;
+        }
+      }
+      return result;
+    });
   }
 
   protected checkTestData(data: ITestData) {

@@ -3,7 +3,10 @@ import { INotifier } from '@/notifier';
 import { ISpotExecutor } from '../../executor/spot';
 
 export
-abstract class SpotRobot<TestData extends IOHLCV> {
+abstract class SpotRobot<
+  Params,
+  TestData extends IOHLCV
+> {
   public constructor(
     protected executor: ISpotExecutor,
     protected notifier?: INotifier,
@@ -75,6 +78,15 @@ abstract class SpotRobot<TestData extends IOHLCV> {
    * @param data 测试数据
    */
   protected abstract checkTestData(data: TestData): void;
+
+  /**
+   * 生成测试数据
+   * @param kline 输入历史数据
+   */
+  protected abstract generateTestData<InData extends IOHLCV>(
+    params: Params,
+    kline: InData[],
+  ): TestData[];
 
   /**
    * 回测
