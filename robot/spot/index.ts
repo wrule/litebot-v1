@@ -36,28 +36,58 @@ abstract class SpotRobot<TestData extends IOHLCV> {
     kline: T[],
   ): void;
 
-
+  //#region 回测逻辑
+  /**
+   * 用于回测的历史数据
+   */
   private testKLine: TestData[] = [];
-  private current = 0;
+  /**
+   * 历史数据当前索引
+   */
+  private currentIndex = 0;
 
+  /**
+   * 回溯获取测试数据
+   * @param offset 偏移量
+   * @returns 测试数据
+   */
   protected last(offset = 0) {
-    const dstIndex = this.current - offset;
+    if (offset < 0) {
+      throw 'offset必须大于等于0';
+    }
+    const dstIndex = this.currentIndex - offset;
+    if (dstIndex < 0) {
+      throw 'dstIndex必须大于等于0';
+    }
     return this.testKLine[dstIndex];
   }
 
+  /**
+   * 上一个测试数据
+   * @returns 测试数据
+   */
   protected prev() {
     return this.last(1);
   }
 
+  /**
+   * 检查测试数据
+   * @param data 测试数据
+   */
+  protected abstract checkTestData(data: TestData): void;
+
+  /**
+   * 回测
+   * @param kline 历史数据
+   */
   public BackTesting(kline: TestData[]) {
     this.testKLine = kline;
-    for (let i = 0; i < kline.length; ++i) {
-      this.current = i;
-      this.checkBackTesting(this.last());
+    for (let i = 0; i < this.testKLine.length; ++i) {
+      this.currentIndex = i;
+      this.checkTestData(this.last());
     }
   }
-
-  protected abstract checkBackTesting(data: TestData): void;
+  //#endregion
 
   public Buy(
     in_asset: number,

@@ -93,7 +93,7 @@ extends SpotRobot<ITestData> {
     }
   }
 
-  protected checkBackTesting(data: ITestData) {
+  protected checkTestData(data: ITestData) {
     if (data.buy) {
       this.BuyAll(data.close, data.time);
     } else if (data.sell) {
