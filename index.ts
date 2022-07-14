@@ -22,6 +22,10 @@ async function main() {
     at_mobiles: dingtalk.AT_MOBILES,
   });
   const robot = new TwoMaCross(executor, 11, 21, notifier);
+
+  console.log(robot.sma([1, 2, 3], 3));
+
+  return;
   setInterval(async () => {
     try {
       const list = await client.fetchOHLCV('ETH/USDT', '30m', undefined, robot.KLineReadyLength);

@@ -30,7 +30,7 @@ extends SpotRobot<IParams, ITestData> {
     super(executor, notifier);
   }
 
-  private sma(closes: number[], size: number) {
+  public sma(closes: number[], size: number) {
     let result: number[] = [];
     tulind.indicators.sma.indicator(
       [closes],
@@ -39,7 +39,7 @@ extends SpotRobot<IParams, ITestData> {
         if (error) {
           throw error;
         }
-        result = data[0];
+        result = Array(size - 1).fill(null).concat(data[0]);
       },
     );
     return result;
@@ -104,10 +104,8 @@ extends SpotRobot<IParams, ITestData> {
     kline: KLine,
   ): ITestData[] {
     const closes = kline.map((item) => item.close);
-    const fast_line = Array(params.fast_ma - 1).fill(null)
-      .concat(this.sma(closes, params.fast_ma));
-    const slow_line = Array(params.slow_ma - 1).fill(null)
-      .concat(this.sma(closes, params.slow_ma));
+    const fast_line = this.sma(closes, params.fast_ma);
+    const slow_line = this.sma(closes, params.slow_ma);
     const effective_index = Math.max(params.fast_ma, params.slow_ma);
     return kline.map((item, index) => {
       const result: ITestData = { ...item };
