@@ -5,7 +5,8 @@ import { ISpotExecutor } from '../../executor/spot';
 export
 abstract class SpotRobot<
   Params,
-  TestData extends IOHLCV
+  RealData extends IOHLCV,
+  TestData extends IOHLCV,
 > {
   public constructor(
     protected executor: ISpotExecutor,
@@ -131,6 +132,7 @@ abstract class SpotRobot<
     return this.executor.SellAll(price, time);
   }
 
+  //#region 工具方法
   protected gold_cross(
     fast_prev: number,
     slow_prev: number,
@@ -170,4 +172,5 @@ abstract class SpotRobot<
     const slow_last = slow_line[slow_line.length - 1];
     return this.dead_cross(fast_prev, slow_prev, fast_last, slow_last);
   }
+  //#endregion
 }
