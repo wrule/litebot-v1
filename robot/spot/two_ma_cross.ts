@@ -49,14 +49,14 @@ extends SpotRobot<IParams, IOHLCV, ITestData> {
     return Math.max(this.params.fast_ma, this.params.slow_ma) + 2;
   }
 
-  private message(tn: ITransaction) {
+  private message(tn: ITransaction, prev_diff: number, last_diff: number) {
     this.SendMessage(`[${
       moment(new Date(tn.transaction_time)).format('HH:mm:ss')
     }  ${
       { 'buy': '买', 'sell': '卖' }[tn.side as string]
     }  ${
       `${tn.in_amount}${tn.in_name} =(${tn.price})=> ${tn.out_amount}${tn.out_name}`
-    }]`);
+    }]\n前差: ${prev_diff}  现差: ${last_diff}\n走单耗时: ${(tn.transaction_time - tn.request_time) / 1000}秒`);
   }
 
   protected async checkKLine(
