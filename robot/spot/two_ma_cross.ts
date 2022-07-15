@@ -20,7 +20,7 @@ extends IOHLCV {
 
 export
 class TwoMaCross
-extends SpotRobot<IParams, ITestData> {
+extends SpotRobot<IParams, IOHLCV, ITestData> {
   public constructor(
     protected readonly executor: ISpotExecutor,
     private readonly fast_ma: number,
