@@ -19,11 +19,12 @@ abstract class SpotRobot<
     }
   }
 
+  //#region 实盘运行
   private kline_last_time = -1;
 
   public abstract KLineReadyLength: number;
 
-  public CheckKLine<T extends KLine>(kline: T) {
+  public CheckKLine(kline: RealData[]) {
     if (kline.length >= this.KLineReadyLength) {
       const last = kline[kline.length - 1];
       if (last.time > this.kline_last_time) {
@@ -34,11 +35,12 @@ abstract class SpotRobot<
     }
   }
 
-  protected abstract checkKLine<T extends IOHLCV>(
-    confirmed_kline: T[],
-    last: T,
-    kline: T[],
+  protected abstract checkKLine(
+    confirmed_kline: RealData[],
+    last: RealData,
+    kline: RealData[],
   ): void;
+  //#endregion
 
   //#region 回测逻辑
   /**
