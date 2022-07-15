@@ -59,29 +59,19 @@ extends SpotRobot<IParams, IOHLCV, ITestData> {
     }]\n前差: ${prev_diff}  现差: ${last_diff}\n走单耗时: ${(tn.transaction_time - tn.request_time) / 1000}秒`);
   }
 
-  protected async checkKLine(
-    confirmed_kline: KLine,
-    last: IOHLCV,
-    kline: KLine,
-  ) {
+  protected async checkKLine(confirmed_kline: KLine, last: IOHLCV, kline: KLine) {
     const closes = confirmed_kline.map((item) => item.close);
     const fast_line = this.sma(closes, this.params.fast_ma);
     const slow_line = this.sma(closes, this.params.slow_ma);
-    const fast_prev = fast_line[fast_line.length - 2];
-    const slow_prev = slow_line[slow_line.length - 2];
-    const fast_last = fast_line[fast_line.length - 1];
-    const slow_last = slow_line[slow_line.length - 1];
-    console.log(
-      moment().format('YYYY-MM-DD HH:mm:ss'),
-      '前均线差', fast_prev - slow_prev,
-      '现均线差', fast_last - slow_last,
-    );
+    const prev_diff = fast_line[fast_line.length - 2] - slow_line[slow_line.length - 2];
+    const last_diff = fast_line[fast_line.length - 1] - slow_line[slow_line.length - 1];
+    console.log(moment().format('YYYY-MM-DD HH:mm:ss'), '前差', prev_diff, '现差', last_diff);
     if (this.gold_cross_line(fast_line, slow_line)) {
       const tn = await this.BuyAll(last.close, Number(new Date()));
-      if (tn) this.message(tn);
+      if (tn) this.message(tn, prev_diff, last_diff);
     } else if (this.dead_cross_line(fast_line, slow_line)) {
       const tn = await this.SellAll(last.close, Number(new Date()));
-      if (tn) this.message(tn);
+      if (tn) this.message(tn, prev_diff, last_diff);
     }
   }
 
