@@ -9,8 +9,9 @@ abstract class SpotRobot<
   TestData extends IOHLCV,
 > {
   public constructor(
+    protected params: Params,
     protected executor: ISpotExecutor,
-    protected notifier?: INotifier,
+    private notifier?: INotifier,
   ) { }
 
   public async SendMessage(message: string) {

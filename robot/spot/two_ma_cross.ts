@@ -22,12 +22,11 @@ export
 class TwoMaCross
 extends SpotRobot<IParams, IOHLCV, ITestData> {
   public constructor(
+    protected readonly params: IParams,
     protected readonly executor: ISpotExecutor,
-    private readonly fast_ma: number,
-    private readonly slow_ma: number,
     notifier?: INotifier,
   ) {
-    super(executor, notifier);
+    super(params, executor, notifier);
   }
 
   public sma(closes: number[], size: number) {
@@ -46,7 +45,7 @@ extends SpotRobot<IParams, IOHLCV, ITestData> {
   }
 
   public get KLineReadyLength() {
-    return Math.max(this.fast_ma, this.slow_ma) + 2;
+    return Math.max(this.params.fast_ma, this.params.slow_ma) + 2;
   }
 
   protected async checkKLine(
@@ -55,8 +54,8 @@ extends SpotRobot<IParams, IOHLCV, ITestData> {
     kline: KLine,
   ) {
     const closes = confirmed_kline.map((item) => item.close);
-    const fast_line = this.sma(closes, this.fast_ma);
-    const slow_line = this.sma(closes, this.slow_ma);
+    const fast_line = this.sma(closes, this.params.fast_ma);
+    const slow_line = this.sma(closes, this.params.slow_ma);
     const fast_prev = fast_line[fast_line.length - 2];
     const slow_prev = slow_line[slow_line.length - 2];
     const fast_last = fast_line[fast_line.length - 1];
