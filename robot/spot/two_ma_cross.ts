@@ -4,6 +4,7 @@ import { ISpotExecutor } from '@/executor/spot';
 import { SpotRobot } from '.';
 import moment from 'moment';
 import { INotifier } from '@/notifier';
+import { ITransaction } from '@/common/transaction';
 
 export
 interface IParams {
@@ -48,6 +49,14 @@ extends SpotRobot<IParams, IOHLCV, ITestData> {
     return Math.max(this.params.fast_ma, this.params.slow_ma) + 2;
   }
 
+  private message(tn: ITransaction) {
+    this.SendMessage(`[${
+      { 'buy': '买', 'sell': '卖' }[tn.side as string]
+    }  ${
+      `${tn.in_amount}${tn.in_name} =(${tn.price})=> ${tn.out_amount}${tn.out_name}`
+    }]`);
+  }
+
   protected async checkKLine(
     confirmed_kline: KLine,
     last: IOHLCV,
@@ -67,34 +76,10 @@ extends SpotRobot<IParams, IOHLCV, ITestData> {
     );
     if (this.gold_cross_line(fast_line, slow_line)) {
       const tn = await this.BuyAll(last.close, Number(new Date()));
-      if (tn) {
-        this.SendMessage(`[买 价格 ${tn.price}] ${
-          moment(new Date(tn.transaction_time)).format('HH:mm:ss')
-        }:\n使用 ${
-          tn.in_amount
-        } 个 ${
-          tn.in_name
-        } 买了 ${
-          tn.out_amount
-        } 个 ${
-          tn.out_name
-        }`);
-      }
+      if (tn) this.message(tn);
     } else if (this.dead_cross_line(fast_line, slow_line)) {
       const tn = await this.SellAll(last.close, Number(new Date()));
-      if (tn) {
-        this.SendMessage(`[卖 价格 ${tn.price}] ${
-          moment(new Date(tn.transaction_time)).format('HH:mm:ss')
-        }:\n使用 ${
-          tn.in_amount
-        } 个 ${
-          tn.in_name
-        } 卖了 ${
-          tn.out_amount
-        } 个 ${
-          tn.out_name
-        }`);
-      }
+      if (tn) this.message(tn);
     }
   }
 
