@@ -14,11 +14,13 @@ abstract class SpotRobot<
     private notifier?: INotifier,
   ) { }
 
+  //#region 消息通知部分
   public async SendMessage(message: string) {
     if (this.notifier) {
       await this.notifier.SendMessage(message);
     }
   }
+  //#endregion
 
   //#region 实盘运行
   private kline_last_time = -1;
