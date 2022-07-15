@@ -51,6 +51,8 @@ extends SpotRobot<IParams, IOHLCV, ITestData> {
 
   private message(tn: ITransaction) {
     this.SendMessage(`[${
+      moment(new Date(tn.transaction_time)).format('HH:mm:ss')
+    }  ${
       { 'buy': '买', 'sell': '卖' }[tn.side as string]
     }  ${
       `${tn.in_amount}${tn.in_name} =(${tn.price})=> ${tn.out_amount}${tn.out_name}`
