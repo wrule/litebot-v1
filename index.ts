@@ -37,12 +37,12 @@ async function main() {
 }
 
 async function mainTest() {
-  const executor = new TestSpot(100, 0.001, false, 'USDT', 'BTC');
-  const robot = new TwoMaCross({ fast_ma: 11, slow_ma: 21 }, executor);
   const kline = ArrayToKLine(HistData as number[][], true);
+  const executor = new TestSpot(100, 0.001, false, 'USDT', 'BTC');
+
   const start = Number(new Date());
-  const output = robot.generateTestData(kline);
-  robot.BackTesting(output);
+  const robot = new TwoMaCross({ fast_ma: 11, slow_ma: 21 }, executor);
+  robot.BackTesting(kline);
   console.log(Number(new Date()) - start);
 }
 

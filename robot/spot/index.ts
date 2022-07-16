@@ -95,8 +95,8 @@ abstract class SpotRobot<
    * 回测
    * @param kline 历史数据
    */
-  public BackTesting(kline: TestData[]) {
-    this.testKLine = kline;
+  public BackTesting(kline: RealData[]) {
+    this.testKLine = this.generateTestData(kline);
     for (let i = 0; i < this.testKLine.length; ++i) {
       this.currentIndex = i;
       this.checkTestData(this.last());
