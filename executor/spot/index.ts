@@ -25,4 +25,24 @@ interface ISpotExecutor {
   ): ReturnTransactionAS;
 
   Reset(): void;
+
+  /**
+   * 资金名称
+   */
+  FundName: string;
+
+  /**
+   * 资金数量
+   */
+  FundAmount(): number;
+
+  /**
+   * 资产名称
+   */
+  AssetName: string;
+
+  /**
+   * 资产数量
+   */
+  AssetAmount(): number;
 }

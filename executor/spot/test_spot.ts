@@ -99,4 +99,20 @@ implements ISpotExecutor {
     this.fee_multiplier = 1 - this.fee;
     this.transactions = [];
   }
+
+  public get FundName() {
+    return this.fund_name;
+  }
+
+  public FundAmount() {
+    return this.funds;
+  }
+
+  public get AssetName() {
+    return this.asset_name;
+  }
+
+  public AssetAmount() {
+    return this.assets;
+  }
 }
