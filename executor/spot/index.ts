@@ -24,6 +24,9 @@ interface ISpotExecutor {
     time?: number,
   ): ReturnTransactionAS;
 
+  /**
+   * 重置测试机器人
+   */
   Reset(): void;
 
   /**
@@ -32,9 +35,9 @@ interface ISpotExecutor {
   FundName: string;
 
   /**
-   * 资金数量
+   * 可用资金余额
    */
-  FundAmount(): number | Promise<number>;
+  FundBalance(): number | Promise<number>;
 
   /**
    * 资产名称
@@ -42,7 +45,7 @@ interface ISpotExecutor {
   AssetName: string;
 
   /**
-   * 资产数量
+   * 可用资产余额
    */
-  AssetAmount(): number | Promise<number>;
+  AssetBalance(): number | Promise<number>;
 }
