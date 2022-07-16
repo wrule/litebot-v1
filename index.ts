@@ -6,8 +6,7 @@ import { BinanceSpot } from './executor/spot/binance_spot';
 import { TwoMaCross } from './robot/spot/two_ma_cross';
 import { ArrayToKLine } from './common/kline';
 import { TestSpot } from './executor/spot/test_spot';
-import HistData from './data/ETH_USDT-30m.json';
-import fs from 'fs';
+import HistData from './data/ETH_USDT-1d.json';
 
 async function main() {
   console.log('加载客户端...');

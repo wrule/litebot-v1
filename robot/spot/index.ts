@@ -102,6 +102,7 @@ abstract class SpotRobot<
       this.currentIndex = i;
       this.checkTestData(this.last());
     }
+    console.log(this.executor.AssetAmount());
   }
   //#endregion
 
