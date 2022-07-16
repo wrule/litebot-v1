@@ -25,50 +25,14 @@ async function main() {
     at_mobiles: dingtalk.AT_MOBILES,
   });
   const robot = new TwoMaCross({ fast_ma: 11, slow_ma: 21 }, executor, notifier);
-
-
-  function funca(kline: KLine) {
-    console.log('a', kline.length);
-  }
-
-  function funcb(kline: KLine) {
-    console.log('b', kline.length);
-  }
-
-  const watcher = new KLineWatcher(client, 1000, 'ETH/USDT', '1m', 10);
-  watcher.Subscribe(funca);
-  watcher.Subscribe(funcb);
+  const watcher = new KLineWatcher(client, 1000, 'ETH/USDT', '30m', robot.KLineReadyLength);
+  watcher.Subscribe((kline) => {
+    robot.CheckKLine(kline);
+  });
   watcher.Start();
-  setTimeout(() => {
-    watcher.Unsubscribe(funca);
-  }, 10000);
-
-  // setInterval(async () => {
-  //   try {
-  //     const list = await client.fetchOHLCV('ETH/USDT', '30m', undefined, robot.KLineReadyLength);
-  //     const kline = ArrayToKLine(list);
-  //     robot.CheckKLine(kline);
-  //   } catch (e) {
-  //     console.error(e);
-  //   }
-  // }, 1000);
 }
 
 async function mainTest() {
-  function funca() {
-    console.log('a');
-  }
-
-  function funcb() {
-    console.log('b');
-  }
-
-  const funcc = funcb;
-
-  const map = new Map<() => void, void>();
-  map.set(funcb);
-  console.log(map.has(funcc));
-
   // const kline = ArrayToKLine(HistData as number[][], true);
   // const executor = new TestSpot(100, 0.001, false, 'USDT', 'BTC');
 
