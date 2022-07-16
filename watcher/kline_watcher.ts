@@ -1,5 +1,5 @@
 import { binance } from 'ccxt';
-import { ArrayToKLine, IOHLCV, KLine } from '@/common/kline';
+import { ArrayToKLine, IOHLCV, KLine } from '../common/kline';
 import { Watcher } from '.';
 
 export
@@ -22,7 +22,7 @@ extends Watcher<KLine> {
       try {
         const list = await this.client.fetchOHLCV(this.symbol, this.timeframe, undefined, this.length);
         const kline = ArrayToKLine(list);
-        this.Update(kline);
+        this.update(kline);
       } catch (e) {
         console.error(e);
       }

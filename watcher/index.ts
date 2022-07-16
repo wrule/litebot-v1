@@ -11,7 +11,7 @@ abstract class Watcher<T> {
     this.callback_map.delete(callback);
   }
 
-  public Update(data: T) {
+  protected update(data: T) {
     Array.from(this.callback_map.keys())
       .forEach((callback) => {
         callback(data);

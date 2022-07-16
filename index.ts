@@ -4,9 +4,10 @@ import dingtalk from './.dingtalk.json';
 import { DingTalk } from './notifier/ding_talk';
 import { BinanceSpot } from './executor/spot/binance_spot';
 import { TwoMaCross } from './robot/spot/two_ma_cross';
-import { ArrayToKLine } from './common/kline';
+import { ArrayToKLine, KLine } from './common/kline';
 import { TestSpot } from './executor/spot/test_spot';
 import HistData from './data/ETH_USDT-1d.json';
+import { KLineWatcher } from './watcher/kline_watcher';
 
 async function main() {
   console.log('加载客户端...');
@@ -24,15 +25,33 @@ async function main() {
     at_mobiles: dingtalk.AT_MOBILES,
   });
   const robot = new TwoMaCross({ fast_ma: 11, slow_ma: 21 }, executor, notifier);
-  setInterval(async () => {
-    try {
-      const list = await client.fetchOHLCV('ETH/USDT', '30m', undefined, robot.KLineReadyLength);
-      const kline = ArrayToKLine(list);
-      robot.CheckKLine(kline);
-    } catch (e) {
-      console.error(e);
-    }
-  }, 1000);
+
+
+  function funca(kline: KLine) {
+    console.log('a', kline.length);
+  }
+
+  function funcb(kline: KLine) {
+    console.log('b', kline.length);
+  }
+
+  const watcher = new KLineWatcher(client, 1000, 'ETH/USDT', '1m', 10);
+  watcher.Subscribe(funca);
+  watcher.Subscribe(funcb);
+  watcher.Start();
+  setTimeout(() => {
+    watcher.Unsubscribe(funca);
+  }, 10000);
+
+  // setInterval(async () => {
+  //   try {
+  //     const list = await client.fetchOHLCV('ETH/USDT', '30m', undefined, robot.KLineReadyLength);
+  //     const kline = ArrayToKLine(list);
+  //     robot.CheckKLine(kline);
+  //   } catch (e) {
+  //     console.error(e);
+  //   }
+  // }, 1000);
 }
 
 async function mainTest() {
@@ -59,4 +78,4 @@ async function mainTest() {
   // console.log(Number(new Date()) - start);
 }
 
-mainTest();
+main();
