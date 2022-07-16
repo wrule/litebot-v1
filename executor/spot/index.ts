@@ -34,7 +34,7 @@ interface ISpotExecutor {
   /**
    * 资金数量
    */
-  FundAmount(): number;
+  FundAmount(): number | Promise<number>;
 
   /**
    * 资产名称
@@ -44,5 +44,5 @@ interface ISpotExecutor {
   /**
    * 资产数量
    */
-  AssetAmount(): number;
+  AssetAmount(): number | Promise<number>;
 }

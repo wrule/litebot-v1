@@ -13,12 +13,12 @@ implements ISpotExecutor {
     private readonly retries = 5,
     private readonly transactions_file: string,
   ) {
-    this.target_name = this.symbol.split('/')[0].trim();
-    this.source_name = this.symbol.split('/')[1].trim();
+    this.asset_name = this.symbol.split('/')[0].trim();
+    this.fund_name = this.symbol.split('/')[1].trim();
   }
 
-  private target_name!: string;
-  private source_name!: string;
+  private asset_name!: string;
+  private fund_name!: string;
 
   public async buy(
     in_assets: number,
@@ -42,11 +42,11 @@ implements ISpotExecutor {
       response_time,
       expected_price: price as number,
       price: order.price,
-      in_name: this.source_name,
+      in_name: this.fund_name,
       expected_in_amount: in_assets,
       in_amount: order.cost,
-      out_name: this.target_name,
-      out_amount: order.amount - (order.fee.currency === this.target_name ? order.fee.cost : 0),
+      out_name: this.asset_name,
+      out_amount: order.amount - (order.fee.currency === this.asset_name ? order.fee.cost : 0),
     };
     append_list(this.transactions_file, tn);
     return tn;
@@ -66,9 +66,7 @@ implements ISpotExecutor {
   }
 
   public async buy_all(price?: number) {
-    const balance = await this.client.fetchBalance();
-    const free: number = balance[this.source_name].free;
-    return await this.buy(free, price);
+    return await this.buy(await this.FundAmount(), price);
   }
 
   public async BuyAll(price?: number) {
@@ -99,11 +97,11 @@ implements ISpotExecutor {
       response_time,
       expected_price: price as number,
       price: order.price,
-      in_name: this.target_name,
+      in_name: this.asset_name,
       expected_in_amount: in_assets,
       in_amount: order.amount,
-      out_name: this.source_name,
-      out_amount: order.cost - (order.fee.currency === this.source_name ? order.fee.cost : 0),
+      out_name: this.fund_name,
+      out_amount: order.cost - (order.fee.currency === this.fund_name ? order.fee.cost : 0),
     };
     append_list(this.transactions_file, tn);
     return tn;
@@ -123,9 +121,7 @@ implements ISpotExecutor {
   }
 
   public async sell_all(price?: number) {
-    const balance = await this.client.fetchBalance();
-    const free: number = balance[this.target_name].free;
-    return await this.sell(free, price);
+    return await this.sell(await this.AssetAmount(), price);
   }
 
   public async SellAll(price?: number) {
@@ -140,5 +136,26 @@ implements ISpotExecutor {
 
   public Reset() {
 
+  }
+
+  private async fetchBalance(name: string) {
+    const balance = await this.client.fetchBalance();
+    return balance[name].free;
+  }
+
+  public get FundName() {
+    return this.fund_name;
+  }
+
+  public async FundAmount() {
+    return await this.fetchBalance(this.fund_name);
+  }
+
+  public get AssetName() {
+    return this.asset_name;
+  }
+
+  public async AssetAmount() {
+    return await this.fetchBalance(this.asset_name);
   }
 }
