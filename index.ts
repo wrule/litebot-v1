@@ -6,6 +6,7 @@ import { BinanceSpot } from './executor/spot/binance_spot';
 import { TwoMaCross } from './robot/spot/two_ma_cross';
 import { ArrayToKLine } from './common/kline';
 import { TestSpot } from './executor/spot/test_spot';
+import HistData from './data/ETH_USDT-30m.json';
 
 async function main() {
   console.log('加载客户端...');
@@ -37,7 +38,9 @@ async function main() {
 async function mainTest() {
   const executor = new TestSpot(100, 0.001, false, 'USDT', 'BTC');
   const robot = new TwoMaCross({ fast_ma: 11, slow_ma: 21 }, executor);
-  console.log('你好，世界');
+  const kline = ArrayToKLine(HistData as number[][], true);
+  const output = robot.generateTestData(kline);
+  console.log(output);
 }
 
 mainTest();
