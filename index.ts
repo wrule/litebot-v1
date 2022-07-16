@@ -10,13 +10,14 @@ import HistData from './data/ETH_USDT-1d.json';
 import { KLineWatcher } from './watcher/kline_watcher';
 import { TickerWatcher } from './watcher/ticker_watcher';
 import { append_list } from './utils/json_list';
+import moment from 'moment';
 
 async function main() {
   console.log('加载客户端...');
   const client = new binance({
     apiKey: secret.API_KEY,
     secret: secret.SECRET_KEY,
-    enableRateLimit: true,
+    // enableRateLimit: true,
   });
   await client.loadMarkets();
   console.log('客户端加载完成');
@@ -61,6 +62,9 @@ async function main() {
     const result = Object.entries(data)
       .map(([key, value]) => ([key, value.timestamp, value.close]));
     append_list('history.log', result);
+    if (result.length > 0) {
+      console.log(moment(new Date(result[0][1] as number)).format('YYYY-MM-DD HH:mm:ss'));
+    }
   });
   watcher.Start();
 }
