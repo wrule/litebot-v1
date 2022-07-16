@@ -21,11 +21,7 @@ async function main() {
     secret: dingtalk.SECRET,
     at_mobiles: dingtalk.AT_MOBILES,
   });
-  const robot = new TwoMaCross(executor, 11, 21, notifier);
-
-  console.log(robot.sma([1, 2, 3], 3));
-
-  return;
+  const robot = new TwoMaCross({ fast_ma: 11, slow_ma: 21 }, executor, notifier);
   setInterval(async () => {
     try {
       const list = await client.fetchOHLCV('ETH/USDT', '30m', undefined, robot.KLineReadyLength);
