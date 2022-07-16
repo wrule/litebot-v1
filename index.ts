@@ -34,7 +34,28 @@ async function main() {
   const watcher = new TickerWatcher(
     client,
     1000,
-    ['BTC/USDT', 'ETH/USDT', 'LINK/USDT'],
+    [
+      'BTC/USDT',
+      'ETH/USDT',
+      'BNB/USDT',
+      'ADA/USDT',
+      'LINK/USDT',
+      'APE/USDT',
+      'DOT/USDT',
+      'SOL/USDT',
+      'DOGE/USDT',
+      'UNI/USDT',
+      'FTT/USDT',
+      'ZEC/USDT',
+      'CRV/USDT',
+      'ENJ/USDT',
+      'DENT/USDT',
+      'NEAR/USDT',
+      'SAND/USDT',
+      'FIL/USDT',
+      'AXS/USDT',
+      'SHIB/USDT',
+    ],
   );
   watcher.Subscribe((data) => {
     const result = Object.entries(data)
