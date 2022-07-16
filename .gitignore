@@ -103,6 +103,8 @@ dist
 # TernJS port file
 .tern-port
 
+data/
+
 .secret.json
 .dingtalk.json
 tn_log.json
