@@ -17,7 +17,7 @@ async function main() {
   const client = new binance({
     apiKey: secret.API_KEY,
     secret: secret.SECRET_KEY,
-    // enableRateLimit: true,
+    enableRateLimit: true,
   });
   await client.loadMarkets();
   console.log('客户端加载完成');
