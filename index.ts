@@ -36,13 +36,27 @@ async function main() {
 }
 
 async function mainTest() {
-  const kline = ArrayToKLine(HistData as number[][], true);
-  const executor = new TestSpot(100, 0.001, false, 'USDT', 'BTC');
+  function funca() {
+    console.log('a');
+  }
 
-  const start = Number(new Date());
-  const robot = new TwoMaCross({ fast_ma: 11, slow_ma: 21 }, executor);
-  robot.BackTesting(kline);
-  console.log(Number(new Date()) - start);
+  function funcb() {
+    console.log('b');
+  }
+
+  const funcc = funcb;
+
+  const map = new Map<() => void, void>();
+  map.set(funcb);
+  console.log(map.has(funcc));
+
+  // const kline = ArrayToKLine(HistData as number[][], true);
+  // const executor = new TestSpot(100, 0.001, false, 'USDT', 'BTC');
+
+  // const start = Number(new Date());
+  // const robot = new TwoMaCross({ fast_ma: 11, slow_ma: 21 }, executor);
+  // robot.BackTesting(kline);
+  // console.log(Number(new Date()) - start);
 }
 
 mainTest();
