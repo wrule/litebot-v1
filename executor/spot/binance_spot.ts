@@ -137,4 +137,8 @@ implements ISpotExecutor {
       (error) => error instanceof cctx.NetworkError,
     );
   }
+
+  public Reset() {
+
+  }
 }

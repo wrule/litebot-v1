@@ -23,4 +23,6 @@ interface ISpotExecutor {
     price?: number,
     time?: number,
   ): ReturnTransactionAS;
+
+  Reset(): void;
 }

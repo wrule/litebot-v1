@@ -97,6 +97,7 @@ abstract class SpotRobot<
    */
   public BackTesting(kline: RealData[]) {
     this.testKLine = this.generateTestData(kline);
+    this.Reset();
     for (let i = 0; i < this.testKLine.length; ++i) {
       this.currentIndex = i;
       this.checkTestData(this.last());
@@ -132,6 +133,11 @@ abstract class SpotRobot<
     time?: number,
   ) {
     return this.executor.SellAll(price, time);
+  }
+
+  public Reset() {
+    this.currentIndex = 0;
+    this.executor.Reset();
   }
 
   //#region 工具方法
