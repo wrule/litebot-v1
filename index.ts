@@ -5,6 +5,7 @@ import { DingTalk } from './notifier/ding_talk';
 import { BinanceSpot } from './executor/spot/binance_spot';
 import { TwoMaCross } from './robot/spot/two_ma_cross';
 import { ArrayToKLine } from './common/kline';
+import { TestSpot } from './executor/spot/test_spot';
 
 async function main() {
   console.log('加载客户端...');
@@ -33,4 +34,10 @@ async function main() {
   }, 1000);
 }
 
-main();
+async function mainTest() {
+  const executor = new TestSpot(100, 0.001, false, 'USDT', 'BTC');
+  const robot = new TwoMaCross({ fast_ma: 11, slow_ma: 21 }, executor);
+  console.log('你好，世界');
+}
+
+mainTest();

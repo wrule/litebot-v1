@@ -89,10 +89,7 @@ abstract class SpotRobot<
    * 生成测试数据
    * @param kline 输入历史数据
    */
-  protected abstract generateTestData(
-    params: Params,
-    kline: RealData[],
-  ): TestData[];
+  protected abstract generateTestData(kline: RealData[]): TestData[];
 
   /**
    * 回测

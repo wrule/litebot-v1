@@ -75,14 +75,11 @@ extends SpotRobot<IParams, IOHLCV, ITestData> {
     }
   }
 
-  protected generateTestData(
-    params: IParams,
-    kline: KLine,
-  ): ITestData[] {
+  public generateTestData(kline: KLine): ITestData[] {
     const closes = kline.map((item) => item.close);
-    const fast_line = this.sma(closes, params.fast_ma);
-    const slow_line = this.sma(closes, params.slow_ma);
-    const effective_index = Math.max(params.fast_ma, params.slow_ma);
+    const fast_line = this.sma(closes, this.params.fast_ma);
+    const slow_line = this.sma(closes, this.params.slow_ma);
+    const effective_index = Math.max(this.params.fast_ma, this.params.slow_ma);
     return kline.map((item, index) => {
       const result: ITestData = { ...item };
       if (index >= effective_index) {
