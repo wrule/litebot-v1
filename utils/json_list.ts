@@ -17,7 +17,7 @@ function read_list<T>(file: string): T[] {
 
 export
 function append_list<T>(file: string, item: T) {
-  fs.appendFileSync(file, JSON.stringify(item, null, 2) + ',\n', 'utf-8');
+  fs.appendFileSync(file, JSON.stringify(item) + ',\n', 'utf-8');
 }
 
 export

@@ -1,9 +1,9 @@
-import { binance } from 'ccxt';
+import { binance, Dictionary, Ticker } from 'ccxt';
 import { Watcher } from '.';
 
 export
 class TickerWatcher
-extends Watcher<any> {
+extends Watcher<Dictionary<Ticker>> {
   public constructor(
     private client: binance,
     private interval = 1000,

@@ -8,6 +8,8 @@ import { ArrayToKLine, KLine } from './common/kline';
 import { TestSpot } from './executor/spot/test_spot';
 import HistData from './data/ETH_USDT-1d.json';
 import { KLineWatcher } from './watcher/kline_watcher';
+import { TickerWatcher } from './watcher/ticker_watcher';
+import { append_list } from './utils/json_list';
 
 async function main() {
   console.log('加载客户端...');
@@ -25,9 +27,19 @@ async function main() {
     at_mobiles: dingtalk.AT_MOBILES,
   });
   const robot = new TwoMaCross({ fast_ma: 11, slow_ma: 21 }, executor, notifier);
-  const watcher = new KLineWatcher(client, 1000, 'ETH/USDT', '30m', robot.KLineReadyLength);
-  watcher.Subscribe((kline) => {
-    robot.CheckKLine(kline);
+  // const watcher = new KLineWatcher(client, 1000, 'ETH/USDT', '30m', robot.KLineReadyLength);
+  // watcher.Subscribe((kline) => {
+  //   robot.CheckKLine(kline);
+  // });
+  const watcher = new TickerWatcher(
+    client,
+    1000,
+    ['BTC/USDT', 'ETH/USDT', 'LINK/USDT'],
+  );
+  watcher.Subscribe((data) => {
+    const result = Object.entries(data)
+      .map(([key, value]) => ([key, value.timestamp, value.close]));
+    append_list('history.log', result);
   });
   watcher.Start();
 }
