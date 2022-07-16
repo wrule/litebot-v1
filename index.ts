@@ -7,6 +7,7 @@ import { TwoMaCross } from './robot/spot/two_ma_cross';
 import { ArrayToKLine } from './common/kline';
 import { TestSpot } from './executor/spot/test_spot';
 import HistData from './data/ETH_USDT-30m.json';
+import fs from 'fs';
 
 async function main() {
   console.log('加载客户端...');
@@ -40,7 +41,9 @@ async function mainTest() {
   const robot = new TwoMaCross({ fast_ma: 11, slow_ma: 21 }, executor);
   const kline = ArrayToKLine(HistData as number[][], true);
   const output = robot.generateTestData(kline);
-  console.log(output);
+  const start = Number(new Date());
+  robot.BackTesting(output);
+  console.log(Number(new Date()) - start);
 }
 
 mainTest();
