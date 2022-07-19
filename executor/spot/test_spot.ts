@@ -1,5 +1,5 @@
 import { ISpotExecutor } from '.';
-import { ITransaction } from '../../common/transaction';
+import { ITransaction } from '@/common/transaction';
 
 export
 class TestSpot
@@ -29,7 +29,7 @@ implements ISpotExecutor {
       const out_assets = in_funds / price * this.fee_multiplier;
       this.assets += out_assets;
       const tn: ITransaction = {
-        side: 'buy',
+        action: 'BUY',
         request_time: time,
         transaction_time: time,
         response_time: time,
@@ -46,7 +46,7 @@ implements ISpotExecutor {
       }
       return tn;
     }
-    return null;
+    throw new Error('资金不足');
   }
 
   public BuyAll(
@@ -66,7 +66,7 @@ implements ISpotExecutor {
       const out_funds = in_assets * price * this.fee_multiplier;
       this.funds += out_funds;
       const tn: ITransaction = {
-        side: 'sell',
+        action: 'SELL',
         request_time: time,
         transaction_time: time,
         response_time: time,
@@ -83,7 +83,7 @@ implements ISpotExecutor {
       }
       return tn;
     }
-    return null;
+    throw new Error('资产不足');
   }
 
   public SellAll(
