@@ -36,7 +36,7 @@ implements ISpotExecutor {
     );
     const response_time = Number(new Date());
     const tn: ITransaction = {
-      side: 'buy',
+      action: 'BUY',
       request_time,
       transaction_time: order.timestamp,
       response_time,
@@ -91,7 +91,7 @@ implements ISpotExecutor {
     );
     const response_time = Number(new Date());
     const tn: ITransaction = {
-      side: 'sell',
+      action: 'SELL',
       request_time,
       transaction_time: order.timestamp,
       response_time,
