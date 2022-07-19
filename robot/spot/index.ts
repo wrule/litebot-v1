@@ -106,36 +106,6 @@ abstract class SpotRobot<
   }
   //#endregion
 
-  public Buy(
-    in_asset: number,
-    price?: number,
-    time?: number,
-  ) {
-    return this.executor.Buy(in_asset, price, time);
-  }
-
-  public BuyAll(
-    price?: number,
-    time?: number,
-  ) {
-    return this.executor.BuyAll(price, time);
-  }
-
-  public Sell(
-    in_asset: number,
-    price?: number,
-    time?: number,
-  ) {
-    return this.executor.Sell(in_asset, price, time);
-  }
-
-  public SellAll(
-    price?: number,
-    time?: number,
-  ) {
-    return this.executor.SellAll(price, time);
-  }
-
   public Reset() {
     this.currentIndex = 0;
     this.executor.Reset();

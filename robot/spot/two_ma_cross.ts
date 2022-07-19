@@ -67,10 +67,10 @@ extends SpotRobot<IParams, IOHLCV, ITestData> {
     const last_diff = fast_line[fast_line.length - 1] - slow_line[slow_line.length - 1];
     console.log(moment().format('YYYY-MM-DD HH:mm:ss'), '前差', prev_diff, '现差', last_diff);
     if (this.gold_cross_line(fast_line, slow_line)) {
-      const tn = await this.BuyAll(last.close, Number(new Date()));
+      const tn = await this.executor.BuyAll(last.close, Number(new Date()));
       if (tn) this.message(tn, prev_diff, last_diff);
     } else if (this.dead_cross_line(fast_line, slow_line)) {
-      const tn = await this.SellAll(last.close, Number(new Date()));
+      const tn = await this.executor.SellAll(last.close, Number(new Date()));
       if (tn) this.message(tn, prev_diff, last_diff);
     }
   }
@@ -97,9 +97,9 @@ extends SpotRobot<IParams, IOHLCV, ITestData> {
 
   protected checkTestData(data: ITestData) {
     if (data.buy) {
-      this.BuyAll(data.close, data.time);
+      this.executor.BuyAll(data.close, data.time);
     } else if (data.sell) {
-      this.SellAll(data.close, data.time);
+      this.executor.SellAll(data.close, data.time);
     }
   }
 }
