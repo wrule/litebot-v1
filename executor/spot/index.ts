@@ -1,4 +1,4 @@
-import { ReturnTransactionAS } from '@/common/transaction';
+import { ITransaction } from '@/common/transaction';
 
 export
 interface ISpotExecutor {
@@ -26,23 +26,23 @@ interface ISpotExecutor {
     in_asset: number,
     price?: number,
     time?: number,
-  ): ReturnTransactionAS;
+  ): ITransaction | Promise<ITransaction>;
 
   BuyAll(
     price?: number,
     time?: number,
-  ): ReturnTransactionAS;
+  ): ITransaction | Promise<ITransaction>;
 
   Sell(
     in_asset: number,
     price?: number,
     time?: number,
-  ): ReturnTransactionAS;
+  ): ITransaction | Promise<ITransaction>;
 
   SellAll(
     price?: number,
     time?: number,
-  ): ReturnTransactionAS;
+  ): ITransaction | Promise<ITransaction>;
 
   /**
    * 重置测试机器人
