@@ -66,7 +66,7 @@ implements ISpotExecutor {
   }
 
   public async buy_all(price?: number) {
-    return await this.buy(await this.FundAmount(), price);
+    return await this.buy(await this.FundBalance(), price);
   }
 
   public async BuyAll(price?: number) {
@@ -121,7 +121,7 @@ implements ISpotExecutor {
   }
 
   public async sell_all(price?: number) {
-    return await this.sell(await this.AssetAmount(), price);
+    return await this.sell(await this.AssetBalance(), price);
   }
 
   public async SellAll(price?: number) {
@@ -147,7 +147,7 @@ implements ISpotExecutor {
     return this.fund_name;
   }
 
-  public async FundAmount() {
+  public async FundBalance() {
     return await this.fetchBalance(this.fund_name);
   }
 
@@ -155,7 +155,7 @@ implements ISpotExecutor {
     return this.asset_name;
   }
 
-  public async AssetAmount() {
+  public async AssetBalance() {
     return await this.fetchBalance(this.asset_name);
   }
 }

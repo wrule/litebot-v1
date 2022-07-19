@@ -32,7 +32,7 @@ async function main() {
   // watcher.Subscribe((kline) => {
   //   robot.CheckKLine(kline);
   // });
-  const watcher = new TickerWatcher(
+  const watcher = new TickersWatcher(
     client,
     1000,
     [
