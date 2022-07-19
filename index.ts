@@ -8,7 +8,7 @@ import { ArrayToKLine, KLine } from './common/kline';
 import { TestSpot } from './executor/spot/test_spot';
 import HistData from './data/ETH_USDT-1d.json';
 import { KLineWatcher } from './watcher/kline_watcher';
-import { TickerWatcher } from './watcher/ticker_watcher';
+import { TickerWatcher } from './watcher/tickers_watcher';
 import { append_list } from './utils/json_list';
 import moment from 'moment';
 
