@@ -19,7 +19,7 @@ interface ITransaction {
   /**
    * 买卖方向
    */
-  action?: TransactionAction;
+  action: TransactionAction;
   /**
    * 多空方向
    */
