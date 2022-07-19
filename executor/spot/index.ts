@@ -1,4 +1,4 @@
-import { ReturnTransactionAS } from '../../common/transaction';
+import { ReturnTransactionAS } from '@/common/transaction';
 
 export
 interface ISpotExecutor {

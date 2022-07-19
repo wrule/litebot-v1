@@ -1,20 +1,29 @@
 
+/**
+ * 交易行为
+ */
 export
-type Side = ('buy' | 'sell');
+type TransactionAction = ('BUY' | 'SELL');
 
+/**
+ * 交易方向
+ */
 export
-type Direction = ('LONG' | 'SHORT');
+type TransactionSide = ('LONG' | 'SHORT');
 
+/**
+ * 交易结构
+ */
 export
 interface ITransaction {
   /**
    * 买卖方向
    */
-  side?: Side;
+  action?: TransactionAction;
   /**
    * 多空方向
    */
-  direction?: Direction;
+  side?: TransactionSide;
   /**
    * 请求时间
    */
@@ -56,9 +65,3 @@ interface ITransaction {
    */
   out_amount: number;
 }
-
-export
-type ReturnTransaction = (ITransaction | null);
-
-export
-type ReturnTransactionAS = (Promise<ReturnTransaction> | ReturnTransaction);
