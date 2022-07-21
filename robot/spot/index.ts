@@ -49,11 +49,19 @@ abstract class SpotRobot<
   /**
    * 用于回测的历史数据
    */
-  private testKLine: TestData[] = [];
+  private testData: TestData[] = [];
   /**
    * 历史数据当前索引
    */
   private currentIndex = 0;
+
+  /**
+   * 重置回测状态
+   */
+  public Reset() {
+    this.currentIndex = 0;
+    this.executor.Reset();
+  }
 
   /**
    * 回溯获取测试数据
@@ -68,7 +76,7 @@ abstract class SpotRobot<
     if (dstIndex < 0) {
       throw 'dstIndex必须大于等于0';
     }
-    return this.testKLine[dstIndex];
+    return this.testData[dstIndex];
   }
 
   /**
@@ -87,29 +95,23 @@ abstract class SpotRobot<
 
   /**
    * 生成测试数据
-   * @param kline 输入历史数据
+   * @param realData 输入历史数据
    */
-  protected abstract generateTestData(kline: RealData[]): TestData[];
+  protected abstract generateTestData(realData: RealData[]): TestData[];
 
   /**
    * 回测
-   * @param kline 历史数据
+   * @param testData 历史数据
    */
-  public BackTesting(kline: RealData[]) {
-    this.testKLine = this.generateTestData(kline);
+  public BackTesting(testData: TestData[]) {
+    this.testData = testData;
     this.Reset();
-    for (let i = 0; i < this.testKLine.length; ++i) {
+    for (let i = 0; i < this.testData.length; ++i) {
       this.currentIndex = i;
       this.checkTestData(this.last());
     }
-    console.log(this.executor.AssetBalance());
   }
   //#endregion
-
-  public Reset() {
-    this.currentIndex = 0;
-    this.executor.Reset();
-  }
 
   //#region 工具方法
   protected gold_cross(
