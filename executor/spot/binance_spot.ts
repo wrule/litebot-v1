@@ -158,4 +158,13 @@ implements ISpotExecutor {
   public async AssetBalance() {
     return await this.fetchBalance(this.asset_name);
   }
+
+  public async Valuation() {
+    const [assetBalance, fundBalance, ticker] = await Promise.all([
+      this.AssetBalance(),
+      this.FundBalance(),
+      this.client.fetchTicker(this.symbol),
+    ]);
+    return assetBalance * (ticker.close as number) + fundBalance;
+  }
 }

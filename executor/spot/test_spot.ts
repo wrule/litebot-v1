@@ -115,4 +115,8 @@ implements ISpotExecutor {
   public AssetBalance() {
     return this.assets;
   }
+
+  public Valuation(price: number) {
+    return this.assets * price + this.funds;
+  }
 }
