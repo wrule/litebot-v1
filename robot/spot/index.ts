@@ -14,6 +14,10 @@ abstract class SpotRobot<
     private notifier?: INotifier,
   ) { }
 
+  public get Executor() {
+    return this.executor;
+  }
+
   //#region 消息通知部分
   public async SendMessage(message: string) {
     if (this.notifier) {
@@ -97,7 +101,7 @@ abstract class SpotRobot<
    * 生成测试数据
    * @param realData 输入历史数据
    */
-  protected abstract generateTestData(realData: RealData[]): TestData[];
+  protected abstract GenerateTestData(realData: RealData[]): TestData[];
 
   /**
    * 回测

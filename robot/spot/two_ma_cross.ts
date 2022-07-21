@@ -30,7 +30,7 @@ extends SpotRobot<IParams, IOHLCV, ITestData> {
     super(params, executor, notifier);
   }
 
-  public sma(closes: number[], size: number) {
+  private sma(closes: number[], size: number) {
     let result: number[] = [];
     tulind.indicators.sma.indicator(
       [closes],
@@ -75,7 +75,7 @@ extends SpotRobot<IParams, IOHLCV, ITestData> {
     }
   }
 
-  public generateTestData(kline: KLine): ITestData[] {
+  public GenerateTestData(kline: KLine): ITestData[] {
     const closes = kline.map((item) => item.close);
     const fast_line = this.sma(closes, this.params.fast_ma);
     const slow_line = this.sma(closes, this.params.slow_ma);
