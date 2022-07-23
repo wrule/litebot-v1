@@ -1,6 +1,13 @@
 // 2022年07月19日21:26:55
 import { ITransaction } from '@/common/transaction';
 
+export
+interface ISnapshot {
+  funds: number;
+  assets: number;
+  valuation: number;
+}
+
 /**
  * 现货执行者接口
  */
@@ -36,6 +43,13 @@ interface ISpotExecutor {
    * 获取交易数据列表
    */
   Transactions(): ITransaction[] | Promise<ITransaction[]>;
+
+  /**
+   * 获取快照数据列表
+   */
+  Snapshots(): ISnapshot[] | Promise<ISnapshot[]>;
+
+  UpdateSnapshot(price?: number): void;
 
   /**
    * 购买资产

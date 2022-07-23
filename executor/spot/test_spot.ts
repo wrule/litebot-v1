@@ -1,4 +1,4 @@
-import { ISpotExecutor } from '.';
+import { ISnapshot, ISpotExecutor } from '.';
 import { ITransaction } from '@/common/transaction';
 
 export
@@ -18,9 +18,22 @@ implements ISpotExecutor {
   private assets!: number;
   private fee_multiplier!: number;
   private transactions!: ITransaction[];
+  private snapshots!: ISnapshot[];
 
   public Transactions() {
     return this.transactions || [];
+  }
+
+  public Snapshots() {
+    return this.snapshots || [];
+  }
+
+  public UpdateSnapshot(price: number) {
+    this.snapshots.push({
+      funds: this.funds,
+      assets: this.assets,
+      valuation: this.Valuation(price),
+    });
   }
 
   public Buy(
@@ -102,6 +115,7 @@ implements ISpotExecutor {
     this.assets = 0;
     this.fee_multiplier = 1 - this.fee;
     this.transactions = [];
+    this.snapshots = [];
   }
 
   public get FundName() {

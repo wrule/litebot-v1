@@ -1,5 +1,5 @@
 import cctx, { binance } from 'ccxt';
-import { ISpotExecutor } from '.';
+import { ISnapshot, ISpotExecutor } from '.';
 import { ITransaction } from '../../common/transaction';
 import { append_list } from '../../utils/json_list';
 import { retryer } from '../../utils/retryer';
@@ -22,6 +22,13 @@ implements ISpotExecutor {
 
   public Transactions() {
     return [] as ITransaction[];
+  }
+
+  public Snapshots() {
+    return [] as ISnapshot[];
+  }
+
+  public UpdateSnapshot(price: number) {
   }
 
   public async buy(

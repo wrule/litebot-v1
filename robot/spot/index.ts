@@ -112,7 +112,9 @@ abstract class SpotRobot<
     this.Reset();
     for (let i = 0; i < this.testData.length; ++i) {
       this.currentIndex = i;
-      this.checkTestData(this.last());
+      const last = this.last();
+      this.checkTestData(last);
+      this.executor.UpdateSnapshot(last.close);
     }
   }
 
