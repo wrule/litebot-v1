@@ -33,6 +33,11 @@ interface ISpotExecutor {
   Valuation(price?: number): number | Promise<number>;
 
   /**
+   * 获取交易数据列表
+   */
+  Transactions(): ITransaction[] | Promise<ITransaction[]>;
+
+  /**
    * 购买资产
    * @param in_asset 期望输入资产
    * @param price 期望成交价

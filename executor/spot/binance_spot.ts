@@ -20,6 +20,10 @@ implements ISpotExecutor {
   private asset_name!: string;
   private fund_name!: string;
 
+  public Transactions() {
+    return [] as ITransaction[];
+  }
+
   public async buy(
     in_assets: number,
     price?: number,

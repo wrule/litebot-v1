@@ -19,6 +19,10 @@ implements ISpotExecutor {
   private fee_multiplier!: number;
   private transactions!: ITransaction[];
 
+  public Transactions() {
+    return this.transactions || [];
+  }
+
   public Buy(
     in_funds: number,
     price: number,
