@@ -104,16 +104,25 @@ abstract class SpotRobot<
   protected abstract GenerateTestData(realData: RealData[]): TestData[];
 
   /**
-   * 回测
-   * @param testData 历史数据
+   * 测试数据回测
+   * @param testData 测试数据
    */
-  public BackTesting(testData: TestData[]) {
+  public BackTestingBasic(testData: TestData[]) {
     this.testData = testData;
     this.Reset();
     for (let i = 0; i < this.testData.length; ++i) {
       this.currentIndex = i;
       this.checkTestData(this.last());
     }
+  }
+
+  /**
+   * 真实数据回测
+   * @param realData 真实数据
+   */
+  public BackTesting(realData: RealData[]) {
+    const testData = this.GenerateTestData(realData);
+    return this.BackTestingBasic(testData);
   }
   //#endregion
 
