@@ -5,5 +5,7 @@ interface IList<T> {
 
   All(): T[] | Promise<T[]>;
 
+  Length(): number | Promise<number>;
+
   Empty(): void | Promise<void>;
 }

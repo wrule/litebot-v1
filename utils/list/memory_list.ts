@@ -13,6 +13,10 @@ implements IList<T> {
     return this.list;
   }
 
+  public Length() {
+    return this.list.length;
+  }
+
   public Empty() {
     this.list = [];
   }

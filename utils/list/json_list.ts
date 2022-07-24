@@ -18,6 +18,10 @@ implements IList<T> {
     return JSON.parse(json_text) as T[];
   }
 
+  public Length() {
+    return this.All().length;
+  }
+
   public Empty() {
     fs.writeFileSync(this.file, '', 'utf-8');
   }
