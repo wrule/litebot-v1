@@ -1,12 +1,23 @@
+import { IOHLCV } from '@/common/kline';
 import { ITransaction } from '@/common/transaction';
 import { ISnapshot } from '@/executor/spot';
 import { IList } from '@/utils/list';
 
 export
-interface IProps {
+interface IReport<
+  Params,
+  RealData extends IOHLCV,
+  TestData extends IOHLCV,
+> {
   name?: string;
   start_time?: number;
   end_time?: number;
+  real_data?: RealData[];
+  test_data?: TestData[];
+  params?: Params;
+  transactions?: ITransaction[];
+  snapshots?: ISnapshot[];
+  last?: ISnapshot;
 }
 
 export
