@@ -17,4 +17,8 @@ implements IList<T> {
     json_text = `[${json_text.substring(0, json_text.length - 2)}]`;
     return JSON.parse(json_text) as T[];
   }
+
+  public Empty() {
+    fs.writeFileSync(this.file, '', 'utf-8');
+  }
 }

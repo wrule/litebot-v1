@@ -12,4 +12,8 @@ implements IList<T> {
   public All() {
     return this.list;
   }
+
+  public Empty() {
+    this.list = [];
+  }
 }

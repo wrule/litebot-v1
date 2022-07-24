@@ -2,6 +2,9 @@ import { TwoMaCross } from './robot/spot/two_ma_cross';
 import { TestSpot } from './executor/spot/test_spot';
 import HistData from './data/ETH_USDT-2h.json';
 import { ArrayToKLine } from './common/kline';
+import { IList } from './utils/list';
+import { JSONList } from './utils/list/json_list';
+import { MemoryList } from './utils/list/memory_list';
 
 async function main() {
   const realData = ArrayToKLine(HistData);
@@ -22,4 +25,13 @@ async function main() {
   console.log('结束');
 }
 
-main();
+// main();
+
+function testMain() {
+  const a: IList<any> = new MemoryList();
+  a.Append({ name: 1 });
+  a.Append({ name: '123' });
+  console.log(a.All());
+}
+
+testMain();
