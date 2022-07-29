@@ -18,9 +18,28 @@ class Report<
   TestData extends IOHLCV,
 > {
   public constructor(
-    private readonly real_data: IList<RealData>,
-    private readonly test_data: IList<TestData>,
-    private readonly transactions: IList<ITransaction>,
-    private readonly snapshots: IList<ISnapshot>,
+    private readonly config?: {
+      meta?: IList<IReportMeta<Params>>,
+      real_data?: IList<RealData>,
+      test_data?: IList<TestData>,
+      transactions?: IList<ITransaction>,
+      snapshots?: IList<ISnapshot>,
+    },
   ) { }
+
+  public async AppendRealData(data: RealData) {
+    await this.config?.real_data?.Append(data);
+  }
+
+  public async AppendTestData(data: TestData) {
+    await this.config?.test_data?.Append(data);
+  }
+
+  public async AppendTransaction(transaction: ITransaction) {
+    await this.config?.transactions?.Append(transaction);
+  }
+
+  public async AppendSnapshot(snapshot: ISnapshot) {
+    await this.config?.snapshots?.Append(snapshot);
+  }
 }
