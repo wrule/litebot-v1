@@ -27,6 +27,7 @@ implements IList<T> {
     } else {
       list.push(data);
     }
+    this.Empty();
     list.forEach((item) => this.Append(item));
   }
 
