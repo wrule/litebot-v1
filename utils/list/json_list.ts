@@ -23,6 +23,9 @@ implements IList<T> {
   }
 
   public All() {
+    if (!fs.existsSync(this.file)) {
+      fs.writeFileSync(this.file, '', 'utf-8');
+    }
     let json_text = fs.readFileSync(this.file, 'utf-8');
     json_text = `[${json_text.substring(0, json_text.length - 2)}]`;
     return JSON.parse(json_text) as T[];
