@@ -12,6 +12,16 @@ implements IList<T> {
     fs.appendFileSync(this.file, JSON.stringify(data) + ',\n', 'utf-8');
   }
 
+  public UpdateFirst(data: T) {
+    const list = this.All();
+    if (list.length > 0) {
+      list[0] = data;
+    } else {
+      list.push(data);
+    }
+    list.forEach((item) => this.Append(item));
+  }
+
   public All() {
     let json_text = fs.readFileSync(this.file, 'utf-8');
     json_text = `[${json_text.substring(0, json_text.length - 2)}]`;
