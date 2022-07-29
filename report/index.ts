@@ -27,6 +27,10 @@ class Report<
     },
   ) { }
 
+  public async Meta() {
+    return (await this.config?.meta_data?.GetFirst()) || null;
+  }
+
   public async UpdateMeta(meta: IReportMeta<Params>) {
     const meta_data = this.config?.meta_data;
     if (meta_data) {
