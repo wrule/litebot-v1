@@ -17,7 +17,7 @@ interface IReport<
   params?: Params;
   transactions?: ITransaction[];
   snapshots?: ISnapshot[];
-  last?: ISnapshot;
+  last: ISnapshot;
 }
 
 export
