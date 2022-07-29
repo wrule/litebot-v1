@@ -19,13 +19,24 @@ class Report<
 > {
   public constructor(
     private readonly config?: {
-      meta?: IList<IReportMeta<Params>>,
+      meta_data?: IList<IReportMeta<Params>>,
       real_data?: IList<RealData>,
       test_data?: IList<TestData>,
       transactions?: IList<ITransaction>,
       snapshots?: IList<ISnapshot>,
     },
   ) { }
+
+  public async UpdateMeta(meta: IReportMeta<Params>) {
+    const meta_data = this.config?.meta_data;
+    if (meta_data) {
+      const old_meta = await meta_data.GetFirst() || { };
+      await meta_data.UpdateFirst({
+        ...old_meta,
+        ...meta,
+      });
+    }
+  }
 
   public async AppendRealData(data: RealData) {
     await this.config?.real_data?.Append(data);

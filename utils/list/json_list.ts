@@ -12,6 +12,14 @@ implements IList<T> {
     fs.appendFileSync(this.file, JSON.stringify(data) + ',\n', 'utf-8');
   }
 
+  public GetFirst() {
+    const list = this.All();
+    if (list.length > 0) {
+      return list[0];
+    }
+    return null;
+  }
+
   public UpdateFirst(data: T) {
     const list = this.All();
     if (list.length > 0) {

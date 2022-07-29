@@ -9,6 +9,13 @@ implements IList<T> {
     this.list.push(data);
   }
 
+  public GetFirst() {
+    if (this.list.length > 0) {
+      return this.list[0];
+    }
+    return null;
+  }
+
   public UpdateFirst(data: T) {
     if (this.list.length > 0) {
       this.list[0] = data;
