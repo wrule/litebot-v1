@@ -21,17 +21,52 @@ interface IReport<
 }
 
 export
-class Report {
+class Report<
+  Params,
+  RealData extends IOHLCV,
+  TestData extends IOHLCV,
+> {
   public constructor(
-    private readonly transactions: IList<ITransaction>,
-    private readonly snapshots: IList<ISnapshot>,
+    private readonly data: IReport<Params, RealData, TestData>,
   ) { }
 
+  public get Name() {
+    return this.data.name || '';
+  }
+
+  public get StartTime() {
+    return this.data.start_time;
+  }
+
+  public get EndTime() {
+    return this.data.end_time;
+  }
+
+  public get Data() {
+    return this.data;
+  }
+
+  public get RealData() {
+    return this.data.real_data || [];
+  }
+
+  public get TestData() {
+    return this.data.test_data || [];
+  }
+
+  public get Params() {
+    return this.data.params;
+  }
+
   public get Transactions() {
-    return this.transactions;
+    return this.data.transactions || [];
   }
 
   public get Snapshots() {
-    return this.snapshots;
+    return this.data.snapshots || [];
+  }
+
+  public get Last() {
+    return this.data.last;
   }
 }
