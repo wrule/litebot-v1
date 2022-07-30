@@ -14,6 +14,23 @@ implements IList<T> {
     });
   }
 
+  public All() {
+    if (!fs.existsSync(this.file)) {
+      fs.writeFileSync(this.file, '', 'utf-8');
+    }
+    let json_text = fs.readFileSync(this.file, 'utf-8');
+    json_text = `[${json_text.substring(0, json_text.length - 2)}]`;
+    return JSON.parse(json_text) as T[];
+  }
+
+  public Length() {
+    return this.All().length;
+  }
+
+  public Empty() {
+    fs.writeFileSync(this.file, '', 'utf-8');
+  }
+
   public GetFirst() {
     const list = this.All();
     if (list.length > 0) {
@@ -31,22 +48,5 @@ implements IList<T> {
     }
     this.Empty();
     this.Append(...list);
-  }
-
-  public All() {
-    if (!fs.existsSync(this.file)) {
-      fs.writeFileSync(this.file, '', 'utf-8');
-    }
-    let json_text = fs.readFileSync(this.file, 'utf-8');
-    json_text = `[${json_text.substring(0, json_text.length - 2)}]`;
-    return JSON.parse(json_text) as T[];
-  }
-
-  public Length() {
-    return this.All().length;
-  }
-
-  public Empty() {
-    fs.writeFileSync(this.file, '', 'utf-8');
   }
 }
