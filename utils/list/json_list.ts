@@ -20,7 +20,7 @@ implements IList<T> {
     return null;
   }
 
-  public UpdateFirst(data: T) {
+  public SetFirst(data: T) {
     const list = this.All();
     if (list.length > 0) {
       list[0] = data;
