@@ -37,7 +37,7 @@ class Report<
   }
 
   public async UpdateMeta(meta: IReportMeta<Params>) {
-    await this.config?.meta_data?.UpdateFirst({
+    await this.config?.meta_data?.SetFirst({
       ...(await this.Meta()),
       ...meta,
     });
