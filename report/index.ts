@@ -28,7 +28,7 @@ class Report<
   ) { }
 
   public async Meta() {
-    return (await this.config?.meta_data?.GetFirst()) || null;
+    return await this.config?.meta_data?.GetFirst() || null;
   }
 
   public async UpdateMeta(meta: IReportMeta<Params>) {
