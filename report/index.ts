@@ -42,16 +42,32 @@ class Report<
     }
   }
 
+  public async RealData() {
+    return await this.config?.real_data?.All() || [];
+  }
+
   public async AppendRealData(data: RealData) {
     await this.config?.real_data?.Append(data);
+  }
+
+  public async TestData() {
+    return await this.config?.test_data?.All() || [];
   }
 
   public async AppendTestData(data: TestData) {
     await this.config?.test_data?.Append(data);
   }
 
+  public async Transactions() {
+    return await this.config?.transactions?.All() || [];
+  }
+
   public async AppendTransaction(transaction: ITransaction) {
     await this.config?.transactions?.Append(transaction);
+  }
+
+  public async Snapshots() {
+    return await this.config?.snapshots?.All() || [];
   }
 
   public async AppendSnapshot(snapshot: ISnapshot) {
