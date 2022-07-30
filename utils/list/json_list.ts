@@ -8,8 +8,10 @@ implements IList<T> {
     private readonly file: string,
   ) { }
 
-  public Append(data: T) {
-    fs.appendFileSync(this.file, JSON.stringify(data) + ',\n', 'utf-8');
+  public Append(...data: T[]) {
+    data.forEach((item) => {
+      fs.appendFileSync(this.file, JSON.stringify(item) + ',\n', 'utf-8');
+    });
   }
 
   public GetFirst() {
@@ -28,7 +30,7 @@ implements IList<T> {
       list.push(data);
     }
     this.Empty();
-    list.forEach((item) => this.Append(item));
+    this.Append(...list);
   }
 
   public All() {
