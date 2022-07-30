@@ -33,7 +33,7 @@ class Report<
   }
 
   public async Last() {
-    return (await this.Meta()).last;
+    return (await this.Meta()).last as ISnapshot;
   }
 
   public async UpdateMeta(meta: IReportMeta<Params>) {
