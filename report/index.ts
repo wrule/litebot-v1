@@ -29,7 +29,7 @@ class Report<
   ) { }
 
   public async Meta() {
-    return await this.config?.meta_data?.GetFirst() || null;
+    return await this.config.meta_data.GetFirst() || null;
   }
 
   public async Last() {
@@ -37,45 +37,43 @@ class Report<
   }
 
   public async UpdateMeta(meta: IReportMeta<Params>) {
-    const meta_data = this.config?.meta_data;
-    if (meta_data) {
-      const old_meta = await meta_data.GetFirst() || { };
-      await meta_data.UpdateFirst({
-        ...old_meta,
-        ...meta,
-      });
-    }
+    const meta_data = this.config.meta_data;
+    const old_meta = await meta_data.GetFirst() || { };
+    await meta_data.UpdateFirst({
+      ...old_meta,
+      ...meta,
+    });
   }
 
   public async RealData() {
-    return await this.config?.real_data?.All() || [];
+    return await this.config.real_data?.All() || [];
   }
 
   public async AppendRealData(data: RealData) {
-    await this.config?.real_data?.Append(data);
+    await this.config.real_data?.Append(data);
   }
 
   public async TestData() {
-    return await this.config?.test_data?.All() || [];
+    return await this.config.test_data?.All() || [];
   }
 
   public async AppendTestData(data: TestData) {
-    await this.config?.test_data?.Append(data);
+    await this.config.test_data?.Append(data);
   }
 
   public async Transactions() {
-    return await this.config?.transactions?.All() || [];
+    return await this.config.transactions?.All() || [];
   }
 
   public async AppendTransaction(transaction: ITransaction) {
-    await this.config?.transactions?.Append(transaction);
+    await this.config.transactions?.Append(transaction);
   }
 
   public async Snapshots() {
-    return await this.config?.snapshots?.All() || [];
+    return await this.config.snapshots?.All() || [];
   }
 
   public async AppendSnapshot(snapshot: ISnapshot) {
-    await this.config?.snapshots?.Append(snapshot);
+    await this.config.snapshots?.Append(snapshot);
   }
 }
