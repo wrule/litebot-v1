@@ -6,6 +6,7 @@ import { IList } from './utils/list';
 import { JSONList } from './utils/list/json_list';
 import { MemoryList } from './utils/list/memory_list';
 import { Report } from './report';
+import path from 'path';
 
 // async function main() {
 //   const realData = ArrayToKLine(HistData);
@@ -29,14 +30,18 @@ import { Report } from './report';
 // main();
 
 async function testMain() {
-  const report = new Report<any, IOHLCV, IOHLCV>({
-    meta_data: new JSONList<any>('meta.json'),
-  });
-  const a = await report.Meta();
+
+  const a = path.resolve('a', 'b');
   console.log(a);
-  await report.UpdateMeta({
-    name: '鸡毛的报告',
-  });
+
+  // const report = new Report<any, IOHLCV, IOHLCV>({
+  //   meta_data: new JSONList<any>('meta.json'),
+  // });
+  // const a = await report.Meta();
+  // console.log(a);
+  // await report.UpdateMeta({
+  //   name: '鸡毛的报告',
+  // });
 }
 
 testMain();

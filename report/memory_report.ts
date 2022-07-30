@@ -13,7 +13,7 @@ class MemoryReport<
 extends Report<Params, RealData, TestData> {
   public constructor() {
     super({
-      meta_data: new MemoryList<IReportMeta<Params>>,
+      meta_data: new MemoryList<IReportMeta<Params>>(),
       real_data: new MemoryList<RealData>(),
       test_data: new MemoryList<TestData>(),
       transactions: new MemoryList<ITransaction>(),
