@@ -29,18 +29,16 @@ class Report<
   ) { }
 
   public async Meta() {
-    return await this.config.meta_data.GetFirst() || null;
+    return ((await this.config.meta_data.GetFirst()) || { }) as IReportMeta<Params>;
   }
 
   public async Last() {
-    return (await this.config.meta_data.GetFirst())?.last as ISnapshot;
+    return (await this.Meta()).last;
   }
 
   public async UpdateMeta(meta: IReportMeta<Params>) {
-    const meta_data = this.config.meta_data;
-    const old_meta = await meta_data.GetFirst() || { };
-    await meta_data.UpdateFirst({
-      ...old_meta,
+    await this.config.meta_data.UpdateFirst({
+      ...(await this.Meta()),
       ...meta,
     });
   }
