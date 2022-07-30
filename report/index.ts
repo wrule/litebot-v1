@@ -9,7 +9,7 @@ interface IReportMeta<Params> {
   start_time?: number;
   end_time?: number;
   params?: Params;
-  last: ISnapshot;
+  last?: ISnapshot;
 }
 
 export
@@ -19,8 +19,8 @@ class Report<
   TestData extends IOHLCV,
 > {
   public constructor(
-    private readonly config: {
-      meta_data: IList<IReportMeta<Params>>,
+    private readonly config?: {
+      meta_data?: IList<IReportMeta<Params>>,
       real_data?: IList<RealData>,
       test_data?: IList<TestData>,
       transactions?: IList<ITransaction>,
@@ -29,7 +29,7 @@ class Report<
   ) { }
 
   public async Meta() {
-    return ((await this.config.meta_data.GetFirst()) || { }) as IReportMeta<Params>;
+    return ((await this.config?.meta_data?.GetFirst()) || { }) as IReportMeta<Params>;
   }
 
   public async Last() {
@@ -37,41 +37,41 @@ class Report<
   }
 
   public async UpdateMeta(meta: IReportMeta<Params>) {
-    await this.config.meta_data.UpdateFirst({
+    await this.config?.meta_data?.UpdateFirst({
       ...(await this.Meta()),
       ...meta,
     });
   }
 
   public async RealData() {
-    return await this.config.real_data?.All() || [];
+    return await this.config?.real_data?.All() || [];
   }
 
   public async AppendRealData(data: RealData) {
-    await this.config.real_data?.Append(data);
+    await this.config?.real_data?.Append(data);
   }
 
   public async TestData() {
-    return await this.config.test_data?.All() || [];
+    return await this.config?.test_data?.All() || [];
   }
 
   public async AppendTestData(data: TestData) {
-    await this.config.test_data?.Append(data);
+    await this.config?.test_data?.Append(data);
   }
 
   public async Transactions() {
-    return await this.config.transactions?.All() || [];
+    return await this.config?.transactions?.All() || [];
   }
 
   public async AppendTransaction(transaction: ITransaction) {
-    await this.config.transactions?.Append(transaction);
+    await this.config?.transactions?.Append(transaction);
   }
 
   public async Snapshots() {
-    return await this.config.snapshots?.All() || [];
+    return await this.config?.snapshots?.All() || [];
   }
 
   public async AppendSnapshot(snapshot: ISnapshot) {
-    await this.config.snapshots?.Append(snapshot);
+    await this.config?.snapshots?.Append(snapshot);
   }
 }
