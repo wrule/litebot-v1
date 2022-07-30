@@ -9,6 +9,7 @@ interface IReportMeta<Params> {
   start_time?: number;
   end_time?: number;
   params?: Params;
+  last: ISnapshot;
 }
 
 export
@@ -18,8 +19,8 @@ class Report<
   TestData extends IOHLCV,
 > {
   public constructor(
-    private readonly config?: {
-      meta_data?: IList<IReportMeta<Params>>,
+    private readonly config: {
+      meta_data: IList<IReportMeta<Params>>,
       real_data?: IList<RealData>,
       test_data?: IList<TestData>,
       transactions?: IList<ITransaction>,
@@ -29,6 +30,10 @@ class Report<
 
   public async Meta() {
     return await this.config?.meta_data?.GetFirst() || null;
+  }
+
+  public async Last() {
+    return (await this.config.meta_data.GetFirst())?.last || null;
   }
 
   public async UpdateMeta(meta: IReportMeta<Params>) {
