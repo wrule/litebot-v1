@@ -5,7 +5,7 @@ export
 class JSONList<T>
 implements IList<T> {
   public constructor(
-    private readonly file: string,
+    private readonly file: fs.PathLike,
   ) { }
 
   public Append(...data: T[]) {
