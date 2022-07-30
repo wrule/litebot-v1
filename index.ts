@@ -7,6 +7,7 @@ import { JSONList } from './utils/list/json_list';
 import { MemoryList } from './utils/list/memory_list';
 import { Report } from './report';
 import path from 'path';
+import fs from 'fs';
 
 // async function main() {
 //   const realData = ArrayToKLine(HistData);
@@ -30,10 +31,6 @@ import path from 'path';
 // main();
 
 async function testMain() {
-
-  const a = path.resolve('a', 'b');
-  console.log(a);
-
   // const report = new Report<any, IOHLCV, IOHLCV>({
   //   meta_data: new JSONList<any>('meta.json'),
   // });

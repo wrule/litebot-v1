@@ -1,3 +1,4 @@
+import fs from 'fs';
 import path from 'path';
 import { IOHLCV } from '@/common/kline';
 import { ITransaction } from '@/common/transaction';
@@ -13,6 +14,7 @@ class JSONReport<
 >
 extends Report<Params, RealData, TestData> {
   public constructor(report_path: string) {
+    fs.mkdirSync(report_path, { recursive: true });
     super({
       meta_data: new JSONList<IReportMeta<Params>>(path.join(report_path, 'meta.json')),
       real_data: new JSONList<RealData>(path.join(report_path, 'real_data.json')),
