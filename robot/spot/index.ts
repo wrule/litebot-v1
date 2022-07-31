@@ -1,5 +1,6 @@
 import { IOHLCV, KLine } from '@/common/kline';
 import { INotifier } from '@/notifier';
+import { Report } from '@/report';
 import { ISpotExecutor } from '../../executor/spot';
 
 export
@@ -11,6 +12,7 @@ abstract class SpotRobot<
   public constructor(
     protected params: Params,
     protected executor: ISpotExecutor,
+    protected report?: Report<Params, RealData, TestData>,
     private notifier?: INotifier,
   ) { }
 
@@ -35,9 +37,13 @@ abstract class SpotRobot<
     if (kline.length >= this.KLineReadyLength) {
       const last = kline[kline.length - 1];
       if (last.time > this.kline_last_time) {
-        this.kline_last_time = last.time;
         const confirmed_kline = kline.filter((item) => item.confirmed);
-        this.checkKLine(confirmed_kline, last, kline);
+        // 有bug
+        const append_kline = confirmed_kline.filter((item) => item.time > this.kline_last_time);
+        this.kline_last_time = last.time;
+        // this.report?.AppendRealData()
+        console.log(append_kline.length, confirmed_kline.length);
+        // this.checkKLine(confirmed_kline, last, kline);
       }
     }
   }

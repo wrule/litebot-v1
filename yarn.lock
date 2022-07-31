@@ -442,7 +442,7 @@ tr46@~0.0.3:
 
 tulind@^0.8.20:
   version "0.8.20"
-  resolved "http://npm.perfma-inc.com:80/tulind/-/tulind-0.8.20.tgz#1d417d090855b2860edeacb7d796d0f744bc0a32"
+  resolved "https://registry.yarnpkg.com/tulind/-/tulind-0.8.20.tgz#1d417d090855b2860edeacb7d796d0f744bc0a32"
   integrity sha512-GnWW1LBuhMSaAkToiLhcoBowERQpfwIinmh00mvJ9wcYt6CvA9jpcN0V2VBtja+ZA6pz+Fev8xTI8Br493t1vw==
   dependencies:
     "@mapbox/node-pre-gyp" "^1.0.5"

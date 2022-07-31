@@ -5,6 +5,7 @@ import { SpotRobot } from '.';
 import moment from 'moment';
 import { INotifier } from '@/notifier';
 import { ITransaction } from '@/common/transaction';
+import { Report } from '@/report';
 
 export
 interface IParams {
@@ -25,9 +26,10 @@ extends SpotRobot<IParams, IOHLCV, ITestData> {
   public constructor(
     protected readonly params: IParams,
     protected readonly executor: ISpotExecutor,
+    protected report?: Report<IParams, IOHLCV, ITestData>,
     notifier?: INotifier,
   ) {
-    super(params, executor, notifier);
+    super(params, executor, report, notifier);
   }
 
   private sma(closes: number[], size: number) {

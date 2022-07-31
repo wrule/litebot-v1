@@ -11,10 +11,11 @@ function main() {
     secret: secret.SECRET_KEY,
     enableRateLimit: true,
   });
-  const watcher = new KLineWatcher(client, 1000, 'BTC/USDT', '1m', 10);
+  const watcher = new KLineWatcher(client, 1000, 'BTC/USDT', '1m', 100);
   const report = new JSONReport('output/test_ma');
   const executor = new BinanceSpot('BTC/USDT', client, 3, 'a.log');
   const robot = new TwoMaCross({ fast_ma: 9, slow_ma: 44 }, executor);
+  console.log('开始');
   watcher.Subscribe((kline) => {
     robot.CheckKLine(kline);
   });
