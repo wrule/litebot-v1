@@ -13,11 +13,7 @@ interface IReportMeta<Params> {
 }
 
 export
-class Report<
-  Params,
-  RealData extends IOHLCV,
-  TestData extends IOHLCV,
-> {
+class Report<Params, RealData, TestData> {
   public constructor(
     private readonly config?: {
       meta_data?: IList<IReportMeta<Params>>,

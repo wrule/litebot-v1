@@ -7,11 +7,7 @@ import { JSONList } from '../utils/list/json_list';
 import { IReportMeta, Report } from '.';
 
 export
-class JSONReport<
-  Params,
-  RealData extends IOHLCV,
-  TestData extends IOHLCV,
->
+class JSONReport<Params, RealData, TestData>
 extends Report<Params, RealData, TestData> {
   public constructor(report_path: string) {
     fs.mkdirSync(report_path, { recursive: true });

@@ -5,11 +5,7 @@ import { MemoryList } from '@/utils/list/memory_list';
 import { IReportMeta, Report } from '.';
 
 export
-class MemoryReport<
-  Params,
-  RealData extends IOHLCV,
-  TestData extends IOHLCV,
->
+class MemoryReport<Params, RealData, TestData>
 extends Report<Params, RealData, TestData> {
   public constructor() {
     super({
