@@ -39,6 +39,16 @@ class Report<Params, RealData, TestData> {
     });
   }
 
+  public async Reset() {
+    await Promise.all([
+      this.config?.meta_data?.Empty(),
+      this.config?.real_data?.Empty(),
+      this.config?.test_data?.Empty(),
+      this.config?.transactions?.Empty(),
+      this.config?.snapshots?.Empty(),
+    ]);
+  }
+
   public async RealData() {
     return await this.config?.real_data?.All() || [];
   }
