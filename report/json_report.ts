@@ -3,7 +3,7 @@ import path from 'path';
 import { IOHLCV } from '@/common/kline';
 import { ITransaction } from '@/common/transaction';
 import { ISnapshot } from '@/executor/spot';
-import { JSONList } from '@/utils/list/json_list';
+import { JSONList } from '../utils/list/json_list';
 import { IReportMeta, Report } from '.';
 
 export
