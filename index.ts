@@ -8,7 +8,6 @@ import { MemoryList } from './utils/list/memory_list';
 import { Report } from './report';
 import path from 'path';
 import fs from 'fs';
-import { A } from '@/report/k';
 
 // async function main() {
 //   const realData = ArrayToKLine(HistData);
@@ -32,7 +31,6 @@ import { A } from '@/report/k';
 // main();
 
 async function testMain() {
-  const a = new A();
   // const report = new JSONReport<any, IOHLCV, IOHLCV>('test_report');
   // const a = await report.Meta();
   // console.log(a);
