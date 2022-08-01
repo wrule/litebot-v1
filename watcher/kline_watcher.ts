@@ -1,5 +1,5 @@
 import { binance } from 'ccxt';
-import { ArrayToKLine, IOHLCV, KLine } from '../common/kline';
+import { ArrayToKLine, KLine } from '../common/kline';
 import { Watcher } from '.';
 
 export
@@ -15,21 +15,26 @@ extends Watcher<KLine> {
     super();
   }
 
-  private timer!: NodeJS.Timer;
+  private timer: NodeJS.Timer | null = null;
 
   public Start() {
-    this.timer = setInterval(async () => {
+    clearTimeout(this.timer as any);
+    this.timer = setTimeout(async () => {
       try {
         const list = await this.client.fetchOHLCV(this.symbol, this.timeframe, undefined, this.length);
         const kline = ArrayToKLine(list);
         this.update(kline);
       } catch (e) {
         console.error(e);
+      } finally {
+        if (this.timer) {
+          this.Start();
+        }
       }
     }, this.interval);
   }
 
   public Stop() {
-    clearInterval(this.timer);
+    this.timer = null;
   }
 }
