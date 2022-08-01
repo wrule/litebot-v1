@@ -17,7 +17,7 @@ function main() {
   const robot = new TwoMaCross({ fast_ma: 9, slow_ma: 44 }, executor);
   console.log('开始');
   watcher.Subscribe((kline) => {
-    robot.CheckKLine(kline);
+    console.log(kline.length);
   });
   watcher.Start();
 }
