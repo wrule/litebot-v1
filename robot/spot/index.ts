@@ -34,6 +34,23 @@ abstract class SpotRobot<
   public abstract KLineReadyLength: number;
 
   public CheckKLine(kline: RealData[]) {
+    if (kline.length < 1) {
+      return;
+    }
+    const last = kline[kline.length - 1];
+    if (last.time > this.kline_last_time) {
+      const confirmed_kline = kline.filter((item) => item.confirmed);
+      const append_kline = confirmed_kline.filter((item) => item.time >= this.kline_last_time);
+
+      console.log('更新', confirmed_kline.length, append_kline.length);
+
+      this.report?.AppendRealData(
+        ...confirmed_kline.filter((item) => item.time >= this.kline_last_time),
+      );
+
+      this.kline_last_time = last.time;
+    }
+    return;
     if (kline.length >= this.KLineReadyLength) {
       const last = kline[kline.length - 1];
       if (last.time > this.kline_last_time) {
