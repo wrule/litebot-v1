@@ -12,20 +12,25 @@ extends Watcher<Dictionary<Ticker>> {
     super();
   }
 
-  private timer!: NodeJS.Timer;
+  private timer: NodeJS.Timer | null = null;
 
   public Start() {
-    this.timer = setInterval(async () => {
+    clearTimeout(this.timer as any);
+    this.timer = setTimeout(async () => {
       try {
         const data = await this.client.fetchTickers(this.symbols);
         this.update(data);
       } catch (e) {
         console.error(e);
+      } finally {
+        if (this.timer) {
+          this.Start();
+        }
       }
     }, this.interval);
   }
 
   public Stop() {
-    clearInterval(this.timer);
+    this.timer = null;
   }
 }
