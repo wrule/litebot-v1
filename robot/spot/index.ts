@@ -41,7 +41,13 @@ abstract class SpotRobot<
       return;
     }
     if (last.time > this.kline_last_time) {
-      // TODO
+      if (confirmed_kline.length >= this.KLineReadyLength) {
+        // TODO 交易
+      }
+      this.report?.AppendRealData(
+        ...confirmed_kline.filter((item) => item.time >= this.kline_last_time)
+      );
+      this.kline_last_time = last.time;
     }
   }
 
