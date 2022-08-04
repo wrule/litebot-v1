@@ -50,19 +50,6 @@ abstract class SpotRobot<
 
       this.kline_last_time = last.time;
     }
-    return;
-    if (kline.length >= this.KLineReadyLength) {
-      const last = kline[kline.length - 1];
-      if (last.time > this.kline_last_time) {
-        const confirmed_kline = kline.filter((item) => item.confirmed);
-        // 有bug
-        const append_kline = confirmed_kline.filter((item) => item.time > this.kline_last_time);
-        this.kline_last_time = last.time;
-        // this.report?.AppendRealData()
-        console.log(append_kline.length, confirmed_kline.length);
-        // this.checkKLine(confirmed_kline, last, kline);
-      }
-    }
   }
 
   protected abstract checkKLine(
