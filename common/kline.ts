@@ -7,17 +7,13 @@ interface IOHLCV {
   low: number;
   close: number;
   volume: number;
-  confirmed?: boolean;
 }
 
 export
 type KLine = IOHLCV[];
 
 export
-function ArrayToOHLCV(
-  array: number[],
-  confirmed?: boolean,
-) {
+function ArrayToOHLCV(array: number[]) {
   return {
     time: array[0],
     open: array[1],
@@ -25,17 +21,10 @@ function ArrayToOHLCV(
     low: array[3],
     close: array[4],
     volume: array[5],
-    confirmed,
   } as IOHLCV;
 }
 
 export
-function ArrayToKLine(
-  array: number[][],
-  confirmed?: boolean,
-): KLine {
-  return array.map((item, index) => ArrayToOHLCV(
-    item,
-    confirmed == null ? index < array.length - 1 : confirmed,
-  ));
+function ArrayToKLine(array: number[][]): KLine {
+  return array.map((item) => ArrayToOHLCV(item));
 }
