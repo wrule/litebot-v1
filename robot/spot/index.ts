@@ -42,7 +42,7 @@ abstract class SpotRobot<
     }
     if (last.time > this.kline_last_time) {
       if (confirmed_kline.length >= this.KLineReadyLength) {
-        // TODO 交易
+        this.checkKLine(confirmed_kline, last);
       }
       this.report?.AppendRealData(
         ...confirmed_kline.filter((item) => item.time >= this.kline_last_time)
@@ -54,7 +54,6 @@ abstract class SpotRobot<
   protected abstract checkKLine(
     confirmed_kline: RealData[],
     last: RealData,
-    kline: RealData[],
   ): void;
   //#endregion
 
