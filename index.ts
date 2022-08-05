@@ -19,7 +19,7 @@ function main() {
     secret: secret.SECRET_KEY,
     enableRateLimit: true,
   });
-  const watcher = new KLineWatcher(client, 1000, 'ETH/USDT', '1m', 50);
+  const watcher = new KLineWatcher(client, 1000, 'ETH/USDT', '2h', 50);
   const report = new JSONReport<IParams, IOHLCV, IOHLCV>('output/test_ma');
   const executor = new BinanceSpot('ETH/USDT', client, 3, 'tn.log');
   const robot = new TwoMaCross({ fast_ma: 9, slow_ma: 44 }, executor, report, ding);
