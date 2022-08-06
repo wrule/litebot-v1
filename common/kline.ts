@@ -13,7 +13,7 @@ export
 type KLine = IOHLCV[];
 
 export
-interface KLineSnapshot {
+interface IKLineSnapshot {
   confirmed_kline: KLine;
   last: IOHLCV;
 }
@@ -33,4 +33,16 @@ function ArrayToOHLCV(array: number[]) {
 export
 function ArrayToKLine(array: number[][]) {
   return array.map((item) => ArrayToOHLCV(item)) as KLine;
+}
+
+export
+function ArrayToKLineSnapshot(array: number[][]) {
+  const kline = ArrayToKLine(array);
+  if (kline.length < 1) {
+    throw 'kline长度必须大于0';
+  }
+  return {
+    confirmed_kline: kline.slice(0, kline.length - 1),
+    last: kline[kline.length - 1],
+  } as IKLineSnapshot;
 }
