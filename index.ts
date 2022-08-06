@@ -24,8 +24,8 @@ function main() {
   const executor = new BinanceSpot('ETH/USDT', client, 3, 'tn.log');
   const robot = new TwoMaCross({ fast_ma: 9, slow_ma: 44 }, executor, report, ding);
   console.log('开始');
-  watcher.Subscribe(([kline, last]) => {
-    robot.CheckKLine(kline, last);
+  watcher.Subscribe((kline_snapshot) => {
+    robot.CheckKLine(kline_snapshot.confirmed_kline, kline_snapshot.last);
   });
   watcher.Start();
 }
