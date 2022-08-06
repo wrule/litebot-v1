@@ -13,6 +13,12 @@ export
 type KLine = IOHLCV[];
 
 export
+interface KLineSnapshot {
+  confirmed_kline: KLine;
+  last: IOHLCV;
+}
+
+export
 function ArrayToOHLCV(array: number[]) {
   return {
     time: array[0],
@@ -25,6 +31,6 @@ function ArrayToOHLCV(array: number[]) {
 }
 
 export
-function ArrayToKLine(array: number[][]): KLine {
-  return array.map((item) => ArrayToOHLCV(item));
+function ArrayToKLine(array: number[][]) {
+  return array.map((item) => ArrayToOHLCV(item)) as KLine;
 }
