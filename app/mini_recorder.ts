@@ -11,7 +11,6 @@ function main() {
   const recorder = new JSONList(`output/${symbol.replace('/', '-')}.json`);
   watcher.Subscribe((ticker) => {
     recorder.Append([ticker.timestamp, ticker.close]);
-    console.log(symbol, ticker.timestamp, ticker.close);
   });
   watcher.Start();
 }
