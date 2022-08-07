@@ -1,3 +1,4 @@
+// 2022年08月07日22:01:43
 
 export
 interface IOHLCV {
@@ -19,7 +20,7 @@ interface IKLineSnapshot {
 }
 
 export
-function ArrayToOHLCV(array: number[]) {
+function ArrayToOHLCV(array: number[]): IOHLCV {
   return {
     time: array[0],
     open: array[1],
@@ -27,16 +28,16 @@ function ArrayToOHLCV(array: number[]) {
     low: array[3],
     close: array[4],
     volume: array[5],
-  } as IOHLCV;
+  };
 }
 
 export
-function ArrayToKLine(array: number[][]) {
-  return array.map((item) => ArrayToOHLCV(item)) as KLine;
+function ArrayToKLine(array: number[][]): KLine {
+  return array.map((item) => ArrayToOHLCV(item));
 }
 
 export
-function ArrayToKLineSnapshot(array: number[][]) {
+function ArrayToKLineSnapshot(array: number[][]): IKLineSnapshot {
   const kline = ArrayToKLine(array);
   if (kline.length < 1) {
     throw 'kline长度必须大于0';
@@ -44,5 +45,5 @@ function ArrayToKLineSnapshot(array: number[][]) {
   return {
     confirmed_kline: kline.slice(0, kline.length - 1),
     last: kline[kline.length - 1],
-  } as IKLineSnapshot;
+  };
 }
