@@ -9,7 +9,7 @@ function getArgs() {
     const interval = Number(argvs[1]);
     return { symbol, interval };
   }
-  throw '参数数量错误';
+  throw '参数错误';
 }
 
 function main() {
