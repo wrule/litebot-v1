@@ -1,12 +1,57 @@
-const { program } = require('commander');
+#!/usr/bin/env node
+import { App } from './app';
+import { KLineWatcher } from '../watcher/kline_watcher';
+import { binance } from 'ccxt';
+import secret from '../.secret.json';
 
-program
-  .option('--first')
-  .option('-s, --separator <char>');
+export
+interface IConfig {
+  symbol: string;
+  timeframe: string;
+  interval?: number;
+  fast: number;
+  slow: number;
+  asset?: string;
+  amount?: number;
+}
 
-program.parse();
+export
+class MACrosser
+extends App {
+  public constructor(
+    private readonly config: IConfig,
+  ) {
+    super();
+  }
 
-const options = program.opts();
-console.log(options);
-// const limit = options.first ? 1 : undefined;
-// console.log(program.args[0].split(options.separator, limit));
+  protected run(...args: string[]) {
+    const client = new binance({
+      apiKey: secret.API_KEY,
+      secret: secret.SECRET_KEY,
+      enableRateLimit: true,
+    });
+    const watcher = new KLineWatcher(
+      client,
+      this.config.interval,
+      this.config.symbol,
+      this.config.timeframe,
+      100,
+    );
+    watcher.Subscribe((kline_snapshot) => {
+      console.log(kline_snapshot.confirmed_kline.length);
+    });
+    watcher.Start();
+  }
+}
+
+const app = new MACrosser({
+  symbol: 'BTC/USDT',
+  timeframe: '2h',
+  interval: 1000,
+  fast: 8,
+  slow: 49,
+  asset: 'USDT',
+  amount: 1000,
+});
+
+app.Run();
