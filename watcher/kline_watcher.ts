@@ -25,7 +25,7 @@ extends Watcher<IKLineSnapshot> {
         const kline_snapshot = ArrayToKLineSnapshot(list);
         this.update(kline_snapshot);
       } catch (e) {
-        console.error(e);
+        this.logger.error(e);
       } finally {
         if (this.timer) {
           this.Start();

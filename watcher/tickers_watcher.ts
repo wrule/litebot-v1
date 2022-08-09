@@ -21,7 +21,7 @@ extends Watcher<Dictionary<Ticker>> {
         const data = await this.client.fetchTickers(this.symbols);
         this.update(data);
       } catch (e) {
-        console.error(e);
+        this.logger.error(e);
       } finally {
         if (this.timer) {
           this.Start();

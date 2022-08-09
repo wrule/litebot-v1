@@ -1,3 +1,4 @@
+import { Logger } from '../utils/logger';
 
 /**
  * 监听回调函数
@@ -38,6 +39,8 @@ abstract class Watcher<T> {
         callback(data);
       });
   }
+
+  protected logger = new Logger();
 
   /**
    * 运行监听者
