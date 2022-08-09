@@ -6,7 +6,8 @@
     "dev": "node dist/index.js",
     "watch": "tsc -w",
     "build": "tsc",
-    "mini_recorder": "node dist/app/mini_recorder.js"
+    "mini_recorder": "node dist/app/mini_recorder.js",
+    "ma_crosser": "node dist/app/ma_crosser.js"
   },
   "repository": "https://github.com/wrule/litebot.git",
   "license": "MIT",
