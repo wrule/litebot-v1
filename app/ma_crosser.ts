@@ -1,2 +1,12 @@
+const { program } = require('commander');
 
-console.log('你好，世界');
+program
+  .option('--first')
+  .option('-s, --separator <char>');
+
+program.parse();
+
+const options = program.opts();
+console.log(options);
+// const limit = options.first ? 1 : undefined;
+// console.log(program.args[0].split(options.separator, limit));
