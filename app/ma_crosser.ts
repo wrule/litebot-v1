@@ -14,8 +14,8 @@ interface IConfig {
   symbol: string;
   timeframe: string;
   interval?: number;
-  fast: number;
-  slow: number;
+  fast_ma: number;
+  slow_ma: number;
   asset?: string;
   amount?: number;
 }
@@ -35,13 +35,6 @@ extends App {
       secret: secret.SECRET_KEY,
       enableRateLimit: true,
     });
-    this.watcher = new KLineWatcher(
-      this.client,
-      this.config.interval,
-      this.config.symbol,
-      this.config.timeframe,
-      100,
-    );
     this.executor = new BinanceSpot(
       this.config.symbol,
       this.client,
@@ -49,18 +42,25 @@ extends App {
       'tn.log',
     );
     this.robot = new TwoMaCross(
-      { fast_ma: this.config.fast, slow_ma: this.config.slow },
+      { fast_ma: this.config.fast_ma, slow_ma: this.config.slow_ma },
       this.executor,
       undefined,
       this.notifier,
     );
+    this.watcher = new KLineWatcher(
+      this.client,
+      this.config.interval,
+      this.config.symbol,
+      this.config.timeframe,
+      this.robot.KLineReadyLength,
+    );
   }
 
-  private client!: binance;
   private notifier!: INotifier;
-  private watcher!: KLineWatcher;
+  private client!: binance;
   private executor!: BinanceSpot;
   private robot!: TwoMaCross;
+  private watcher!: KLineWatcher;
 
   protected async run(...args: string[]) {
     await this.client.loadMarkets();
@@ -78,8 +78,8 @@ const app = new MACrosser({
   symbol: 'ETH/USDT',
   timeframe: '1m',
   interval: 1000,
-  fast: 9,
-  slow: 44,
+  fast_ma: 9,
+  slow_ma: 44,
   asset: 'USDT',
   amount: 1000,
 });
