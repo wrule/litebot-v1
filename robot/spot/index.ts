@@ -1,6 +1,7 @@
 import { IOHLCV, KLine } from '@/common/kline';
 import { INotifier } from '@/notifier';
 import { Report } from '@/report';
+import { Logger } from '../../utils/logger';
 import { ISpotExecutor } from '../../executor/spot';
 
 export
@@ -15,6 +16,8 @@ abstract class SpotRobot<
     protected report?: Report<Params, RealData, TestData>,
     private notifier?: INotifier,
   ) { }
+
+  protected logger = new Logger();
 
   public get Executor() {
     return this.executor;
