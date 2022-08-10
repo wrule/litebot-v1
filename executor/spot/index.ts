@@ -100,7 +100,7 @@ interface ISpotExecutor {
   ): ITransaction | Promise<ITransaction>;
 
   /**
-   * 重置机器人（回测使用）
+   * 重置执行者（回测使用）
    */
   Reset(): void;
 }
