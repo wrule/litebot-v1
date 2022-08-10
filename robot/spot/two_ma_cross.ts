@@ -55,7 +55,7 @@ extends SpotRobot<IParams, IOHLCV, ITestData> {
     this.SendMessage(`[${
       moment(new Date(tn.transaction_time)).format('HH:mm:ss')
     }  ${
-      { 'buy': '买', 'sell': '卖' }[tn.side as string]
+      { 'BUY': '买', 'SELL': '卖' }[tn.action as string]
     }  ${
       `${tn.in_amount}${tn.in_name} =(${tn.price})=> ${tn.out_amount}${tn.out_name}`
     }]\n前差: ${prev_diff}  现差: ${last_diff}\n走单耗时: ${(tn.transaction_time - tn.request_time) / 1000}秒`);
