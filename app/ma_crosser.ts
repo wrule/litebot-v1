@@ -75,8 +75,8 @@ extends App {
 }
 
 const app = new MACrosser({
-  symbol: 'OP/BUSD',
-  timeframe: '1m',
+  symbol: 'ETH/USDT',
+  timeframe: '2h',
   interval: 1000,
   fast_ma: 9,
   slow_ma: 44,
