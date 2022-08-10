@@ -52,7 +52,7 @@ extends App {
       this.config.interval,
       this.config.symbol,
       this.config.timeframe,
-      this.robot.KLineReadyLength,
+      this.robot.KLineReadyLength + 1,
     );
   }
 
