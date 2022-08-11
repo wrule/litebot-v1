@@ -47,3 +47,19 @@ function ArrayToKLineSnapshot(array: number[][]): IKLineSnapshot {
     last: kline[kline.length - 1],
   };
 }
+
+export
+function TimeframeToMS(timeframe: string) {
+  if (timeframe.endsWith('m')) {
+    return Number(timeframe.replace('m', '')) * (1000 * 60);
+  } else if (timeframe.endsWith('h')) {
+    return Number(timeframe.replace('h', '')) * (1000 * 60 * 60);
+  } else if (timeframe.endsWith('d')) {
+    return Number(timeframe.replace('d', '')) * (1000 * 60 * 60 * 24);
+  } else if (timeframe.endsWith('w')) {
+    return Number(timeframe.replace('w', '')) * (1000 * 60 * 60 * 24 * 7);
+  } else if (timeframe.endsWith('M')) {
+    return Number(timeframe.replace('w', '')) * (1000 * 60 * 60 * 24 * 28);
+  }
+  throw '';
+}
