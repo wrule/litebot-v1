@@ -11,7 +11,6 @@ implements ISpotExecutor {
     private readonly symbol: string,
     private readonly client: binance,
     private readonly retries = 5,
-    private readonly transactions_file: string,
   ) {
     this.asset_name = this.symbol.split('/')[0].trim();
     this.fund_name = this.symbol.split('/')[1].trim();
@@ -59,7 +58,6 @@ implements ISpotExecutor {
       out_name: this.asset_name,
       out_amount: order.amount - (order.fee.currency === this.asset_name ? order.fee.cost : 0),
     };
-    append_list(this.transactions_file, tn);
     return tn;
   }
 
@@ -114,7 +112,6 @@ implements ISpotExecutor {
       out_name: this.fund_name,
       out_amount: order.cost - (order.fee.currency === this.fund_name ? order.fee.cost : 0),
     };
-    append_list(this.transactions_file, tn);
     return tn;
   }
 
