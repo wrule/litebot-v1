@@ -35,12 +35,13 @@ extends App {
       secret: secret.SECRET_KEY,
       enableRateLimit: true,
     });
-    this.executor = new BinanceSpot(
-      this.config.symbol,
-      this.client,
-      3,
-      'tn.log',
-    );
+    this.executor = new BinanceSpot({
+      client: this.client,
+      symbol: this.config.symbol,
+      init_funds: 1000,
+      init_assets: 0,
+      retries: 3,
+    });
     this.robot = new TwoMaCross(
       { fast_ma: this.config.fast_ma, slow_ma: this.config.slow_ma },
       this.executor,

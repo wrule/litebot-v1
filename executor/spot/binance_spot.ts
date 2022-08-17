@@ -1,19 +1,25 @@
 import cctx, { binance } from 'ccxt';
 import { ISnapshot, ISpotExecutor } from '.';
 import { ITransaction } from '../../common/transaction';
-import { append_list } from '../../utils/json_list';
 import { retryer } from '../../utils/retryer';
+
+export
+interface BinanceSpotConfig {
+  client: binance;
+  symbol: string;
+  init_funds: number;
+  init_assets: number;
+  retries?: number;
+}
 
 export
 class BinanceSpot
 implements ISpotExecutor {
   public constructor(
-    private readonly symbol: string,
-    private readonly client: binance,
-    private readonly retries = 5,
+    private readonly config: BinanceSpotConfig,
   ) {
-    this.asset_name = this.symbol.split('/')[0].trim();
-    this.fund_name = this.symbol.split('/')[1].trim();
+    this.asset_name = this.config.symbol.split('/')[0].trim();
+    this.fund_name = this.config.symbol.split('/')[1].trim();
   }
 
   private asset_name!: string;
@@ -35,13 +41,13 @@ implements ISpotExecutor {
     price?: number,
   ) {
     const request_time = Number(new Date());
-    const order = await this.client.createMarketOrder(
-      this.symbol,
+    const order = await this.config.client.createMarketOrder(
+      this.config.symbol,
       'buy',
       0,
       undefined,
       {
-        quoteOrderQty: this.client.costToPrecision(this.symbol, in_assets),
+        quoteOrderQty: this.config.client.costToPrecision(this.config.symbol, in_assets),
       },
     );
     const response_time = Number(new Date());
@@ -69,7 +75,7 @@ implements ISpotExecutor {
       async () => {
         return await this.buy(in_assets, price);
       },
-      this.retries,
+      this.config.retries,
       (error) => error instanceof cctx.NetworkError,
     );
   }
@@ -83,7 +89,7 @@ implements ISpotExecutor {
       async () => {
         return await this.buy_all(price);
       },
-      this.retries,
+      this.config.retries,
       (error) => error instanceof cctx.NetworkError,
     );
   }
@@ -93,10 +99,10 @@ implements ISpotExecutor {
     price?: number,
   ) {
     const request_time = Number(new Date());
-    const order = await this.client.createMarketOrder(
-      this.symbol,
+    const order = await this.config.client.createMarketOrder(
+      this.config.symbol,
       'sell',
-      this.client.amountToPrecision(this.symbol, in_assets),
+      this.config.client.amountToPrecision(this.config.symbol, in_assets),
     );
     const response_time = Number(new Date());
     const tn: ITransaction = {
@@ -123,7 +129,7 @@ implements ISpotExecutor {
       async () => {
         return await this.sell(in_assets, price);
       },
-      this.retries,
+      this.config.retries,
       (error) => error instanceof cctx.NetworkError,
     );
   }
@@ -137,7 +143,7 @@ implements ISpotExecutor {
       async () => {
         return await this.sell_all(price);
       },
-      this.retries,
+      this.config.retries,
       (error) => error instanceof cctx.NetworkError,
     );
   }
@@ -147,7 +153,7 @@ implements ISpotExecutor {
   }
 
   private async fetchBalance(name: string) {
-    const balance = await this.client.fetchBalance();
+    const balance = await this.config.client.fetchBalance();
     return balance[name].free;
   }
 
@@ -171,7 +177,7 @@ implements ISpotExecutor {
     const [assetBalance, fundBalance, ticker] = await Promise.all([
       this.AssetBalance(),
       this.FundBalance(),
-      this.client.fetchTicker(this.symbol),
+      this.config.client.fetchTicker(this.config.symbol),
     ]);
     return assetBalance * (ticker.close as number) + fundBalance;
   }
