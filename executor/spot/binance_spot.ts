@@ -1,8 +1,6 @@
-import { JSONList } from '../../utils/list/json_list';
-import cctx, { binance } from 'ccxt';
+import { binance } from 'ccxt';
 import { ISnapshot, ISpotExecutor } from '.';
 import { ITransaction } from '../../common/transaction';
-import { retryer } from '../../utils/retryer';
 import { Logger } from '../../utils/logger';
 
 export
@@ -175,11 +173,6 @@ implements ISpotExecutor {
 
   public Reset() {
 
-  }
-
-  private async fetchBalance(name: string) {
-    const balance = await this.config.client.fetchBalance();
-    return balance[name].free;
   }
 
   public get FundName() {
