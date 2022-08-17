@@ -1,7 +1,9 @@
+import { JSONList } from '../../utils/list/json_list';
 import cctx, { binance } from 'ccxt';
 import { ISnapshot, ISpotExecutor } from '.';
 import { ITransaction } from '../../common/transaction';
 import { retryer } from '../../utils/retryer';
+import { Logger } from '../../utils/logger';
 
 export
 interface BinanceSpotConfig {
@@ -28,6 +30,30 @@ implements ISpotExecutor {
   private funds_name = '';
   private assets_amount = 0;
   private assets_name = '';
+
+  protected logger = new Logger();
+
+  public async SelfCheck() {
+    const balance = await this.config.client.fetchBalance();
+    if (this.funds_amount > balance[this.funds_name].free) {
+      this.logger.warn(
+        '预期资金数量', this.funds_amount,
+        '大于',
+        '账户资金数量', balance[this.funds_name].free,
+        '将重置为账户资金数量'
+      );
+      this.funds_amount = balance[this.funds_name].free;
+    }
+    if (balance[this.assets_name].free < this.assets_amount) {
+      this.logger.warn(
+        '预期资产数量', this.assets_amount,
+        '大于',
+        '账户资产数量', balance[this.assets_name].free,
+        '将重置为账户资产数量'
+      );
+      this.assets_amount = balance[this.assets_name].free;
+    }
+  }
 
   public Transactions() {
     return [] as ITransaction[];
