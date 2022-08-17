@@ -42,7 +42,7 @@ implements ISpotExecutor {
     this.account_funds_amount = balance[this.funds_name].free;
     this.account_assets_amount = balance[this.assets_name].free;
     if (this.available_funds_amount > this.account_funds_amount) {
-      this.logger.warn(
+      this.logger.log(
         '预期资金数量', this.available_funds_amount,
         '大于',
         '账户资金数量', this.account_funds_amount,
@@ -51,7 +51,7 @@ implements ISpotExecutor {
       this.available_funds_amount = this.account_funds_amount;
     }
     if (this.available_assets_amount > this.account_assets_amount) {
-      this.logger.warn(
+      this.logger.log(
         '预期资产数量', this.available_assets_amount,
         '大于',
         '账户资产数量', this.account_assets_amount,
