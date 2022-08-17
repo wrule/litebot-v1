@@ -186,24 +186,20 @@ implements ISpotExecutor {
     return this.funds_name;
   }
 
-  public async FundBalance() {
-    return await this.fetchBalance(this.funds_name);
+  public FundBalance() {
+    return this.available_funds_amount;
   }
 
   public get AssetName() {
     return this.assets_name;
   }
 
-  public async AssetBalance() {
-    return await this.fetchBalance(this.assets_name);
+  public AssetBalance() {
+    return this.available_assets_amount;
   }
 
   public async Valuation() {
-    const [assetBalance, fundBalance, ticker] = await Promise.all([
-      this.AssetBalance(),
-      this.FundBalance(),
-      this.config.client.fetchTicker(this.config.symbol),
-    ]);
-    return assetBalance * (ticker.close as number) + fundBalance;
+    const ticker = await this.config.client.fetchTicker(this.config.symbol);
+    return this.AssetBalance() * (ticker.close as number) + this.FundBalance();
   }
 }
