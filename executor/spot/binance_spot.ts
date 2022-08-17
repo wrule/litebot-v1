@@ -18,12 +18,16 @@ implements ISpotExecutor {
   public constructor(
     private readonly config: BinanceSpotConfig,
   ) {
-    this.asset_name = this.config.symbol.split('/')[0].trim();
-    this.fund_name = this.config.symbol.split('/')[1].trim();
+    this.funds_amount = this.config.init_funds;
+    this.assets_amount = this.config.init_assets;
+    this.assets_name = this.config.symbol.split('/')[0].trim();
+    this.funds_name = this.config.symbol.split('/')[1].trim();
   }
 
-  private asset_name!: string;
-  private fund_name!: string;
+  private funds_amount = 0;
+  private funds_name = '';
+  private assets_amount = 0;
+  private assets_name = '';
 
   public Transactions() {
     return [] as ITransaction[];
@@ -58,11 +62,11 @@ implements ISpotExecutor {
       response_time,
       expected_price: price as number,
       price: order.price,
-      in_name: this.fund_name,
+      in_name: this.funds_name,
       expected_in_amount: in_assets,
       in_amount: order.cost,
-      out_name: this.asset_name,
-      out_amount: order.amount - (order.fee.currency === this.asset_name ? order.fee.cost : 0),
+      out_name: this.assets_name,
+      out_amount: order.amount - (order.fee.currency === this.assets_name ? order.fee.cost : 0),
     };
     return tn;
   }
@@ -112,11 +116,11 @@ implements ISpotExecutor {
       response_time,
       expected_price: price as number,
       price: order.price,
-      in_name: this.asset_name,
+      in_name: this.assets_name,
       expected_in_amount: in_assets,
       in_amount: order.amount,
-      out_name: this.fund_name,
-      out_amount: order.cost - (order.fee.currency === this.fund_name ? order.fee.cost : 0),
+      out_name: this.funds_name,
+      out_amount: order.cost - (order.fee.currency === this.funds_name ? order.fee.cost : 0),
     };
     return tn;
   }
@@ -158,19 +162,19 @@ implements ISpotExecutor {
   }
 
   public get FundName() {
-    return this.fund_name;
+    return this.funds_name;
   }
 
   public async FundBalance() {
-    return await this.fetchBalance(this.fund_name);
+    return await this.fetchBalance(this.funds_name);
   }
 
   public get AssetName() {
-    return this.asset_name;
+    return this.assets_name;
   }
 
   public async AssetBalance() {
-    return await this.fetchBalance(this.asset_name);
+    return await this.fetchBalance(this.assets_name);
   }
 
   public async Valuation() {
