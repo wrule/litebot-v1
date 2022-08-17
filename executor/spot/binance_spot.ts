@@ -59,7 +59,13 @@ implements ISpotExecutor {
       );
       this.available_assets_amount = this.account_assets_amount;
     }
-    this.logger.log('同步账户完成');
+    this.logger.log(
+      '同步账户完成',
+      '预期资金数量', this.available_funds_amount,
+      '账户资金数量', this.account_funds_amount,
+      '预期资产数量', this.available_assets_amount,
+      '账户资产数量', this.account_assets_amount,
+    );
   }
 
   public Transactions() {
@@ -101,6 +107,8 @@ implements ISpotExecutor {
       out_name: this.assets_name,
       out_amount: order.amount - (order.fee.currency === this.assets_name ? order.fee.cost : 0),
     };
+    this.available_funds_amount -= tn.in_amount;
+    this.available_assets_amount += tn.out_amount;
     return tn;
   }
 
@@ -133,6 +141,8 @@ implements ISpotExecutor {
       out_name: this.funds_name,
       out_amount: order.cost - (order.fee.currency === this.funds_name ? order.fee.cost : 0),
     };
+    this.available_assets_amount -= tn.in_amount;
+    this.available_funds_amount += tn.out_amount;
     return tn;
   }
 
