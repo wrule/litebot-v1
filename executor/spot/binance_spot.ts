@@ -11,7 +11,6 @@ interface BinanceSpotConfig {
   symbol: string;
   init_funds: number;
   init_assets: number;
-  retries?: number;
 }
 
 export
@@ -67,7 +66,7 @@ implements ISpotExecutor {
   public UpdateSnapshot(price: number) {
   }
 
-  public async buy(
+  public async Buy(
     in_assets: number,
     price?: number,
   ) {
@@ -98,35 +97,12 @@ implements ISpotExecutor {
     return tn;
   }
 
-  public async Buy(
-    in_assets: number,
-    price?: number,
-  ) {
-    return await retryer(
-      async () => {
-        return await this.buy(in_assets, price);
-      },
-      this.config.retries,
-      (error) => error instanceof cctx.NetworkError,
-    );
-  }
-
-  public async buy_all(price?: number) {
-    await this.SyncAccount();
-    return await this.buy(this.funds_amount, price);
-  }
-
   public async BuyAll(price?: number) {
-    return await retryer(
-      async () => {
-        return await this.buy_all(price);
-      },
-      this.config.retries,
-      (error) => error instanceof cctx.NetworkError,
-    );
+    await this.SyncAccount();
+    return await this.Buy(this.funds_amount, price);
   }
 
-  public async sell(
+  public async Sell(
     in_assets: number,
     price?: number,
   ) {
@@ -153,32 +129,9 @@ implements ISpotExecutor {
     return tn;
   }
 
-  public async Sell(
-    in_assets: number,
-    price?: number,
-  ) {
-    return await retryer(
-      async () => {
-        return await this.sell(in_assets, price);
-      },
-      this.config.retries,
-      (error) => error instanceof cctx.NetworkError,
-    );
-  }
-
-  public async sell_all(price?: number) {
-    await this.SyncAccount();
-    return await this.sell(this.assets_amount, price);
-  }
-
   public async SellAll(price?: number) {
-    return await retryer(
-      async () => {
-        return await this.sell_all(price);
-      },
-      this.config.retries,
-      (error) => error instanceof cctx.NetworkError,
-    );
+    await this.SyncAccount();
+    return await this.Sell(this.assets_amount, price);
   }
 
   public Reset() {
