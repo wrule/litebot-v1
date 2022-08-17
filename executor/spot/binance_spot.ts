@@ -79,7 +79,7 @@ implements ISpotExecutor {
   public UpdateSnapshot(price: number) {
   }
 
-  public async Buy(
+  private async buy(
     in_assets: number,
     price?: number,
   ) {
@@ -112,12 +112,23 @@ implements ISpotExecutor {
     return tn;
   }
 
-  public async BuyAll(price?: number) {
+  public async Buy(
+    in_assets: number,
+    price?: number,
+  ) {
     await this.SyncAccount();
-    return await this.Buy(this.available_funds_amount, price);
+    if (in_assets > this.available_funds_amount) {
+      in_assets = this.available_funds_amount;
+    }
+    return this.buy(in_assets, price);
   }
 
-  public async Sell(
+  public async BuyAll(price?: number) {
+    await this.SyncAccount();
+    return await this.buy(this.available_funds_amount, price);
+  }
+
+  public async sell(
     in_assets: number,
     price?: number,
   ) {
@@ -146,9 +157,20 @@ implements ISpotExecutor {
     return tn;
   }
 
+  public async Sell(
+    in_assets: number,
+    price?: number,
+  ) {
+    await this.SyncAccount();
+    if (in_assets > this.available_assets_amount) {
+      in_assets = this.available_assets_amount;
+    }
+    return this.sell(in_assets, price);
+  }
+
   public async SellAll(price?: number) {
     await this.SyncAccount();
-    return await this.Sell(this.available_assets_amount, price);
+    return await this.sell(this.available_assets_amount, price);
   }
 
   public Reset() {
