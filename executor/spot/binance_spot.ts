@@ -19,38 +19,45 @@ implements ISpotExecutor {
   public constructor(
     private readonly config: BinanceSpotConfig,
   ) {
-    this.funds_amount = this.config.init_funds;
-    this.assets_amount = this.config.init_assets;
+    this.available_funds_amount = this.config.init_funds;
+    this.available_assets_amount = this.config.init_assets;
     this.assets_name = this.config.symbol.split('/')[0].trim();
     this.funds_name = this.config.symbol.split('/')[1].trim();
   }
 
-  private funds_amount = 0;
   private funds_name = '';
-  private assets_amount = 0;
+  private account_funds_amount = 0;
+  private available_funds_amount = 0;
   private assets_name = '';
+  private account_assets_amount = 0;
+  private available_assets_amount = 0;
 
   protected logger = new Logger();
 
+  /**
+   * 同步账户信息
+   */
   public async SyncAccount() {
     const balance = await this.config.client.fetchBalance();
-    if (this.funds_amount > balance[this.funds_name].free) {
+    this.account_funds_amount = balance[this.funds_name].free;
+    this.account_assets_amount = balance[this.assets_name].free;
+    if (this.available_funds_amount > this.account_funds_amount) {
       this.logger.warn(
-        '预期资金数量', this.funds_amount,
+        '预期资金数量', this.available_funds_amount,
         '大于',
-        '账户资金数量', balance[this.funds_name].free,
+        '账户资金数量', this.account_funds_amount,
         '将重置为账户资金数量'
       );
-      this.funds_amount = balance[this.funds_name].free;
+      this.available_funds_amount = this.account_funds_amount;
     }
-    if (balance[this.assets_name].free < this.assets_amount) {
+    if (this.available_assets_amount > this.account_assets_amount) {
       this.logger.warn(
-        '预期资产数量', this.assets_amount,
+        '预期资产数量', this.available_assets_amount,
         '大于',
-        '账户资产数量', balance[this.assets_name].free,
+        '账户资产数量', this.account_assets_amount,
         '将重置为账户资产数量'
       );
-      this.assets_amount = balance[this.assets_name].free;
+      this.available_assets_amount = this.account_assets_amount;
     }
     this.logger.log('同步账户完成');
   }
@@ -99,7 +106,7 @@ implements ISpotExecutor {
 
   public async BuyAll(price?: number) {
     await this.SyncAccount();
-    return await this.Buy(this.funds_amount, price);
+    return await this.Buy(this.available_funds_amount, price);
   }
 
   public async Sell(
@@ -131,7 +138,7 @@ implements ISpotExecutor {
 
   public async SellAll(price?: number) {
     await this.SyncAccount();
-    return await this.Sell(this.assets_amount, price);
+    return await this.Sell(this.available_assets_amount, price);
   }
 
   public Reset() {
