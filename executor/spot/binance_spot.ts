@@ -112,7 +112,8 @@ implements ISpotExecutor {
   }
 
   public async buy_all(price?: number) {
-    return await this.buy(await this.FundBalance(), price);
+    await this.SyncAccount();
+    return await this.buy(this.funds_amount, price);
   }
 
   public async BuyAll(price?: number) {
@@ -166,7 +167,8 @@ implements ISpotExecutor {
   }
 
   public async sell_all(price?: number) {
-    return await this.sell(await this.AssetBalance(), price);
+    await this.SyncAccount();
+    return await this.sell(this.assets_amount, price);
   }
 
   public async SellAll(price?: number) {
