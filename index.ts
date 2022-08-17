@@ -8,15 +8,16 @@ async function main() {
     secret: secret.SECRET_KEY,
     enableRateLimit: true,
   });
+  console.log('加载市场');
   await client.loadMarkets();
-  console.log(1234);
+  console.log('加载完成');
   const executor = new BinanceSpot({
     client,
     symbol: 'ETH/USDT',
-    init_funds: 1000,
-    init_assets: 0,
+    init_funds: 10000,
+    init_assets: 0.01,
   });
-  await executor.SelfCheck();
+  await executor.SyncAccount();
 }
 
 main();

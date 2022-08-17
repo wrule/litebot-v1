@@ -33,7 +33,7 @@ implements ISpotExecutor {
 
   protected logger = new Logger();
 
-  public async SelfCheck() {
+  public async SyncAccount() {
     const balance = await this.config.client.fetchBalance();
     if (this.funds_amount > balance[this.funds_name].free) {
       this.logger.warn(
@@ -53,6 +53,7 @@ implements ISpotExecutor {
       );
       this.assets_amount = balance[this.assets_name].free;
     }
+    this.logger.log('同步账户完成');
   }
 
   public Transactions() {
