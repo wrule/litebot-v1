@@ -125,14 +125,14 @@ implements ISpotExecutor {
   }
 
   public async sell(
-    in_assets: number,
+    in_amount: number,
     price?: number,
   ) {
     const request_time = Number(new Date());
     const order = await this.config.client.createMarketOrder(
       this.config.symbol,
       'sell',
-      this.config.client.amountToPrecision(this.config.symbol, in_assets),
+      this.config.client.amountToPrecision(this.config.symbol, in_amount),
     );
     const response_time = Number(new Date());
     const tn: ITransaction = {
@@ -143,7 +143,7 @@ implements ISpotExecutor {
       expected_price: price as number,
       price: order.price,
       in_name: this.assets_name,
-      expected_in_amount: in_assets,
+      expected_in_amount: in_amount,
       in_amount: order.amount,
       out_name: this.funds_name,
       out_amount: order.cost - (order.fee.currency === this.funds_name ? order.fee.cost : 0),
@@ -154,14 +154,14 @@ implements ISpotExecutor {
   }
 
   public async Sell(
-    in_assets: number,
+    in_amount: number,
     price?: number,
   ) {
     await this.SyncAccount();
-    if (in_assets > this.available_assets_amount) {
-      in_assets = this.available_assets_amount;
+    if (in_amount > this.available_assets_amount) {
+      in_amount = this.available_assets_amount;
     }
-    return this.sell(in_assets, price);
+    return this.sell(in_amount, price);
   }
 
   public async SellAll(price?: number) {
