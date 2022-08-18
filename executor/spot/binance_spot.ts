@@ -111,6 +111,12 @@ implements ISpotExecutor {
   ) {
     await this.SyncAccount();
     if (in_amount > this.available_funds_amount) {
+      this.logger.log(
+        '输入资金数量', in_amount,
+        '大于',
+        '可用资金数量', this.available_funds_amount,
+        '将重置为可用资金数量',
+      );
       in_amount = this.available_funds_amount;
     }
     return this.buy(in_amount, price);
@@ -156,6 +162,12 @@ implements ISpotExecutor {
   ) {
     await this.SyncAccount();
     if (in_amount > this.available_assets_amount) {
+      this.logger.log(
+        '输入资产数量', in_amount,
+        '大于',
+        '可用资产数量', this.available_assets_amount,
+        '将重置为可用资产数量',
+      );
       in_amount = this.available_assets_amount;
     }
     return this.sell(in_amount, price);
