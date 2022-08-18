@@ -53,13 +53,13 @@ interface ISpotExecutor {
 
   /**
    * 购买资产
-   * @param in_asset 期望输入资产
+   * @param in_amount 期望输入资金数量
    * @param price 期望成交价
    * @param time 交易时间（回测使用）
    * @returns 交易数据
    */
   Buy(
-    in_asset: number,
+    in_amount: number,
     price?: number,
     time?: number,
   ): ITransaction | Promise<ITransaction>;
@@ -77,13 +77,13 @@ interface ISpotExecutor {
 
   /**
    * 出售资产
-   * @param in_asset 期望输入资产
+   * @param in_amount 期望输入资产
    * @param price 期望成交价
    * @param time 交易时间（回测使用）
    * @returns 交易数据
    */
   Sell(
-    in_asset: number,
+    in_amount: number,
     price?: number,
     time?: number,
   ): ITransaction | Promise<ITransaction>;
