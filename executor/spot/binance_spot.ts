@@ -4,14 +4,32 @@ import { ISnapshot, ISpotExecutor } from '.';
 import { ITransaction } from '../../common/transaction';
 import { Logger } from '../../utils/logger';
 
+/**
+ * 币安现货执行者配置参数
+ */
 export
 interface BinanceSpotConfig {
+  /**
+   * 币安客户端
+   */
   client: binance;
+  /**
+   * 交易对
+   */
   symbol: string;
+  /**
+   * 初始资金
+   */
   init_funds_amount: number;
+  /**
+   * 初始资产（不填默认0）
+   */
   init_assets_amount?: number;
 }
 
+/**
+ * 币安现货执行者
+ */
 export
 class BinanceSpot
 implements ISpotExecutor {
@@ -21,13 +39,35 @@ implements ISpotExecutor {
     [this.assets_name, this.funds_name] = SymbolSplit(this.config.symbol);
   }
 
+  /**
+   * 资金名称
+   */
   private funds_name = '';
+  /**
+   * 账户资金数量
+   */
   private account_funds_amount = 0;
+  /**
+   * 可用资金数量
+   */
   private available_funds_amount = 0;
+
+  /**
+   * 资产名称
+   */
   private assets_name = '';
+  /**
+   * 账户资产数量
+   */
   private account_assets_amount = 0;
+  /**
+   * 可用资产数量
+   */
   private available_assets_amount = 0;
 
+  /**
+   * 日志记录器
+   */
   protected logger = new Logger();
 
   /**
