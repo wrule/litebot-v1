@@ -72,9 +72,6 @@ implements ISpotExecutor {
     return [] as ISnapshot[];
   }
 
-  public UpdateSnapshot(price: number) {
-  }
-
   private async buy(
     in_amount: number,
     price?: number,
@@ -167,10 +164,6 @@ implements ISpotExecutor {
   public async SellAll(price?: number) {
     await this.SyncAccount();
     return await this.sell(this.available_assets_amount, price);
-  }
-
-  public Reset() {
-
   }
 
   public get FundName() {

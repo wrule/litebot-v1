@@ -49,8 +49,6 @@ interface ISpotExecutor {
    */
   Snapshots(): ISnapshot[] | Promise<ISnapshot[]>;
 
-  UpdateSnapshot(price?: number): void;
-
   /**
    * 购买资产
    * @param in_amount 期望输入资金数量
@@ -98,9 +96,4 @@ interface ISpotExecutor {
     price?: number,
     time?: number,
   ): ITransaction | Promise<ITransaction>;
-
-  /**
-   * 重置执行者（回测使用）
-   */
-  Reset(): void;
 }

@@ -75,7 +75,8 @@ abstract class SpotRobot<
    */
   public Reset() {
     this.currentIndex = 0;
-    this.executor.Reset();
+    // TODO
+    // this.executor.Reset();
   }
 
   /**
@@ -125,7 +126,8 @@ abstract class SpotRobot<
       this.currentIndex = i;
       const last = this.last();
       this.checkTestData(last);
-      this.executor.UpdateSnapshot(last.close);
+      // TODO
+      // this.executor.UpdateSnapshot(last.close);
     }
   }
 

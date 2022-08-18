@@ -38,8 +38,7 @@ extends App {
     this.executor = new BinanceSpot({
       client: this.client,
       symbol: this.config.symbol,
-      init_funds: 1000,
-      init_assets: 0,
+      init_funds_amount: 1000,
     });
     this.robot = new TwoMaCross(
       { fast_ma: this.config.fast_ma, slow_ma: this.config.slow_ma },
