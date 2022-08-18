@@ -139,7 +139,8 @@ implements ISpotExecutor {
       expected_in_amount: in_amount,
       in_amount: order.cost,
       out_name: this.assets_name,
-      out_amount: order.amount - (order.fee.currency === this.assets_name ? order.fee.cost : 0),
+      // TODO 查明原因，错误兼容
+      out_amount: order.amount - (order.fee?.currency === this.assets_name ? order.fee.cost : 0),
     };
     this.available_funds_amount -= tn.in_amount;
     this.available_assets_amount += tn.out_amount;
@@ -192,7 +193,8 @@ implements ISpotExecutor {
       expected_in_amount: in_amount,
       in_amount: order.amount,
       out_name: this.funds_name,
-      out_amount: order.cost - (order.fee.currency === this.funds_name ? order.fee.cost : 0),
+      // TODO 查明原因，错误兼容
+      out_amount: order.cost - (order.fee?.currency === this.funds_name ? order.fee.cost : 0),
     };
     this.available_assets_amount -= tn.in_amount;
     this.available_funds_amount += tn.out_amount;
