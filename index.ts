@@ -14,17 +14,9 @@ async function main() {
   const executor = new BinanceSpot({
     client,
     symbol: 'ETH/USDT',
-    init_funds_amount: 11,
+    init_funds_amount: 30,
   });
-  await executor.SyncAccount();
-  // let tn = await executor.BuyAll();
-  // console.log(tn);
-  // tn = await executor.SellAll();
-  // console.log(tn);
-  // tn = await executor.BuyAll();
-  // console.log(tn);
-  // tn = await executor.SellAll();
-  // console.log(tn);
+  await executor.Buy(11);
 }
 
 main();

@@ -116,6 +116,7 @@ implements ISpotExecutor {
     in_amount: number,
     price?: number,
   ) {
+    this.logger.log('准备使用', in_amount, '个', this.FundName, '购买获得', this.AssetName);
     const request_time = Number(new Date());
     const order = await this.config.client.createMarketOrder(
       this.config.symbol,
@@ -142,6 +143,7 @@ implements ISpotExecutor {
     };
     this.available_funds_amount -= tn.in_amount;
     this.available_assets_amount += tn.out_amount;
+    this.logger.log('购买结果\n', tn);
     return tn;
   }
 
@@ -171,6 +173,7 @@ implements ISpotExecutor {
     in_amount: number,
     price?: number,
   ) {
+    this.logger.log('准备使用', in_amount, '个', this.AssetName, '出售收回', this.FundName);
     const request_time = Number(new Date());
     const order = await this.config.client.createMarketOrder(
       this.config.symbol,
@@ -193,6 +196,7 @@ implements ISpotExecutor {
     };
     this.available_assets_amount -= tn.in_amount;
     this.available_funds_amount += tn.out_amount;
+    this.logger.log('出售结果\n', tn);
     return tn;
   }
 
