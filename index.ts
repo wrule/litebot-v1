@@ -15,10 +15,13 @@ async function main() {
     client,
     symbol: 'ETH/USDT',
     init_funds_amount: 0,
-    init_assets_amount: 0.0216555,
+    init_assets_amount: 0.0213703,
   });
+  // await executor.Buy(11);
+  // await executor.Buy(12);
+  // await executor.BuyAll();
   await executor.SellAll();
-  executor.SyncAccount();
+  await executor.SyncAccount();
 }
 
 main();
