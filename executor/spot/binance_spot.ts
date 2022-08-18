@@ -1,3 +1,4 @@
+import { SymbolSplit } from '../../common/symbol';
 import { binance } from 'ccxt';
 import { ISnapshot, ISpotExecutor } from '.';
 import { ITransaction } from '../../common/transaction';
@@ -7,20 +8,17 @@ export
 interface BinanceSpotConfig {
   client: binance;
   symbol: string;
-  init_funds: number;
-  init_assets: number;
+  init_funds_amount: number;
+  init_assets_amount?: number;
 }
 
 export
 class BinanceSpot
 implements ISpotExecutor {
-  public constructor(
-    private readonly config: BinanceSpotConfig,
-  ) {
-    this.available_funds_amount = this.config.init_funds;
-    this.available_assets_amount = this.config.init_assets;
-    this.assets_name = this.config.symbol.split('/')[0].trim();
-    this.funds_name = this.config.symbol.split('/')[1].trim();
+  public constructor(private readonly config: BinanceSpotConfig) {
+    this.available_funds_amount = this.config.init_funds_amount;
+    this.available_assets_amount = this.config.init_assets_amount || 0;
+    [this.assets_name, this.funds_name] = SymbolSplit(this.config.symbol);
   }
 
   private funds_name = '';
