@@ -76,7 +76,7 @@ implements ISpotExecutor {
   }
 
   private async buy(
-    in_assets: number,
+    in_amount: number,
     price?: number,
   ) {
     const request_time = Number(new Date());
@@ -86,7 +86,7 @@ implements ISpotExecutor {
       0,
       undefined,
       {
-        quoteOrderQty: this.config.client.costToPrecision(this.config.symbol, in_assets),
+        quoteOrderQty: this.config.client.costToPrecision(this.config.symbol, in_amount),
       },
     );
     const response_time = Number(new Date());
@@ -98,7 +98,7 @@ implements ISpotExecutor {
       expected_price: price as number,
       price: order.price,
       in_name: this.funds_name,
-      expected_in_amount: in_assets,
+      expected_in_amount: in_amount,
       in_amount: order.cost,
       out_name: this.assets_name,
       out_amount: order.amount - (order.fee.currency === this.assets_name ? order.fee.cost : 0),
@@ -109,14 +109,14 @@ implements ISpotExecutor {
   }
 
   public async Buy(
-    in_assets: number,
+    in_amount: number,
     price?: number,
   ) {
     await this.SyncAccount();
-    if (in_assets > this.available_funds_amount) {
-      in_assets = this.available_funds_amount;
+    if (in_amount > this.available_funds_amount) {
+      in_amount = this.available_funds_amount;
     }
-    return this.buy(in_assets, price);
+    return this.buy(in_amount, price);
   }
 
   public async BuyAll(price?: number) {
