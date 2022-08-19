@@ -1,10 +1,6 @@
 // 2022年07月19日21:26:55
-import { ITransaction } from '@/common/transaction';
-
-export
-interface ISnapshot {
-  valuation: number;
-}
+import { ISnapshot } from '../../common/snapshot';
+import { ITransaction } from '../../common/transaction';
 
 /**
  * 现货执行者接口

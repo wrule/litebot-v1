@@ -1,6 +1,6 @@
 import { IOHLCV } from '@/common/kline';
+import { ISnapshot } from '@/common/snapshot';
 import { ITransaction } from '@/common/transaction';
-import { ISnapshot } from '@/executor/spot';
 import { IList } from '@/utils/list';
 
 export

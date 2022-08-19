@@ -1,5 +1,6 @@
-import { ISnapshot, ISpotExecutor } from '.';
-import { ITransaction } from '@/common/transaction';
+import { ISpotExecutor } from '.';
+import { ITransaction } from '../../common/transaction';
+import { ISnapshot } from '../../common/snapshot';
 
 export
 class TestSpot
@@ -30,8 +31,6 @@ implements ISpotExecutor {
 
   public UpdateSnapshot(price: number) {
     this.snapshots.push({
-      funds: this.funds,
-      assets: this.assets,
       valuation: this.Valuation(price),
     });
   }

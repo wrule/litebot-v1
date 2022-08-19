@@ -1,10 +1,10 @@
 import fs from 'fs';
 import path from 'path';
 import { IOHLCV } from '@/common/kline';
-import { ITransaction } from '@/common/transaction';
-import { ISnapshot } from '@/executor/spot';
+import { ITransaction } from '../common/transaction';
 import { JSONList } from '../utils/list/json_list';
 import { IReportMeta, Report } from '.';
+import { ISnapshot } from '@/common/snapshot';
 
 export
 class JSONReport<Params, RealData, TestData>

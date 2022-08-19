@@ -1,9 +1,10 @@
 import { SymbolSplit } from '../../common/symbol';
 import { binance } from 'ccxt';
-import { ISnapshot, ISpotExecutor } from '.';
+import { ISpotExecutor } from '.';
 import { ITransaction } from '../../common/transaction';
 import { Logger } from '../../utils/logger';
 import { IList } from '../../utils/list';
+import { ISnapshot } from '../../common/snapshot';
 
 /**
  * 币安现货执行者配置参数
