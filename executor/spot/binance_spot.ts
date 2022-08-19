@@ -153,7 +153,7 @@ implements ISpotExecutor {
     return tn;
   }
 
-  public async sell(
+  private async sell(
     in_amount: number,
     price?: number,
   ) {
