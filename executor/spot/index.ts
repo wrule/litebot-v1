@@ -35,7 +35,6 @@ interface ISpotExecutor {
    * 获取快照数据列表
    */
   Snapshots(): ISnapshot[] | Promise<ISnapshot[]>;
-
   /**
    * 购买资产
    * @param in_amount 期望输入资金数量
@@ -48,7 +47,6 @@ interface ISpotExecutor {
     price?: number,
     time?: number,
   ): ITransaction | Promise<ITransaction>;
-
   /**
    * 使用全部资金购买资产
    * @param price 期望成交价
@@ -59,7 +57,6 @@ interface ISpotExecutor {
     price?: number,
     time?: number,
   ): ITransaction | Promise<ITransaction>;
-
   /**
    * 出售资产
    * @param in_amount 期望输入资产
@@ -72,7 +69,6 @@ interface ISpotExecutor {
     price?: number,
     time?: number,
   ): ITransaction | Promise<ITransaction>;
-
   /**
    * 出售全部资产
    * @param price 期望成交价
