@@ -1,6 +1,9 @@
 import { binance } from 'ccxt';
 import secret from './.secret.json';
+import { ITransaction } from './common/transaction';
 import { BinanceSpot } from './executor/spot/binance_spot';
+import { JSONList } from './utils/list/json_list';
+import { Logger } from './utils/logger';
 
 async function main() {
   const client = new binance({
@@ -15,7 +18,9 @@ async function main() {
     client,
     symbol: 'ETH/USDT',
     init_funds_amount: 0,
-    init_assets_amount: 0.0213703,
+    init_assets_amount: 0.023702,
+    transaction_list: new JSONList<ITransaction>('output/tn.json'),
+    logger: new Logger(),
   });
   // await executor.Buy(11);
   // await executor.Buy(12);
