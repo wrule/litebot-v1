@@ -1,4 +1,3 @@
-// 2022年07月19日21:26:55
 import { ISnapshot } from '../../common/snapshot';
 import { ITransaction } from '../../common/transaction';
 
@@ -11,33 +10,27 @@ interface ISpotExecutor {
    * 资金名称
    */
   FundName: string;
-
   /**
    * 可用资金余额
    */
-  FundBalance(): number | Promise<number>;
-
+  FundBalance: number;
   /**
    * 资产名称
    */
   AssetName: string;
-
   /**
    * 可用资产余额
    */
-  AssetBalance(): number | Promise<number>;
-
+  AssetBalance: number;
   /**
    * 获取当前估值
    * @param price 当前资产价格（回测使用）
    */
   Valuation(price?: number): number | Promise<number>;
-
   /**
    * 获取交易数据列表
    */
   Transactions(): ITransaction[] | Promise<ITransaction[]>;
-
   /**
    * 获取快照数据列表
    */
