@@ -116,14 +116,6 @@ implements ISpotExecutor {
     );
   }
 
-  public async Transactions() {
-    return (await this.config?.transaction_list?.All()) || [];
-  }
-
-  public async Snapshots() {
-    return (await this.config?.snapshot_list?.All()) || [];
-  }
-
   private async buy(
     in_amount: number,
     price?: number,
@@ -257,6 +249,14 @@ implements ISpotExecutor {
   public async Valuation() {
     const ticker = await this.config.client.fetchTicker(this.config.symbol);
     return this.AssetBalance * (ticker.close as number) + this.FundBalance;
+  }
+
+  public async Transactions() {
+    return (await this.config?.transaction_list?.All()) || [];
+  }
+
+  public async Snapshots() {
+    return (await this.config?.snapshot_list?.All()) || [];
   }
 
   public async UpdateSnapshot() {
