@@ -230,6 +230,20 @@ implements ISpotExecutor {
     return await this.sell(this.available_assets_amount, price);
   }
 
+  public async UpdateSnapshot() {
+    if (this.config?.snapshot_list) {
+      this.config.snapshot_list.Append(
+        await this.LatestSnapshot(),
+      );
+    }
+  }
+
+  public async LatestSnapshot(): Promise<ISnapshot> {
+    return {
+      valuation: await this.Valuation(),
+    };
+  }
+
   public get FundName() {
     return this.funds_name;
   }
@@ -257,19 +271,5 @@ implements ISpotExecutor {
 
   public async Snapshots() {
     return (await this.config?.snapshot_list?.All()) || [];
-  }
-
-  public async UpdateSnapshot() {
-    if (this.config?.snapshot_list) {
-      this.config.snapshot_list.Append(
-        await this.LatestSnapshot(),
-      );
-    }
-  }
-
-  public async LatestSnapshot(): Promise<ISnapshot> {
-    return {
-      valuation: await this.Valuation(),
-    };
   }
 }
