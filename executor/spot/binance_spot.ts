@@ -186,28 +186,6 @@ implements ISpotExecutor {
     return tn;
   }
 
-  public async Sell(
-    in_amount: number,
-    price?: number,
-  ) {
-    await this.SyncAccount();
-    if (in_amount > this.available_assets_amount) {
-      this.config.logger?.log(
-        '输入资产数量', in_amount,
-        '大于',
-        '可用资产数量', this.available_assets_amount,
-        '将重置为可用资产数量',
-      );
-      in_amount = this.available_assets_amount;
-    }
-    return this.sell(in_amount, price);
-  }
-
-  public async SellAll(price?: number) {
-    await this.SyncAccount();
-    return await this.sell(this.available_assets_amount, price);
-  }
-
   public async UpdateSnapshot() {
     if (this.config?.snapshot_list) {
       this.config.snapshot_list.Append(
@@ -271,5 +249,27 @@ implements ISpotExecutor {
   public async BuyAll(price?: number) {
     await this.SyncAccount();
     return await this.buy(this.available_funds_amount, price);
+  }
+
+  public async Sell(
+    in_amount: number,
+    price?: number,
+  ) {
+    await this.SyncAccount();
+    if (in_amount > this.available_assets_amount) {
+      this.config.logger?.log(
+        '输入资产数量', in_amount,
+        '大于',
+        '可用资产数量', this.available_assets_amount,
+        '将重置为可用资产数量',
+      );
+      in_amount = this.available_assets_amount;
+    }
+    return this.sell(in_amount, price);
+  }
+
+  public async SellAll(price?: number) {
+    await this.SyncAccount();
+    return await this.sell(this.available_assets_amount, price);
   }
 }
