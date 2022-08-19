@@ -121,7 +121,7 @@ implements ISpotExecutor {
     return this.fund_name;
   }
 
-  public FundBalance() {
+  public get FundBalance() {
     return this.funds;
   }
 
@@ -129,7 +129,7 @@ implements ISpotExecutor {
     return this.asset_name;
   }
 
-  public AssetBalance() {
+  public get AssetBalance() {
     return this.assets;
   }
 
