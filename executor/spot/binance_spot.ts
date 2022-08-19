@@ -5,6 +5,7 @@ import { ITransaction } from '../../common/transaction';
 import { Logger } from '../../utils/logger';
 import { IList } from '../../utils/list';
 import { ISnapshot } from '../../common/snapshot';
+import { JSONList } from '../../utils/list/json_list';
 
 /**
  * 币安现货执行者配置参数
@@ -116,6 +117,8 @@ implements ISpotExecutor {
     );
   }
 
+  private irregular_data = new JSONList('output/irregular_data.json');
+
   private async buy(
     in_amount: number,
     price?: number,
@@ -146,6 +149,9 @@ implements ISpotExecutor {
       // TODO 查明原因，错误兼容
       out_amount: order.amount - (order.fee?.currency === this.assets_name ? order.fee.cost : 0),
     };
+    if (!order.fee) {
+      await this.irregular_data.Append(order);
+    }
     await this.config.transaction_list?.Append(tn);
     this.available_funds_amount -= tn.in_amount;
     this.available_assets_amount += tn.out_amount;
@@ -179,6 +185,9 @@ implements ISpotExecutor {
       // TODO 查明原因，错误兼容
       out_amount: order.cost - (order.fee?.currency === this.funds_name ? order.fee.cost : 0),
     };
+    if (!order.fee) {
+      await this.irregular_data.Append(order);
+    }
     await this.config.transaction_list?.Append(tn);
     this.available_assets_amount -= tn.in_amount;
     this.available_funds_amount += tn.out_amount;
