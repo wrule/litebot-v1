@@ -47,6 +47,10 @@ interface BinanceSpotConfig {
 export
 class BinanceSpot
 implements ISpotExecutor {
+  /**
+   * 构造函数
+   * @param config 配置信息
+   */
   public constructor(private readonly config: BinanceSpotConfig) {
     this.available_funds_amount = this.config.init_funds_amount;
     this.available_assets_amount = this.config.init_assets_amount || 0;
@@ -65,7 +69,6 @@ implements ISpotExecutor {
    * 可用资金数量
    */
   private available_funds_amount = 0;
-
   /**
    * 资产名称
    */
@@ -88,7 +91,7 @@ implements ISpotExecutor {
     this.account_assets_amount = balance[this.assets_name].free;
     if (this.available_funds_amount > this.account_funds_amount) {
       this.config.logger?.log(
-        '预期资金数量', this.available_funds_amount,
+        '可用资金数量', this.available_funds_amount,
         '大于',
         '账户资金数量', this.account_funds_amount,
         '将重置为账户资金数量',
@@ -97,7 +100,7 @@ implements ISpotExecutor {
     }
     if (this.available_assets_amount > this.account_assets_amount) {
       this.config.logger?.log(
-        '预期资产数量', this.available_assets_amount,
+        '可用资产数量', this.available_assets_amount,
         '大于',
         '账户资产数量', this.account_assets_amount,
         '将重置为账户资产数量',
@@ -106,9 +109,9 @@ implements ISpotExecutor {
     }
     this.config.logger?.log(
       '同步账户完成',
-      '预期资金数量', this.available_funds_amount,
+      '可用资金数量', this.available_funds_amount,
       '账户资金数量', this.account_funds_amount,
-      '预期资产数量', this.available_assets_amount,
+      '可用资产数量', this.available_assets_amount,
       '账户资产数量', this.account_assets_amount,
     );
   }
