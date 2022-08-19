@@ -112,12 +112,12 @@ implements ISpotExecutor {
     );
   }
 
-  public Transactions() {
-    return [] as ITransaction[];
+  public async Transactions() {
+    return (await this.config?.transaction_list?.All()) || [];
   }
 
-  public Snapshots() {
-    return [] as ISnapshot[];
+  public async Snapshots() {
+    return (await this.config?.snapshot_list?.All()) || [];
   }
 
   private async buy(
