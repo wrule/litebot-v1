@@ -254,4 +254,18 @@ implements ISpotExecutor {
     const ticker = await this.config.client.fetchTicker(this.config.symbol);
     return this.AssetBalance() * (ticker.close as number) + this.FundBalance();
   }
+
+  public async UpdateSnapshot() {
+    if (this.config?.snapshot_list) {
+      this.config.snapshot_list.Append(
+        await this.LatestSnapshot(),
+      );
+    }
+  }
+
+  public async LatestSnapshot(): Promise<ISnapshot> {
+    return {
+      valuation: await this.Valuation(),
+    };
+  }
 }

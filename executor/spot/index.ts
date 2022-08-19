@@ -3,8 +3,6 @@ import { ITransaction } from '@/common/transaction';
 
 export
 interface ISnapshot {
-  funds: number;
-  assets: number;
   valuation: number;
 }
 
