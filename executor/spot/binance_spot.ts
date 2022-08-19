@@ -153,28 +153,6 @@ implements ISpotExecutor {
     return tn;
   }
 
-  public async Buy(
-    in_amount: number,
-    price?: number,
-  ) {
-    await this.SyncAccount();
-    if (in_amount > this.available_funds_amount) {
-      this.config.logger?.log(
-        '输入资金数量', in_amount,
-        '大于',
-        '可用资金数量', this.available_funds_amount,
-        '将重置为可用资金数量',
-      );
-      in_amount = this.available_funds_amount;
-    }
-    return this.buy(in_amount, price);
-  }
-
-  public async BuyAll(price?: number) {
-    await this.SyncAccount();
-    return await this.buy(this.available_funds_amount, price);
-  }
-
   public async sell(
     in_amount: number,
     price?: number,
@@ -271,5 +249,27 @@ implements ISpotExecutor {
 
   public async Snapshots() {
     return (await this.config?.snapshot_list?.All()) || [];
+  }
+
+  public async Buy(
+    in_amount: number,
+    price?: number,
+  ) {
+    await this.SyncAccount();
+    if (in_amount > this.available_funds_amount) {
+      this.config.logger?.log(
+        '输入资金数量', in_amount,
+        '大于',
+        '可用资金数量', this.available_funds_amount,
+        '将重置为可用资金数量',
+      );
+      in_amount = this.available_funds_amount;
+    }
+    return this.buy(in_amount, price);
+  }
+
+  public async BuyAll(price?: number) {
+    await this.SyncAccount();
+    return await this.buy(this.available_funds_amount, price);
   }
 }
