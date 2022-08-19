@@ -3,6 +3,7 @@ import { binance } from 'ccxt';
 import { ISnapshot, ISpotExecutor } from '.';
 import { ITransaction } from '../../common/transaction';
 import { Logger } from '../../utils/logger';
+import { IList } from '../../utils/list';
 
 /**
  * 币安现货执行者配置参数
@@ -25,6 +26,18 @@ interface BinanceSpotConfig {
    * 初始资产（不填默认0）
    */
   init_assets_amount?: number;
+  /**
+   * 交易记录器
+   */
+  transaction_list?: IList<ITransaction>;
+  /**
+   * 快照记录器
+   */
+  snapshot_list?: IList<ISnapshot>;
+  /**
+   * 日志记录器
+   */
+  logger?: Logger;
 }
 
 /**
@@ -66,11 +79,6 @@ implements ISpotExecutor {
   private available_assets_amount = 0;
 
   /**
-   * 日志记录器
-   */
-  protected logger = new Logger();
-
-  /**
    * 同步账户信息
    */
   public async SyncAccount() {
@@ -78,7 +86,7 @@ implements ISpotExecutor {
     this.account_funds_amount = balance[this.funds_name].free;
     this.account_assets_amount = balance[this.assets_name].free;
     if (this.available_funds_amount > this.account_funds_amount) {
-      this.logger.log(
+      this.config.logger?.log(
         '预期资金数量', this.available_funds_amount,
         '大于',
         '账户资金数量', this.account_funds_amount,
@@ -87,7 +95,7 @@ implements ISpotExecutor {
       this.available_funds_amount = this.account_funds_amount;
     }
     if (this.available_assets_amount > this.account_assets_amount) {
-      this.logger.log(
+      this.config.logger?.log(
         '预期资产数量', this.available_assets_amount,
         '大于',
         '账户资产数量', this.account_assets_amount,
@@ -95,7 +103,7 @@ implements ISpotExecutor {
       );
       this.available_assets_amount = this.account_assets_amount;
     }
-    this.logger.log(
+    this.config.logger?.log(
       '同步账户完成',
       '预期资金数量', this.available_funds_amount,
       '账户资金数量', this.account_funds_amount,
@@ -116,7 +124,7 @@ implements ISpotExecutor {
     in_amount: number,
     price?: number,
   ) {
-    this.logger.log('准备使用', in_amount, '个', this.FundName, '购买获得', this.AssetName);
+    this.config.logger?.log('准备使用', in_amount, '个', this.FundName, '购买获得', this.AssetName);
     const request_time = Number(new Date());
     const order = await this.config.client.createMarketOrder(
       this.config.symbol,
@@ -144,7 +152,7 @@ implements ISpotExecutor {
     };
     this.available_funds_amount -= tn.in_amount;
     this.available_assets_amount += tn.out_amount;
-    this.logger.log('购买结果\n', tn);
+    this.config.logger?.log('购买结果\n', tn);
     return tn;
   }
 
@@ -154,7 +162,7 @@ implements ISpotExecutor {
   ) {
     await this.SyncAccount();
     if (in_amount > this.available_funds_amount) {
-      this.logger.log(
+      this.config.logger?.log(
         '输入资金数量', in_amount,
         '大于',
         '可用资金数量', this.available_funds_amount,
@@ -174,7 +182,7 @@ implements ISpotExecutor {
     in_amount: number,
     price?: number,
   ) {
-    this.logger.log('准备使用', in_amount, '个', this.AssetName, '出售收回', this.FundName);
+    this.config.logger?.log('准备使用', in_amount, '个', this.AssetName, '出售收回', this.FundName);
     const request_time = Number(new Date());
     const order = await this.config.client.createMarketOrder(
       this.config.symbol,
@@ -198,7 +206,7 @@ implements ISpotExecutor {
     };
     this.available_assets_amount -= tn.in_amount;
     this.available_funds_amount += tn.out_amount;
-    this.logger.log('出售结果\n', tn);
+    this.config.logger?.log('出售结果\n', tn);
     return tn;
   }
 
@@ -208,7 +216,7 @@ implements ISpotExecutor {
   ) {
     await this.SyncAccount();
     if (in_amount > this.available_assets_amount) {
-      this.logger.log(
+      this.config.logger?.log(
         '输入资产数量', in_amount,
         '大于',
         '可用资产数量', this.available_assets_amount,
