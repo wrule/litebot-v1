@@ -200,6 +200,7 @@ implements ISpotExecutor {
     };
   }
 
+  //#region 接口实现
   public get FundName() {
     return this.funds_name;
   }
@@ -272,4 +273,5 @@ implements ISpotExecutor {
     await this.SyncAccount();
     return await this.sell(this.available_assets_amount, price);
   }
+  //#endregion
 }
