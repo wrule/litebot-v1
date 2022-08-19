@@ -239,7 +239,7 @@ implements ISpotExecutor {
     return this.funds_name;
   }
 
-  public FundBalance() {
+  public get FundBalance() {
     return this.available_funds_amount;
   }
 
@@ -247,13 +247,13 @@ implements ISpotExecutor {
     return this.assets_name;
   }
 
-  public AssetBalance() {
+  public get AssetBalance() {
     return this.available_assets_amount;
   }
 
   public async Valuation() {
     const ticker = await this.config.client.fetchTicker(this.config.symbol);
-    return this.AssetBalance() * (ticker.close as number) + this.FundBalance();
+    return this.AssetBalance * (ticker.close as number) + this.FundBalance;
   }
 
   public async UpdateSnapshot() {
