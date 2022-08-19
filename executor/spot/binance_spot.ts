@@ -150,6 +150,7 @@ implements ISpotExecutor {
       // TODO 查明原因，错误兼容
       out_amount: order.amount - (order.fee?.currency === this.assets_name ? order.fee.cost : 0),
     };
+    await this.config.transaction_list?.Append(tn);
     this.available_funds_amount -= tn.in_amount;
     this.available_assets_amount += tn.out_amount;
     this.config.logger?.log('购买结果\n', tn);
@@ -204,6 +205,7 @@ implements ISpotExecutor {
       // TODO 查明原因，错误兼容
       out_amount: order.cost - (order.fee?.currency === this.funds_name ? order.fee.cost : 0),
     };
+    await this.config.transaction_list?.Append(tn);
     this.available_assets_amount -= tn.in_amount;
     this.available_funds_amount += tn.out_amount;
     this.config.logger?.log('出售结果\n', tn);
