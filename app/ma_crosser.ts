@@ -8,6 +8,10 @@ import dingConfig from '../.dingtalk.json';
 import { BinanceSpot } from '../executor/spot/binance_spot';
 import { TwoMaCross } from '../robot/spot/two_ma_cross';
 import { INotifier } from '../notifier';
+import { JSONList } from '../utils/list/json_list';
+import { ITransaction } from '../common/transaction';
+import { ISnapshot } from '../common/snapshot';
+import { Logger } from '../utils/logger';
 
 export
 interface IConfig {
@@ -38,7 +42,11 @@ extends App {
     this.executor = new BinanceSpot({
       client: this.client,
       symbol: this.config.symbol,
-      init_funds_amount: 1000,
+      init_funds_amount: 20,
+      init_assets_amount: 0,
+      transaction_list: new JSONList<ITransaction>('output/op-tn.json'),
+      snapshot_list: new JSONList<ISnapshot>('output/op-ss.json'),
+      logger: new Logger(),
     });
     this.robot = new TwoMaCross(
       { fast_ma: this.config.fast_ma, slow_ma: this.config.slow_ma },
@@ -74,13 +82,11 @@ extends App {
 }
 
 const app = new MACrosser({
-  symbol: 'ETH/USDT',
-  timeframe: '2h',
+  symbol: 'OP/USDT',
+  timeframe: '1m',
   interval: 1000,
   fast_ma: 9,
   slow_ma: 44,
-  asset: 'USDT',
-  amount: 1000,
 });
 
 app.Run();

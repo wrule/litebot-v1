@@ -7,29 +7,25 @@ import { JSONList } from './utils/list/json_list';
 import { Logger } from './utils/logger';
 
 async function main() {
+  const logger = new Logger();
   const client = new binance({
     apiKey: secret.API_KEY,
     secret: secret.SECRET_KEY,
     enableRateLimit: true,
   });
-  console.log('加载市场');
+  logger.log('加载市场');
   await client.loadMarkets();
-  console.log('加载完成');
+  logger.log('加载完成');
   const executor = new BinanceSpot({
     client,
-    symbol: 'ETH/USDT',
-    init_funds_amount: 40,
+    symbol: 'OP/USDT',
+    init_funds_amount: 20,
     init_assets_amount: 0,
-    transaction_list: new JSONList<ITransaction>('output/tn.json'),
-    snapshot_list: new JSONList<ISnapshot>('output/ss.json'),
+    transaction_list: new JSONList<ITransaction>('output/op-tn.json'),
+    snapshot_list: new JSONList<ISnapshot>('output/op-ss.json'),
     logger: new Logger(),
   });
-  // await executor.Buy(11);
-  // await executor.Buy(12);
-  // await executor.BuyAll();
-  // await executor.SellAll();
   await executor.SyncAccount();
-  await executor.UpdateSnapshot();
 }
 
 main();
