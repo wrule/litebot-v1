@@ -70,7 +70,9 @@ extends App {
   private watcher!: KLineWatcher;
 
   protected async run(...args: string[]) {
+    this.logger.log('加载市场');
     await this.client.loadMarkets();
+    this.logger.log('加载完成');
     this.watcher.Subscribe((kline_snapshot) => {
       this.robot.CheckKLine(
         kline_snapshot.confirmed_kline,
