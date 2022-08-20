@@ -14,6 +14,12 @@ implements ISpotExecutor {
   ) {
     this.Reset();
   }
+  LatestSnapshot(): ISnapshot | Promise<ISnapshot> {
+    throw new Error('Method not implemented.');
+  }
+  UpdateSnapshot(): void | Promise<void> {
+    throw new Error('Method not implemented.');
+  }
 
   private funds!: number;
   private assets!: number;
