@@ -42,10 +42,10 @@ extends App {
     this.executor = new BinanceSpot({
       client: this.client,
       symbol: this.config.symbol,
-      init_funds_amount: 20,
+      init_funds_amount: this.config.amount as number,
       init_assets_amount: 0,
-      transaction_list: new JSONList<ITransaction>('output/op-tn.json'),
-      snapshot_list: new JSONList<ISnapshot>('output/op-ss.json'),
+      transaction_list: new JSONList<ITransaction>(`output/${this.config.symbol}-tn.json`),
+      snapshot_list: new JSONList<ISnapshot>(`output/${this.config.symbol}-ss.json`),
       logger: new Logger(),
     });
     this.robot = new TwoMaCross(
@@ -89,6 +89,7 @@ const app = new MACrosser({
   interval: 1000,
   fast_ma: 9,
   slow_ma: 44,
+  amount: 20,
 });
 
 app.Run();
