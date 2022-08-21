@@ -44,7 +44,7 @@ extends App {
       client: this.client,
       symbol: this.config.symbol,
       init_funds_amount: this.config.amount as number,
-      init_assets_amount: 20,
+      init_assets_amount: 0,
       transaction_list: new JSONList<ITransaction>(`output/${SymbolPathization(this.config.symbol)}-tn.json`),
       snapshot_list: new JSONList<ISnapshot>(`output/${SymbolPathization(this.config.symbol)}-ss.json`),
       logger: new Logger(),
@@ -85,12 +85,12 @@ extends App {
 }
 
 const app = new MACrosser({
-  symbol: 'OP/USDT',
+  symbol: 'LINK/USDT',
   timeframe: '1m',
   interval: 1000,
   fast_ma: 9,
   slow_ma: 44,
-  amount: 0,
+  amount: 20,
 });
 
 app.Run();
