@@ -10,5 +10,5 @@ function SymbolSplit(symbol: string) {
 
 export
 function SymbolPathization(symbol: string) {
-  return symbol.replaceAll('/', '-');
+  return symbol.replace('/', '-');
 }
