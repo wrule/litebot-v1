@@ -12,6 +12,7 @@ import { JSONList } from '../utils/list/json_list';
 import { ITransaction } from '../common/transaction';
 import { ISnapshot } from '../common/snapshot';
 import { Logger } from '../utils/logger';
+import { SymbolPathization } from '../common/symbol';
 
 export
 interface IConfig {
@@ -44,8 +45,8 @@ extends App {
       symbol: this.config.symbol,
       init_funds_amount: this.config.amount as number,
       init_assets_amount: 20,
-      transaction_list: new JSONList<ITransaction>(`output/${this.config.symbol.replace('/', '-')}-tn.json`),
-      snapshot_list: new JSONList<ISnapshot>(`output/${this.config.symbol.replace('/', '-')}-ss.json`),
+      transaction_list: new JSONList<ITransaction>(`output/${SymbolPathization(this.config.symbol)}-tn.json`),
+      snapshot_list: new JSONList<ISnapshot>(`output/${SymbolPathization(this.config.symbol)}-ss.json`),
       logger: new Logger(),
     });
     this.robot = new TwoMaCross(

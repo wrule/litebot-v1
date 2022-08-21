@@ -7,3 +7,8 @@ function SymbolSplit(symbol: string) {
   }
   throw 'symbol解析错误';
 }
+
+export
+function SymbolPathization(symbol: string) {
+  return symbol.replaceAll('/', '');
+}
