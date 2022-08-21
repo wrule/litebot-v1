@@ -44,8 +44,8 @@ extends App {
       symbol: this.config.symbol,
       init_funds_amount: this.config.amount as number,
       init_assets_amount: 0,
-      transaction_list: new JSONList<ITransaction>(`output/${this.config.symbol}-tn.json`),
-      snapshot_list: new JSONList<ISnapshot>(`output/${this.config.symbol}-ss.json`),
+      transaction_list: new JSONList<ITransaction>(`output/${this.config.symbol.replace('/', '-')}-tn.json`),
+      snapshot_list: new JSONList<ISnapshot>(`output/${this.config.symbol.replace('/', '-')}-ss.json`),
       logger: new Logger(),
     });
     this.robot = new TwoMaCross(
