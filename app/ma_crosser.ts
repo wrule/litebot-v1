@@ -43,7 +43,7 @@ extends App {
       client: this.client,
       symbol: this.config.symbol,
       init_funds_amount: this.config.amount as number,
-      init_assets_amount: 0,
+      init_assets_amount: 20,
       transaction_list: new JSONList<ITransaction>(`output/${this.config.symbol.replace('/', '-')}-tn.json`),
       snapshot_list: new JSONList<ISnapshot>(`output/${this.config.symbol.replace('/', '-')}-ss.json`),
       logger: new Logger(),
@@ -89,7 +89,7 @@ const app = new MACrosser({
   interval: 1000,
   fast_ma: 9,
   slow_ma: 44,
-  amount: 20,
+  amount: 0,
 });
 
 app.Run();
