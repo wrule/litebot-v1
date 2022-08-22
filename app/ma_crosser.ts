@@ -85,13 +85,13 @@ extends App {
 }
 
 const app = new MACrosser({
-  symbol: 'LINK/USDT',
+  symbol: process.argv[2],
   timeframe: '1m',
   interval: 1000,
   fast_ma: 9,
   slow_ma: 44,
-  funds: 14,
+  funds: Number(process.argv[3]),
   assets: 0,
 });
 
-app.Run();
+// app.Run();
