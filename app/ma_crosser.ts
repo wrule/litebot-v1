@@ -21,8 +21,8 @@ interface IConfig {
   interval?: number;
   fast_ma: number;
   slow_ma: number;
-  asset?: string;
-  amount?: number;
+  funds: number;
+  assets?: number;
 }
 
 export
@@ -43,8 +43,8 @@ extends App {
     this.executor = new BinanceSpot({
       client: this.client,
       symbol: this.config.symbol,
-      init_funds_amount: this.config.amount as number,
-      init_assets_amount: 0,
+      init_funds_amount: this.config.funds,
+      init_assets_amount: this.config.assets,
       transaction_list: new JSONList<ITransaction>(`output/${SymbolPathization(this.config.symbol)}-tn.json`),
       snapshot_list: new JSONList<ISnapshot>(`output/${SymbolPathization(this.config.symbol)}-ss.json`),
       logger: new Logger(),
@@ -90,7 +90,8 @@ const app = new MACrosser({
   interval: 1000,
   fast_ma: 9,
   slow_ma: 44,
-  amount: 20,
+  funds: 20,
+  assets: 0,
 });
 
 app.Run();
