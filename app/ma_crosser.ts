@@ -90,7 +90,7 @@ const app = new MACrosser({
   interval: 1000,
   fast_ma: 9,
   slow_ma: 44,
-  funds: 20,
+  funds: 14,
   assets: 0,
 });
 
