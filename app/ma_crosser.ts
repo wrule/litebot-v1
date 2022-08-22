@@ -94,4 +94,4 @@ const app = new MACrosser({
   assets: 0,
 });
 
-// app.Run();
+app.Run();
