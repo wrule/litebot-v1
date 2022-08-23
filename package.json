@@ -15,6 +15,7 @@
   "dependencies": {
     "@types/crypto-js": "^4.1.1",
     "@types/node": "^18.0.3",
+    "@types/yargs": "^17.0.11",
     "axios": "^0.27.2",
     "ccxt": "^1.90.29",
     "commander": "^9.4.0",

@@ -13,6 +13,8 @@ import { ITransaction } from '../common/transaction';
 import { ISnapshot } from '../common/snapshot';
 import { Logger } from '../utils/logger';
 import { SymbolPathization } from '../common/symbol';
+import yargs from 'yargs/yargs';
+import { hideBin }  from 'yargs/helpers';
 
 export
 interface IConfig {
@@ -84,14 +86,19 @@ extends App {
   }
 }
 
-const app = new MACrosser({
-  symbol: process.argv[2],
+const config = {
+  symbol: 'ETH/USDT',
   timeframe: '1m',
   interval: 1000,
   fast_ma: 9,
   slow_ma: 44,
-  funds: Number(process.argv[3]),
+  funds: 11,
   assets: 0,
-});
+  ...(yargs(hideBin(process.argv)).argv),
+};
+
+console.log(config);
+
+const app = new MACrosser(config);
 
 app.Run();
