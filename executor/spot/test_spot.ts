@@ -43,6 +43,45 @@ implements ISpotExecutor {
   private funds_name = '';
   private fee_multiplier = 1;
 
+  public async Reset() {
+    this.available_funds_amount = this.config.init_funds_amount;
+    this.available_assets_amount = this.config.init_assets_amount || 0;
+    [this.assets_name, this.funds_name] = SymbolSplit(this.config.symbol);
+    this.fee_multiplier = 1 - this.config.fee;
+    await Promise.all([
+      this.config.transaction_list?.Empty(),
+      this.config.snapshot_list?.Empty(),
+    ]);
+  }
+
+  public get FundName() {
+    return this.funds_name;
+  }
+
+  public get FundBalance() {
+    return this.available_funds_amount;
+  }
+
+  public get AssetName() {
+    return this.assets_name;
+  }
+
+  public get AssetBalance() {
+    return this.available_assets_amount;
+  }
+
+  public Valuation(price: number) {
+    return this.available_assets_amount * price + this.available_funds_amount;
+  }
+
+  public async Transactions() {
+    return (await this.config?.transaction_list?.All()) || [];
+  }
+
+  public async Snapshots() {
+    return (await this.config?.snapshot_list?.All()) || [];
+  }
+
   public async Buy(
     in_amount: number,
     price: number,
@@ -105,45 +144,6 @@ implements ISpotExecutor {
 
   public SellAll(price: number, time: number) {
     return this.Sell(this.available_assets_amount, price, time);
-  }
-
-  public async Reset() {
-    this.available_funds_amount = this.config.init_funds_amount;
-    this.available_assets_amount = this.config.init_assets_amount || 0;
-    [this.assets_name, this.funds_name] = SymbolSplit(this.config.symbol);
-    this.fee_multiplier = 1 - this.config.fee;
-    await Promise.all([
-      this.config.transaction_list?.Empty(),
-      this.config.snapshot_list?.Empty(),
-    ]);
-  }
-
-  public get FundName() {
-    return this.funds_name;
-  }
-
-  public get FundBalance() {
-    return this.available_funds_amount;
-  }
-
-  public get AssetName() {
-    return this.assets_name;
-  }
-
-  public get AssetBalance() {
-    return this.available_assets_amount;
-  }
-
-  public Valuation(price: number) {
-    return this.available_assets_amount * price + this.available_funds_amount;
-  }
-
-  public async Transactions() {
-    return (await this.config?.transaction_list?.All()) || [];
-  }
-
-  public async Snapshots() {
-    return (await this.config?.snapshot_list?.All()) || [];
   }
 
   public LatestSnapshot(): ISnapshot | Promise<ISnapshot> {
