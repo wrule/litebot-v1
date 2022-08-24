@@ -79,12 +79,10 @@ interface ISpotExecutor {
     price?: number,
     time?: number,
   ): ITransaction | Promise<ITransaction>;
-
   /**
    * 获取最新快照信息
    */
   LatestSnapshot(): ISnapshot | Promise<ISnapshot>;
-
   /**
    * 更新快照
    */
