@@ -34,7 +34,7 @@ abstract class SpotRobot<
 
   public abstract KLineReadyLength: number;
 
-  public CheckKLine(
+  public async CheckKLine(
     confirmed_kline: RealData[],
     last: RealData,
   ) {
@@ -43,9 +43,9 @@ abstract class SpotRobot<
     }
     if (last.time > this.kline_last_time) {
       if (confirmed_kline.length >= this.KLineReadyLength) {
-        this.checkKLine(confirmed_kline, last);
+        await this.checkKLine(confirmed_kline, last);
       }
-      this.report?.AppendRealData(
+      await this.report?.AppendRealData(
         ...confirmed_kline.filter((item) => item.time >= this.kline_last_time)
       );
       this.kline_last_time = last.time;
