@@ -28,3 +28,5 @@ class Logger {
     console.warn(...data);
   }
 }
+
+export const logger = new Logger();
