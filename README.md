@@ -19,3 +19,5 @@
 ./ma_crosser.js --symbol BTC/USDT --timeframe 2h --funds 1000
 ```
 更多命参数可查看代码
+
+## mini_recorder可用，在app/dist目录中 参数为 symbol 轮训时间间隔
