@@ -137,23 +137,23 @@ implements ISpotExecutor {
   }
 
   public get FundName() {
-    return this.fund_name;
+    return this.funds_name;
   }
 
   public get FundBalance() {
-    return this.funds;
+    return this.available_funds_amount;
   }
 
   public get AssetName() {
-    return this.asset_name;
+    return this.assets_name;
   }
 
   public get AssetBalance() {
-    return this.assets;
+    return this.available_assets_amount;
   }
 
   public Valuation(price: number) {
-    return this.assets * price + this.funds;
+    return this.available_assets_amount * price + this.available_funds_amount;
   }
 
   public LatestSnapshot(): ISnapshot | Promise<ISnapshot> {
