@@ -34,28 +34,21 @@ abstract class SpotRobot<
 
   public abstract KLineReadyLength: number;
 
-  public async CheckKLine(
-    confirmed_kline: RealData[],
-    last: RealData,
-  ) {
-    if (confirmed_kline.length < 1) {
-      return;
-    }
-    if (last.time > this.kline_last_time) {
+  public async CheckKLine(confirmed_kline: RealData[]) {
+    if (confirmed_kline.length < 1) return;
+    const last_confirmed = confirmed_kline[confirmed_kline.length - 1];
+    if (last_confirmed.time > this.kline_last_time) {
       if (confirmed_kline.length >= this.KLineReadyLength) {
-        await this.checkKLine(confirmed_kline, last);
+        await this.checkKLine(confirmed_kline, last_confirmed);
       }
       await this.report?.AppendRealData(
         ...confirmed_kline.filter((item) => item.time >= this.kline_last_time)
       );
-      this.kline_last_time = last.time;
+      this.kline_last_time = last_confirmed.time;
     }
   }
 
-  protected abstract checkKLine(
-    confirmed_kline: RealData[],
-    last: RealData,
-  ): void;
+  protected abstract checkKLine(confirmed_kline: RealData[], last_confirmed: RealData): Promise<void>;
   //#endregion
 
   //#region 回测逻辑
