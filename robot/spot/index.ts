@@ -25,9 +25,7 @@ abstract class SpotRobot<
 
   //#region 消息通知部分
   public async SendMessage(message: string) {
-    if (this.notifier) {
-      await this.notifier.SendMessage(message);
-    }
+    await this.notifier?.SendMessage(message);
   }
   //#endregion
 
