@@ -1,5 +1,6 @@
-import { ISnapshot, ISpotExecutor } from '.';
-import { ITransaction } from '@/common/transaction';
+import { ISpotExecutor } from '.';
+import { ITransaction } from '../../common/transaction';
+import { ISnapshot } from '../../common/snapshot';
 
 export
 class TestSpot
@@ -12,6 +13,12 @@ implements ISpotExecutor {
     private readonly asset_name = 'ASSET',
   ) {
     this.Reset();
+  }
+  LatestSnapshot(): ISnapshot | Promise<ISnapshot> {
+    throw new Error('Method not implemented.');
+  }
+  UpdateSnapshot(): void | Promise<void> {
+    throw new Error('Method not implemented.');
   }
 
   private funds!: number;
@@ -28,13 +35,11 @@ implements ISpotExecutor {
     return this.snapshots || [];
   }
 
-  public UpdateSnapshot(price: number) {
-    this.snapshots.push({
-      funds: this.funds,
-      assets: this.assets,
-      valuation: this.Valuation(price),
-    });
-  }
+  // public UpdateSnapshot(price: number) {
+  //   this.snapshots.push({
+  //     valuation: this.Valuation(price),
+  //   });
+  // }
 
   public Buy(
     in_funds: number,
@@ -122,7 +127,7 @@ implements ISpotExecutor {
     return this.fund_name;
   }
 
-  public FundBalance() {
+  public get FundBalance() {
     return this.funds;
   }
 
@@ -130,7 +135,7 @@ implements ISpotExecutor {
     return this.asset_name;
   }
 
-  public AssetBalance() {
+  public get AssetBalance() {
     return this.assets;
   }
 

@@ -8,6 +8,13 @@ import dingConfig from '../.dingtalk.json';
 import { BinanceSpot } from '../executor/spot/binance_spot';
 import { TwoMaCross } from '../robot/spot/two_ma_cross';
 import { INotifier } from '../notifier';
+import { JSONList } from '../utils/list/json_list';
+import { ITransaction } from '../common/transaction';
+import { ISnapshot } from '../common/snapshot';
+import { Logger } from '../utils/logger';
+import { SymbolPathization } from '../common/symbol';
+import yargs from 'yargs/yargs';
+import { hideBin }  from 'yargs/helpers';
 
 export
 interface IConfig {
@@ -16,8 +23,8 @@ interface IConfig {
   interval?: number;
   fast_ma: number;
   slow_ma: number;
-  asset?: string;
-  amount?: number;
+  funds: number;
+  assets?: number;
 }
 
 export
@@ -35,12 +42,15 @@ extends App {
       secret: secret.SECRET_KEY,
       enableRateLimit: true,
     });
-    this.executor = new BinanceSpot(
-      this.config.symbol,
-      this.client,
-      3,
-      'tn.log',
-    );
+    this.executor = new BinanceSpot({
+      client: this.client,
+      symbol: this.config.symbol,
+      init_funds_amount: this.config.funds,
+      init_assets_amount: this.config.assets,
+      transaction_list: new JSONList<ITransaction>(`output/${SymbolPathization(this.config.symbol)}-tn.json`),
+      snapshot_list: new JSONList<ISnapshot>(`output/${SymbolPathization(this.config.symbol)}-ss.json`),
+      logger: new Logger(),
+    });
     this.robot = new TwoMaCross(
       { fast_ma: this.config.fast_ma, slow_ma: this.config.slow_ma },
       this.executor,
@@ -63,7 +73,9 @@ extends App {
   private watcher!: KLineWatcher;
 
   protected async run(...args: string[]) {
+    this.logger.log('加载市场');
     await this.client.loadMarkets();
+    this.logger.log('加载完成');
     this.watcher.Subscribe((kline_snapshot) => {
       this.robot.CheckKLine(
         kline_snapshot.confirmed_kline,
@@ -74,14 +86,19 @@ extends App {
   }
 }
 
-const app = new MACrosser({
+const config = {
   symbol: 'ETH/USDT',
-  timeframe: '2h',
+  timeframe: '1m',
   interval: 1000,
   fast_ma: 9,
   slow_ma: 44,
-  asset: 'USDT',
-  amount: 1000,
-});
+  funds: 11,
+  assets: 0,
+  ...(yargs(hideBin(process.argv)).argv),
+};
+
+console.log(config);
+
+const app = new MACrosser(config);
 
 app.Run();

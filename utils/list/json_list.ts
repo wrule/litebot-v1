@@ -10,7 +10,7 @@ implements IList<T> {
 
   public Append(...data: T[]) {
     data.forEach((item) => {
-      fs.appendFileSync(this.file, JSON.stringify(item) + ',\n', 'utf-8');
+      fs.appendFileSync(this.file, JSON.stringify(item, null, 2) + ',\n', 'utf-8');
     });
   }
 

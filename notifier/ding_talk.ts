@@ -1,9 +1,10 @@
+// 2022年08月10日22:58:14
 import axios from 'axios';
 import crypto from 'crypto';
 import { INotifier } from '.';
 
 export
-interface IDingTalkConfig {
+interface IConfig {
   access_token: string;
   secret: string;
   at_mobiles?: string[];
@@ -12,9 +13,7 @@ interface IDingTalkConfig {
 export
 class DingTalk
 implements INotifier {
-  public constructor(
-    private readonly config: IDingTalkConfig,
-  ) { }
+  public constructor(private readonly config: IConfig) { }
 
   public async SendMessage(message: string) {
     const timestamp = Number(new Date());
