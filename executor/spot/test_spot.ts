@@ -52,7 +52,7 @@ implements ISpotExecutor {
   }
 
   public Buy(
-    in_funds: number,
+    in_amount: number,
     price: number,
     time: number,
   ) {
@@ -81,15 +81,12 @@ implements ISpotExecutor {
     throw new Error('资金不足');
   }
 
-  public BuyAll(
-    price: number,
-    time: number,
-  ) {
-    return this.Buy(this.funds, price, time);
+  public BuyAll(price: number, time: number) {
+    return this.Buy(this.available_funds_amount, price, time);
   }
 
   public Sell(
-    in_assets: number,
+    in_amount: number,
     price: number,
     time: number,
   ) {
@@ -118,11 +115,8 @@ implements ISpotExecutor {
     throw new Error('资产不足');
   }
 
-  public SellAll(
-    price: number,
-    time: number,
-  ) {
-    return this.Sell(this.assets, price, time);
+  public SellAll(price: number, time: number) {
+    return this.Sell(this.available_assets_amount, price, time);
   }
 
   public async Reset() {
