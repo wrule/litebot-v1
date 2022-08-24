@@ -43,12 +43,12 @@ implements ISpotExecutor {
   private funds_name = '';
   private fee_multiplier = 1;
 
-  public Transactions() {
-    return this.transactions || [];
+  public async Transactions() {
+    return (await this.config?.transaction_list?.All()) || [];
   }
 
-  public Snapshots() {
-    return this.snapshots || [];
+  public async Snapshots() {
+    return (await this.config?.snapshot_list?.All()) || [];
   }
 
   public Buy(
