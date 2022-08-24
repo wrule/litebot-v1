@@ -151,8 +151,11 @@ implements ISpotExecutor {
     throw new Error('Method not implemented.');
   }
 
-  public UpdateSnapshot(): void | Promise<void> {
-    throw new Error('Method not implemented.');
+  public async UpdateSnapshot(time: number, price: number) {
+    await this.config.snapshot_list?.Append({
+      time,
+      valuation: this.Valuation(price),
+    });
   }
   //#endregion
 }

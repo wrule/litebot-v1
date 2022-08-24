@@ -270,8 +270,10 @@ implements ISpotExecutor {
   }
 
   public async LatestSnapshot(): Promise<ISnapshot> {
+    const valuation = await this.Valuation();
     return {
-      valuation: await this.Valuation(),
+      time: Number(new Date()),
+      valuation,
     };
   }
 

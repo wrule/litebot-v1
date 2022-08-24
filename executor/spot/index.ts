@@ -86,5 +86,8 @@ interface ISpotExecutor {
   /**
    * 更新快照
    */
-  UpdateSnapshot(): void | Promise<void>;
+  UpdateSnapshot(
+    time?: number,
+    price?: number,
+  ): void | Promise<void>;
 }
