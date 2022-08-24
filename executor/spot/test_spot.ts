@@ -35,12 +35,6 @@ implements ISpotExecutor {
     return this.snapshots || [];
   }
 
-  // public UpdateSnapshot(price: number) {
-  //   this.snapshots.push({
-  //     valuation: this.Valuation(price),
-  //   });
-  // }
-
   public Buy(
     in_funds: number,
     price: number,
