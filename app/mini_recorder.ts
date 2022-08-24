@@ -1,3 +1,4 @@
+#!/usr/bin/env node
 import { binance } from 'ccxt';
 import { TickerWatcher } from '../watcher/ticker_watcher';
 import { JSONList } from '../utils/list/json_list';
