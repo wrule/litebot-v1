@@ -51,15 +51,15 @@ implements ISpotExecutor {
     return (await this.config?.snapshot_list?.All()) || [];
   }
 
-  public Buy(
+  public async Buy(
     in_amount: number,
     price: number,
     time: number,
   ) {
-    if (in_funds <= this.funds) {
-      this.funds -= in_funds;
-      const out_assets = in_funds / price * this.fee_multiplier;
-      this.assets += out_assets;
+    if (in_amount <= this.available_funds_amount) {
+      this.available_funds_amount -= in_amount;
+      const out_assets = in_amount / price * this.fee_multiplier;
+      this.available_assets_amount += out_assets;
       const tn: ITransaction = {
         action: 'BUY',
         request_time: time,
@@ -67,18 +67,16 @@ implements ISpotExecutor {
         response_time: time,
         expected_price: price,
         price,
-        in_name: this.fund_name,
-        expected_in_amount: in_funds,
-        in_amount: in_funds,
-        out_name: this.asset_name,
+        in_name: this.funds_name,
+        expected_in_amount: in_amount,
+        in_amount: in_amount,
+        out_name: this.assets_name,
         out_amount: out_assets,
       };
-      if (this.record_transaction) {
-        this.transactions.push(tn);
-      }
+      await this.config.transaction_list?.Append(tn);
       return tn;
     }
-    throw new Error('资金不足');
+    throw '资金不足';
   }
 
   public BuyAll(price: number, time: number) {
