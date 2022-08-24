@@ -83,15 +83,15 @@ implements ISpotExecutor {
     return this.Buy(this.available_funds_amount, price, time);
   }
 
-  public Sell(
+  public async Sell(
     in_amount: number,
     price: number,
     time: number,
   ) {
-    if (in_assets <= this.assets) {
-      this.assets -= in_assets;
-      const out_funds = in_assets * price * this.fee_multiplier;
-      this.funds += out_funds;
+    if (in_amount <= this.available_assets_amount) {
+      this.available_assets_amount -= in_amount;
+      const out_funds = in_amount * price * this.fee_multiplier;
+      this.available_funds_amount += out_funds;
       const tn: ITransaction = {
         action: 'SELL',
         request_time: time,
@@ -99,15 +99,13 @@ implements ISpotExecutor {
         response_time: time,
         expected_price: price,
         price,
-        in_name: this.asset_name,
-        expected_in_amount: in_assets,
-        in_amount: in_assets,
-        out_name: this.fund_name,
+        in_name: this.assets_name,
+        expected_in_amount: in_amount,
+        in_amount: in_amount,
+        out_name: this.funds_name,
         out_amount: out_funds,
       };
-      if (this.record_transaction) {
-        this.transactions.push(tn);
-      }
+      await this.config.transaction_list?.Append(tn);
       return tn;
     }
     throw new Error('资产不足');
