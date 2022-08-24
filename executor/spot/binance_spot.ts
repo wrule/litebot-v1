@@ -278,11 +278,7 @@ implements ISpotExecutor {
   }
 
   public async UpdateSnapshot() {
-    if (this.config?.snapshot_list) {
-      this.config.snapshot_list.Append(
-        await this.LatestSnapshot(),
-      );
-    }
+    await this.config.snapshot_list?.Append(await this.LatestSnapshot());
   }
   //#endregion
 }
