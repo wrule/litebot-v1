@@ -54,6 +54,7 @@ implements ISpotExecutor {
     ]);
   }
 
+  //#region 接口实现
   public get FundName() {
     return this.funds_name;
   }
@@ -153,4 +154,5 @@ implements ISpotExecutor {
   public UpdateSnapshot(): void | Promise<void> {
     throw new Error('Method not implemented.');
   }
+  //#endregion
 }
