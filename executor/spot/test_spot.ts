@@ -35,9 +35,7 @@ interface ITestSpotConfig {
 export
 class TestSpot
 implements ISpotExecutor {
-  public constructor(private readonly config: ITestSpotConfig) {
-    this.Reset();
-  }
+  public constructor(private readonly config: ITestSpotConfig) { }
 
   private available_funds_amount = 0;
   private available_assets_amount = 0;
