@@ -1,6 +1,35 @@
 import { ISpotExecutor } from '.';
 import { ITransaction } from '../../common/transaction';
 import { ISnapshot } from '../../common/snapshot';
+import { IList } from '../../utils/list';
+
+export
+interface TestSpotConfig {
+  /**
+   * 交易对
+   */
+  symbol: string;
+  /**
+   * 交易手续费
+   */
+  fee: number;
+  /**
+   * 初始资金
+   */
+  init_funds_amount: number;
+  /**
+   * 初始资产（不填默认0）
+   */
+  init_assets_amount?: number;
+  /**
+   * 交易记录器
+   */
+  transaction_list?: IList<ITransaction>;
+  /**
+   * 快照记录器
+   */
+  snapshot_list?: IList<ISnapshot>;
+}
 
 export
 class TestSpot
