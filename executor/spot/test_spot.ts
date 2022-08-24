@@ -147,15 +147,12 @@ implements ISpotExecutor {
     return this.Sell(this.available_assets_amount, price, time);
   }
 
-  public LatestSnapshot(): ISnapshot | Promise<ISnapshot> {
-    throw new Error('Method not implemented.');
+  public LatestSnapshot(time: number, price: number): ISnapshot {
+    return { time, valuation: this.Valuation(price), };
   }
 
   public async UpdateSnapshot(time: number, price: number) {
-    await this.config.snapshot_list?.Append({
-      time,
-      valuation: this.Valuation(price),
-    });
+    await this.config.snapshot_list?.Append(this.LatestSnapshot(time, price));
   }
   //#endregion
 }

@@ -82,7 +82,10 @@ interface ISpotExecutor {
   /**
    * 获取最新快照信息
    */
-  LatestSnapshot(): ISnapshot | Promise<ISnapshot>;
+  LatestSnapshot(
+    time?: number,
+    price?: number,
+  ): ISnapshot | Promise<ISnapshot>;
   /**
    * 更新快照
    */
