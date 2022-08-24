@@ -2,9 +2,10 @@ import { ISpotExecutor } from '.';
 import { ITransaction } from '../../common/transaction';
 import { ISnapshot } from '../../common/snapshot';
 import { IList } from '../../utils/list';
+import { SymbolSplit } from '../../common/symbol';
 
 export
-interface TestSpotConfig {
+interface ITestSpotConfig {
   /**
    * 交易对
    */
@@ -34,21 +35,15 @@ interface TestSpotConfig {
 export
 class TestSpot
 implements ISpotExecutor {
-  public constructor(
-    private readonly init_funds = 100,
-    private readonly fee = 0.001,
-    private readonly record_transaction = false,
-    private readonly fund_name = 'MONEY',
-    private readonly asset_name = 'ASSET',
-  ) {
+  public constructor(private readonly config: ITestSpotConfig) {
     this.Reset();
   }
 
-  private funds!: number;
-  private assets!: number;
-  private fee_multiplier!: number;
-  private transactions!: ITransaction[];
-  private snapshots!: ISnapshot[];
+  private available_funds_amount = 0;
+  private available_assets_amount = 0;
+  private assets_name = '';
+  private funds_name = '';
+  private fee_multiplier = 1;
 
   public Transactions() {
     return this.transactions || [];
@@ -133,11 +128,12 @@ implements ISpotExecutor {
   }
 
   public Reset() {
-    this.funds = this.init_funds;
-    this.assets = 0;
-    this.fee_multiplier = 1 - this.fee;
-    this.transactions = [];
-    this.snapshots = [];
+    this.available_funds_amount = this.config.init_funds_amount;
+    this.available_assets_amount = this.config.init_assets_amount || 0;
+    [this.assets_name, this.funds_name] = SymbolSplit(this.config.symbol);
+    this.fee_multiplier = 1 - this.config.fee;
+    this.config.transaction_list?.Empty();
+    this.config.snapshot_list?.Empty();
   }
 
   public get FundName() {
