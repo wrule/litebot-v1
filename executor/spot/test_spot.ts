@@ -127,13 +127,15 @@ implements ISpotExecutor {
     return this.Sell(this.assets, price, time);
   }
 
-  public Reset() {
+  public async Reset() {
     this.available_funds_amount = this.config.init_funds_amount;
     this.available_assets_amount = this.config.init_assets_amount || 0;
     [this.assets_name, this.funds_name] = SymbolSplit(this.config.symbol);
     this.fee_multiplier = 1 - this.config.fee;
-    this.config.transaction_list?.Empty();
-    this.config.snapshot_list?.Empty();
+    await Promise.all([
+      this.config.transaction_list?.Empty(),
+      this.config.snapshot_list?.Empty(),
+    ]);
   }
 
   public get FundName() {
