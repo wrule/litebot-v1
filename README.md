@@ -1,0 +1,21 @@
+# 使用
+## 配置BinanceAPI的.secret.json文件
+```
+{
+  "API_KEY": "xxx",
+  "SECRET_KEY": "xxx"
+}
+```
+## 配置钉钉机器人的.dingtalk.json文件
+```
+{
+  "ACCESS_TOKEN": "xxx",
+  "SECRET": "yyy",
+  "AT_MOBILES": ["153xxxx"]
+}
+```
+## 进入dist/app目录 创建output文件夹 运行 ./ma_crosser.js
+```
+./ma_crosser.js --symbol BTC/USDT --timeframe 2h --funds 1000
+```
+更多命参数可查看代码
