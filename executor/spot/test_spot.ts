@@ -43,14 +43,6 @@ implements ISpotExecutor {
   private funds_name = '';
   private fee_multiplier = 1;
 
-  public async Transactions() {
-    return (await this.config?.transaction_list?.All()) || [];
-  }
-
-  public async Snapshots() {
-    return (await this.config?.snapshot_list?.All()) || [];
-  }
-
   public async Buy(
     in_amount: number,
     price: number,
@@ -144,6 +136,14 @@ implements ISpotExecutor {
 
   public Valuation(price: number) {
     return this.available_assets_amount * price + this.available_funds_amount;
+  }
+
+  public async Transactions() {
+    return (await this.config?.transaction_list?.All()) || [];
+  }
+
+  public async Snapshots() {
+    return (await this.config?.snapshot_list?.All()) || [];
   }
 
   public LatestSnapshot(): ISnapshot | Promise<ISnapshot> {
