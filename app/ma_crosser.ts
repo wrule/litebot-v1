@@ -11,7 +11,7 @@ import { INotifier } from '../notifier';
 import { JSONList } from '../utils/list/json_list';
 import { ITransaction } from '../common/transaction';
 import { ISnapshot } from '../common/snapshot';
-import { Logger } from '../utils/logger';
+import { Logger, logger } from '../utils/logger';
 import { SymbolPathization } from '../common/symbol';
 import yargs from 'yargs/yargs';
 import { hideBin }  from 'yargs/helpers';
@@ -94,7 +94,7 @@ const config = {
   ...(yargs(hideBin(process.argv)).argv),
 };
 
-console.log(config);
+logger.log('配置:\n', config);
 
 const app = new MACrosser(config);
 
