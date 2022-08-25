@@ -87,7 +87,7 @@ extends SpotRobot<IParams, IOHLCV, ITestData> {
   }
   //#endregion
 
-  public GenerateTestData(kline: KLine): ITestData[] {
+  public generateTestData(kline: KLine): ITestData[] {
     const closes = kline.map((item) => item.close);
     const fast_line = this.sma(closes, this.params.fast_ma);
     const slow_line = this.sma(closes, this.params.slow_ma);
