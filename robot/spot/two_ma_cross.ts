@@ -47,10 +47,6 @@ extends SpotRobot<IParams, IOHLCV, ITestData> {
     return result;
   }
 
-  public get KLineReadyLength() {
-    return Math.max(this.params.fast_ma, this.params.slow_ma) + 1;
-  }
-
   private message(tn: ITransaction, prev_diff: number, last_diff: number) {
     this.SendMessage(`[${
       moment(new Date(tn.transaction_time)).format('HH:mm:ss')
@@ -59,6 +55,11 @@ extends SpotRobot<IParams, IOHLCV, ITestData> {
     }  ${
       `${tn.in_amount}${tn.in_name} =(${tn.price})=> ${tn.out_amount}${tn.out_name}`
     }]\n前差: ${prev_diff}  现差: ${last_diff}\n走单耗时: ${(tn.transaction_time - tn.request_time) / 1000}秒`);
+  }
+
+  //#region 实盘运行接口实现
+  public get KLineReadyLength() {
+    return Math.max(this.params.fast_ma, this.params.slow_ma) + 1;
   }
 
   protected async checkKLine(confirmed_kline: KLine, last_confirmed: IOHLCV) {
@@ -80,6 +81,7 @@ extends SpotRobot<IParams, IOHLCV, ITestData> {
       this.logger.error(e);
     }
   }
+  //#endregion
 
   public GenerateTestData(kline: KLine): ITestData[] {
     const closes = kline.map((item) => item.close);
