@@ -3,6 +3,7 @@ import { INotifier } from '@/notifier';
 import { Report } from '@/report';
 import { Logger } from '../../utils/logger';
 import { ISpotExecutor } from '../../executor/spot';
+import { ITransaction } from '../../common/transaction';
 
 export
 abstract class SpotRobot<
@@ -126,7 +127,7 @@ abstract class SpotRobot<
    * 检查测试数据
    * @param data 测试数据
    */
-  protected abstract checkTestData(data: TestData): void;
+  protected abstract checkTestData(data: TestData): ITransaction | Promise<ITransaction>;
   //#endregion
 
   //#region 工具方法
