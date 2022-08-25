@@ -104,20 +104,18 @@ abstract class SpotRobot<
 
   /**
    * 测试数据回测
-   * @param testData 测试数据
+   * @param test_data 测试数据
    */
-  public BackTestingBasic(testData: TestData[]) {
-    this.testData = testData;
+  public BackTestingBasic(test_data: TestData[]) {
+    this.test_data = test_data;
     this.Reset();
-    for (let i = 0; i < this.testData.length; ++i) {
-      this.currentIndex = i;
-      const last = this.last();
-      this.checkTestData(last);
+    for (let i = 0; i < this.test_data.length; ++i) {
+      this.current_index = i;
+      this.checkTestData(this.last());
       // TODO
       // this.executor.UpdateSnapshot(last.close);
     }
   }
-
   /**
    * 真实数据回测
    * @param real_data 真实数据
