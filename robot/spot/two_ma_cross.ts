@@ -87,7 +87,8 @@ extends SpotRobot<IParams, IOHLCV, ITestData> {
   }
   //#endregion
 
-  public generateTestData(kline: KLine): ITestData[] {
+  //#region 回测运行接口实现
+  protected generateTestData(kline: KLine): ITestData[] {
     const closes = kline.map((item) => item.close);
     const fast_line = this.sma(closes, this.params.fast_ma);
     const slow_line = this.sma(closes, this.params.slow_ma);
@@ -114,4 +115,5 @@ extends SpotRobot<IParams, IOHLCV, ITestData> {
       this.executor.SellAll(data.close, data.time);
     }
   }
+  //#endregion
 }
