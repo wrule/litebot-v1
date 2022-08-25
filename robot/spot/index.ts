@@ -51,25 +51,23 @@ abstract class SpotRobot<
   protected abstract checkKLine(confirmed_kline: RealData[], last_confirmed: RealData): Promise<void>;
   //#endregion
 
-  //#region 回测逻辑
+  //#region 回测运行
   /**
    * 用于回测的历史数据
    */
-  private testData: TestData[] = [];
+  private test_data: TestData[] = [];
   /**
    * 历史数据当前索引
    */
-  private currentIndex = 0;
-
+  private current_index = 0;
   /**
    * 重置回测状态
    */
   public Reset() {
-    this.currentIndex = 0;
+    this.current_index = 0;
     // TODO
     // this.executor.Reset();
   }
-
   /**
    * 回溯获取测试数据
    * @param offset 偏移量
@@ -79,13 +77,12 @@ abstract class SpotRobot<
     if (offset < 0) {
       throw 'offset必须大于等于0';
     }
-    const dstIndex = this.currentIndex - offset;
-    if (dstIndex < 0) {
-      throw 'dstIndex必须大于等于0';
+    const dst_index = this.current_index - offset;
+    if (dst_index < 0) {
+      throw 'dst_index必须大于等于0';
     }
-    return this.testData[dstIndex];
+    return this.test_data[dst_index];
   }
-
   /**
    * 上一个测试数据
    * @returns 测试数据
@@ -93,7 +90,6 @@ abstract class SpotRobot<
   protected prev() {
     return this.last(1);
   }
-
   /**
    * 检查测试数据
    * @param data 测试数据
