@@ -32,8 +32,6 @@ abstract class SpotRobot<
   //#region 实盘运行
   private kline_last_time = -1;
 
-  public abstract KLineReadyLength: number;
-
   public async CheckKLine(confirmed_kline: RealData[]): Promise<void> {
     if (confirmed_kline.length < 1) return;
     const last_confirmed = confirmed_kline[confirmed_kline.length - 1];
@@ -47,6 +45,8 @@ abstract class SpotRobot<
       this.kline_last_time = last_confirmed.time;
     }
   }
+
+  public abstract KLineReadyLength: number;
 
   protected abstract checkKLine(confirmed_kline: RealData[], last_confirmed: RealData): Promise<void>;
   //#endregion
