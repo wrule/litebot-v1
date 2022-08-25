@@ -77,10 +77,7 @@ extends App {
     await this.client.loadMarkets();
     this.logger.log('加载完成');
     this.watcher.Subscribe((kline_snapshot) => {
-      this.robot.CheckKLine(
-        kline_snapshot.confirmed_kline,
-        kline_snapshot.last,
-      );
+      this.robot.CheckKLine(kline_snapshot.confirmed_kline);
     });
     this.watcher.Start();
   }
