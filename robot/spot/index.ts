@@ -91,18 +91,6 @@ abstract class SpotRobot<
     return this.last(1);
   }
   /**
-   * 检查测试数据
-   * @param data 测试数据
-   */
-  protected abstract checkTestData(data: TestData): void;
-
-  /**
-   * 生成测试数据
-   * @param realData 输入历史数据
-   */
-  protected abstract GenerateTestData(realData: RealData[]): TestData[];
-
-  /**
    * 测试数据回测
    * @param test_data 测试数据
    */
@@ -121,9 +109,20 @@ abstract class SpotRobot<
    * @param real_data 真实数据
    */
   public BackTesting(real_data: RealData[]) {
-    const test_data = this.GenerateTestData(real_data);
+    const test_data = this.generateTestData(real_data);
     return this.BackTestingBasic(test_data);
   }
+  /**
+   * 生成测试数据
+   * @param real_data 真实历史数据
+   * @returns 测试数据
+   */
+  protected abstract generateTestData(real_data: RealData[]): TestData[];
+  /**
+   * 检查测试数据
+   * @param data 测试数据
+   */
+  protected abstract checkTestData(data: TestData): void;
   //#endregion
 
   //#region 工具方法
