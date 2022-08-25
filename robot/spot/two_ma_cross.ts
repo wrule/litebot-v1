@@ -57,11 +57,11 @@ extends SpotRobot<IParams, IOHLCV, ITestData> {
     }]\n前差: ${prev_diff}  现差: ${last_diff}\n走单耗时: ${(tn.transaction_time - tn.request_time) / 1000}秒`);
   }
 
-  //#region 实盘运行接口实现
   public get KLineReadyLength() {
     return Math.max(this.params.fast_ma, this.params.slow_ma) + 1;
   }
 
+  //#region 实盘运行接口实现
   protected async checkKLine(confirmed_kline: KLine, last_confirmed: IOHLCV) {
     try {
       const closes = confirmed_kline.map((item) => item.close);
