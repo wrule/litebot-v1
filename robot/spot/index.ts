@@ -99,12 +99,12 @@ abstract class SpotRobot<
    * 测试数据回测
    * @param test_data 测试数据
    */
-  public BackTestingBasic(test_data: TestData[]) {
+  public async BackTestingBasic(test_data: TestData[]) {
     this.test_data = test_data;
     this.Reset();
     for (let i = 0; i < this.test_data.length; ++i) {
       this.current_index = i;
-      this.checkTestData(this.last());
+      await this.checkTestData(this.last());
       // TODO
       // this.executor.UpdateSnapshot(last.close);
     }
@@ -113,9 +113,9 @@ abstract class SpotRobot<
    * 真实数据回测
    * @param real_data 真实数据
    */
-  public BackTesting(real_data: RealData[]) {
+  public async BackTesting(real_data: RealData[]) {
     const test_data = this.generateTestData(real_data);
-    return this.BackTestingBasic(test_data);
+    await this.BackTestingBasic(test_data);
   }
   /**
    * 生成测试数据
@@ -127,7 +127,7 @@ abstract class SpotRobot<
    * 检查测试数据
    * @param data 测试数据
    */
-  protected abstract checkTestData(data: TestData): ITransaction | Promise<ITransaction>;
+  protected abstract checkTestData(data: TestData): void | Promise<void>;
   //#endregion
 
   //#region 工具方法

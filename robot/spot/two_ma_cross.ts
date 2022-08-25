@@ -107,11 +107,11 @@ extends SpotRobot<IParams, IOHLCV, ITestData> {
     });
   }
 
-  protected checkTestData(data: ITestData) {
+  protected async checkTestData(data: ITestData) {
     if (data.buy) {
-      this.executor.BuyAll(data.close, data.time);
+      await this.executor.BuyAll(data.close, data.time);
     } else if (data.sell) {
-      this.executor.SellAll(data.close, data.time);
+      await this.executor.SellAll(data.close, data.time);
     }
   }
   //#endregion
