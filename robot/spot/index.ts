@@ -29,6 +29,12 @@ abstract class SpotRobot<
   }
   //#endregion
 
+  public abstract KLineReadyLength: number;
+
+  public get KLineReadyIndex() {
+    return this.KLineReadyLength - 1;
+  }
+
   //#region 实盘运行
   private kline_last_time = -1;
 
@@ -45,8 +51,6 @@ abstract class SpotRobot<
       this.kline_last_time = last_confirmed.time;
     }
   }
-
-  public abstract KLineReadyLength: number;
 
   protected abstract checkKLine(confirmed_kline: RealData[], last_confirmed: RealData): Promise<void>;
   //#endregion

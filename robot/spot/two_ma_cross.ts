@@ -92,10 +92,9 @@ extends SpotRobot<IParams, IOHLCV, ITestData> {
     const closes = kline.map((item) => item.close);
     const fast_line = this.sma(closes, this.params.fast_ma);
     const slow_line = this.sma(closes, this.params.slow_ma);
-    const effective_index = Math.max(this.params.fast_ma, this.params.slow_ma);
     return kline.map((item, index) => {
       const result: ITestData = { ...item };
-      if (index >= effective_index) {
+      if (index >= this.KLineReadyIndex) {
         const fast_last = fast_line[index], slow_last = slow_line[index];
         const fast_prev = fast_line[index - 1], slow_prev = slow_line[index - 1];
         if (this.gold_cross(fast_prev, slow_prev, fast_last, slow_last)) {
