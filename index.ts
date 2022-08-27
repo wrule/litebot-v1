@@ -11,14 +11,8 @@ import { ISnapshot } from './common/snapshot';
 
 async function main() {
   const kline = ArrayToKLine(ETH_USDT_2h);
-  const spot = await new TestSpot({
-    symbol: 'ETH/USDT',
-    init_funds_amount: 100,
-    fee: 0.001,
-    // transaction_list: new JSONList<ITransaction>('output/test_tn.json'),
-    // snapshot_list: new JSONList<ISnapshot>('output/test_sp.json'),
-  });
-  const robot = new TwoMaCross({ params: { fast_ma: 9, slow_ma: 44 }, executor: spot });
+  const spot = new TestSpot({ symbol: 'ETH/USDT', init_funds_amount: 100, fee: 0.001 });
+  const robot = await new TwoMaCross({ params: { fast_ma: 9, slow_ma: 44 }, executor: spot }).Reset();
   const test_data = robot.GenerateTestData(kline);
   const old_time = Number(new Date());
   for (let i = 0; i < 1e3; ++i) {

@@ -71,11 +71,12 @@ abstract class SpotRobot<
   /**
    * 重置回测状态
    */
-  public async Reset() {
+  public async Reset(): Promise<SpotRobot<Params, RealData, TestData>> {
     this.kline_last_time = -1;
     this.current_index = 0;
     this.test_data = [];
     await this.config.executor.Reset();
+    return this;
   }
   /**
    * 回溯获取测试数据
