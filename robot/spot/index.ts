@@ -1,4 +1,4 @@
-import { IOHLCV, KLine } from '@/common/kline';
+import { IOHLCV, ITimeClose, KLine } from '@/common/kline';
 import { INotifier } from '@/notifier';
 import { Report } from '@/report';
 import { Logger } from '../../utils/logger';
@@ -8,8 +8,8 @@ import { ITransaction } from '../../common/transaction';
 export
 abstract class SpotRobot<
   Params,
-  RealData,
-  TestData,
+  RealData extends ITimeClose,
+  TestData extends ITimeClose,
 > {
   public constructor(
     protected params: Params,
