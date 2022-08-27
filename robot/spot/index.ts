@@ -68,10 +68,11 @@ abstract class SpotRobot<
   /**
    * 重置回测状态
    */
-  public Reset() {
+  public async Reset() {
+    this.kline_last_time = -1;
     this.current_index = 0;
-    // TODO
-    // this.executor.Reset();
+    this.test_data = [];
+    await this.executor.Reset();
   }
   /**
    * 回溯获取测试数据
@@ -100,8 +101,8 @@ abstract class SpotRobot<
    * @param test_data 测试数据
    */
   public async BackTestingBasic(test_data: TestData[]) {
+    await this.Reset();
     this.test_data = test_data;
-    this.Reset();
     for (let i = 0; i < this.test_data.length; ++i) {
       this.current_index = i;
       const last = this.last();
