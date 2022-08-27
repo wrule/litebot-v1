@@ -43,7 +43,7 @@ implements ISpotExecutor {
   private funds_name = '';
   private fee_multiplier = 1;
 
-  public async Reset() {
+  public async Reset(): Promise<TestSpot> {
     this.available_funds_amount = this.config.init_funds_amount;
     this.available_assets_amount = this.config.init_assets_amount || 0;
     [this.assets_name, this.funds_name] = SymbolSplit(this.config.symbol);
@@ -52,6 +52,7 @@ implements ISpotExecutor {
       this.config.transaction_list?.Empty(),
       this.config.snapshot_list?.Empty(),
     ]);
+    return this;
   }
 
   //#region 接口实现

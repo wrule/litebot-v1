@@ -10,16 +10,14 @@ import { JSONList } from './utils/list/json_list';
 import { ISnapshot } from './common/snapshot';
 
 async function main() {
-  console.log('你好，世界');
   const kline = ArrayToKLine(ETH_USDT_2h);
-  const spot = new TestSpot({
+  const spot = await new TestSpot({
     symbol: 'ETH/USDT',
     init_funds_amount: 100,
     fee: 0.001,
     transaction_list: new JSONList<ITransaction>('output/test_tn.json'),
     snapshot_list: new JSONList<ISnapshot>('output/test_sp.json'),
-  });
-  await spot.Reset();
+  }).Reset();
   const robot = new TwoMaCross({ fast_ma: 9, slow_ma: 44 }, spot);
   await robot.BackTesting(kline);
   console.log(kline.length, spot.Valuation(1592));
