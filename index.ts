@@ -15,12 +15,15 @@ async function main() {
     symbol: 'ETH/USDT',
     init_funds_amount: 100,
     fee: 0.001,
-    transaction_list: new JSONList<ITransaction>('output/test_tn.json'),
-    snapshot_list: new JSONList<ISnapshot>('output/test_sp.json'),
-  }).Reset();
+    // transaction_list: new JSONList<ITransaction>('output/test_tn.json'),
+    // snapshot_list: new JSONList<ISnapshot>('output/test_sp.json'),
+  });
   const robot = new TwoMaCross({ fast_ma: 9, slow_ma: 44 }, spot);
-  await robot.BackTesting(kline);
-  console.log(kline.length, spot.Valuation(1592));
+  const old_time = Number(new Date());
+  for (let i = 0; i < 100; ++i) {
+    await robot.BackTesting(kline);
+  }
+  console.log(kline.length, spot.Valuation(1592), Number(new Date()) - old_time);
 }
 
 main();
