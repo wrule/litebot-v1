@@ -23,22 +23,13 @@ abstract class SpotRobot<
   RealData extends ITimeClose,
   TestData extends ITimeClose,
 > {
-  public constructor(
-    protected params: Params,
-    protected executor: ISpotExecutor,
-    protected report?: Report<Params, RealData, TestData>,
-    private notifier?: INotifier,
-  ) { }
+  public constructor(private config: ISpotRobotConfig<Params, RealData, TestData>) { }
 
   protected logger = new Logger();
 
-  public get Executor() {
-    return this.executor;
-  }
-
   //#region 消息通知部分
   public async SendMessage(message: string) {
-    await this.notifier?.SendMessage(message);
+    await this.config.notifier?.SendMessage(message);
   }
   //#endregion
 
@@ -58,7 +49,7 @@ abstract class SpotRobot<
       if (confirmed_kline.length >= this.KLineReadyLength) {
         await this.checkKLine(confirmed_kline, last_confirmed);
       }
-      await this.report?.AppendRealData(
+      await this.config.report?.AppendRealData(
         ...confirmed_kline.filter((item) => item.time > this.kline_last_time)
       );
       this.kline_last_time = last_confirmed.time;
@@ -84,7 +75,7 @@ abstract class SpotRobot<
     this.kline_last_time = -1;
     this.current_index = 0;
     this.test_data = [];
-    await this.executor.Reset();
+    await this.config.executor.Reset();
   }
   /**
    * 回溯获取测试数据
@@ -119,7 +110,7 @@ abstract class SpotRobot<
       this.current_index = i;
       const last = this.last();
       await this.checkTestData(last);
-      await this.executor.UpdateSnapshot(last.time, last.close);
+      await this.config.executor.UpdateSnapshot(last.time, last.close);
     }
   }
   /**
