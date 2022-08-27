@@ -1,6 +1,7 @@
 
 export
 interface IVectorElementConfig {
+  name: string;
   range: [number, number];
   current?: number;
   get_value?: (current: number) => any;
@@ -38,6 +39,10 @@ class VectorElement {
     if (this.config.get_value)
       return this.config.get_value(this.Current);
     return this.Current;
+  }
+
+  public get KeyValue() {
+    return { [this.config.name]: this.Value };
   }
 }
 
