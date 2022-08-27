@@ -28,6 +28,21 @@ implements Iterator<any> {
     return { [this.config.name]: this.Value };
   }
 
+  public get randomCurrent() {
+    const length = this.config.range[1] - this.config.range[0] + 1;
+    return this.config.range[0] + Math.floor(Math.random() * length);
+  }
+
+  public get RandomValue() {
+    if (this.config.get_value)
+      return this.config.get_value(this.randomCurrent);
+    return this.randomCurrent;
+  }
+
+  public get RandomKeyValue() {
+    return { [this.config.name]: this.RandomValue };
+  }
+
   public next(): IteratorResult<any> {
     let result: IteratorResult<any>;
     if (this.current <= this.config.range[1]) {
