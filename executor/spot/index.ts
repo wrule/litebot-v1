@@ -93,4 +93,8 @@ interface ISpotExecutor {
     time?: number,
     price?: number,
   ): void | Promise<void>;
+  /**
+   * 重置执行者
+   */
+  Reset(): ISpotExecutor | Promise<ISpotExecutor>;
 }
