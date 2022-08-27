@@ -115,7 +115,7 @@ abstract class SpotRobot<
    * @param real_data 真实数据
    */
   public async BackTesting(real_data: RealData[]) {
-    const test_data = this.generateTestData(real_data);
+    const test_data = this.GenerateTestData(real_data);
     await this.BackTestingBasic(test_data);
   }
   /**
@@ -123,7 +123,7 @@ abstract class SpotRobot<
    * @param real_data 真实历史数据
    * @returns 测试数据
    */
-  protected abstract generateTestData(real_data: RealData[]): TestData[];
+  public abstract GenerateTestData(real_data: RealData[]): TestData[];
   /**
    * 检查测试数据
    * @param data 测试数据
