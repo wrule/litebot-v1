@@ -19,9 +19,10 @@ async function main() {
     // snapshot_list: new JSONList<ISnapshot>('output/test_sp.json'),
   });
   const robot = new TwoMaCross({ fast_ma: 9, slow_ma: 44 }, spot);
+  const test_data = robot.GenerateTestData(kline);
   const old_time = Number(new Date());
-  for (let i = 0; i < 100; ++i) {
-    await robot.BackTesting(kline);
+  for (let i = 0; i < 1e3; ++i) {
+    await robot.BackTestingBasic(test_data);
   }
   console.log(kline.length, spot.Valuation(1592), Number(new Date()) - old_time);
 }
