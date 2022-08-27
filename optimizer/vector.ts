@@ -2,7 +2,6 @@
 export
 interface IVectorElementConfig {
   range: [number, number];
-  step?: number;
   current?: number;
   get_value?: (current: number) => any;
 }
@@ -13,9 +12,6 @@ class VectorElement {
     if (_config.range[1] < _config.range[0]) {
       throw 'range[1]必须大于等于range[0]';
     }
-    if (_config.step != null && _config.step <= 0) {
-      throw 'step必须大于0';
-    }
     if (
       _config.current != null &&
       (_config.current < _config.range[0] || _config.current > _config.range[1])
@@ -24,12 +20,15 @@ class VectorElement {
     }
     this.config = {
       ..._config,
-      step: _config.step != null ? _config.step : 1,
       current: _config.current != null ? _config.current : _config.range[0],
     };
   }
 
   private config!: IVectorElementConfig;
+
+  public get Range() {
+    return this.config.range;
+  }
 
   public get Current(): number {
     return this.config.current as number;
