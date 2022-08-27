@@ -6,6 +6,18 @@ import { ISpotExecutor } from '../../executor/spot';
 import { ITransaction } from '../../common/transaction';
 
 export
+interface ISpotRobotConfig<
+  Params,
+  RealData extends ITimeClose,
+  TestData extends ITimeClose,
+> {
+  params: Params,
+  executor: ISpotExecutor,
+  notifier?: INotifier,
+  report?: Report<Params, RealData, TestData>,
+}
+
+export
 abstract class SpotRobot<
   Params,
   RealData extends ITimeClose,
