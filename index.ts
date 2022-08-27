@@ -18,7 +18,7 @@ async function main() {
     // transaction_list: new JSONList<ITransaction>('output/test_tn.json'),
     // snapshot_list: new JSONList<ISnapshot>('output/test_sp.json'),
   });
-  const robot = new TwoMaCross({ fast_ma: 9, slow_ma: 44 }, spot);
+  const robot = new TwoMaCross({ params: { fast_ma: 9, slow_ma: 44 }, executor: spot });
   const test_data = robot.GenerateTestData(kline);
   const old_time = Number(new Date());
   for (let i = 0; i < 1e3; ++i) {
