@@ -62,5 +62,20 @@ implements Iterator<any> {
 
 export
 class Vector {
+  public constructor(config: IVectorElementConfig[]) {
+    this.elements = config.map((item) => new VectorElement(item));
+  }
 
+  private elements!: VectorElement[];
+
+  public get RandomKeyValue() {
+    let result: any = { };
+    this.elements.forEach((element) => {
+      result = {
+        ...result,
+        ...element.RandomKeyValue,
+      };
+    });
+    return result;
+  }
 }

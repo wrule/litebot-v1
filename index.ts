@@ -1,16 +1,10 @@
-import { VectorElement } from "./optimizer/vector";
+import { Vector, VectorElement } from "./optimizer/vector";
 
 console.log('你好，世界');
 
-const ve = new VectorElement({ name: 'fast', range: [0, 2], get_value: (current) => `${current}%` });
+const v = new Vector([
+  { name: 'fast', range: [0, 100] },
+  { name: 'slow', range: [0, 100] },
+]);
 
-console.log(ve.RandomKeyValue);
-// const k = Array.from(ve);
-
-// for(let a of ve) {
-//   console.log(a);
-// }
-// for(let a of ve) {
-//   console.log(a);
-// }
-
+console.log(v.RandomKeyValue);
