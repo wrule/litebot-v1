@@ -39,6 +39,10 @@ implements Iterator<any> {
     }
     return result;
   }
+
+  [Symbol.iterator](): IterableIterator<any> {
+    return this;
+  }
 }
 
 export
