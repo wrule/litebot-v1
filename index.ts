@@ -13,12 +13,8 @@ async function main() {
   const kline = ArrayToKLine(ETH_USDT_2h);
   const spot = new TestSpot({ symbol: 'ETH/USDT', init_funds_amount: 100, fee: 0.001 });
   const robot = await new TwoMaCross({ params: { fast_ma: 9, slow_ma: 44 }, executor: spot }).Reset();
-  const test_data = robot.GenerateTestData(kline);
-  const old_time = Number(new Date());
-  for (let i = 0; i < 1e3; ++i) {
-    await robot.BackTestingBasic(test_data);
-  }
-  console.log(kline.length, spot.Valuation(1592), Number(new Date()) - old_time);
+  await robot.BackTesting(kline);
+  console.log(kline.length, spot.Valuation(1592));
 }
 
 main();
