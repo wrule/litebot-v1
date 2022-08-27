@@ -1,7 +1,7 @@
 const tulind = require('tulind');
 import { IOHLCV, KLine } from '@/common/kline';
 import { ISpotExecutor } from '@/executor/spot';
-import { SpotRobot } from '.';
+import { ISpotRobotConfig, SpotRobot } from '.';
 import moment from 'moment';
 import { INotifier } from '@/notifier';
 import { ITransaction } from '@/common/transaction';
@@ -23,13 +23,8 @@ extends IOHLCV {
 export
 class TwoMaCross
 extends SpotRobot<IParams, IOHLCV, ITestData> {
-  public constructor(
-    protected readonly params: IParams,
-    protected readonly executor: ISpotExecutor,
-    protected report?: Report<IParams, IOHLCV, ITestData>,
-    notifier?: INotifier,
-  ) {
-    super(params, executor, report, notifier);
+  public constructor(config: ISpotRobotConfig<IParams, IOHLCV, ITestData>) {
+    super(config);
   }
 
   private sma(closes: number[], size: number) {
@@ -58,15 +53,15 @@ extends SpotRobot<IParams, IOHLCV, ITestData> {
   }
 
   public get KLineReadyLength() {
-    return Math.max(this.params.fast_ma, this.params.slow_ma) + 1;
+    return Math.max(this.config.params.fast_ma, this.config.params.slow_ma) + 1;
   }
 
   //#region 实盘运行接口实现
   protected async checkKLine(confirmed_kline: KLine, last_confirmed: IOHLCV) {
     try {
       const closes = confirmed_kline.map((item) => item.close);
-      const fast_line = this.sma(closes, this.params.fast_ma);
-      const slow_line = this.sma(closes, this.params.slow_ma);
+      const fast_line = this.sma(closes, this.config.params.fast_ma);
+      const slow_line = this.sma(closes, this.config.params.slow_ma);
       const prev_diff = fast_line[fast_line.length - 2] - slow_line[slow_line.length - 2];
       const last_diff = fast_line[fast_line.length - 1] - slow_line[slow_line.length - 1];
       this.logger.log(
@@ -75,10 +70,10 @@ extends SpotRobot<IParams, IOHLCV, ITestData> {
         '现差', last_diff,
       );
       if (this.gold_cross_line(fast_line, slow_line)) {
-        const tn = await this.executor.BuyAll(last_confirmed.close);
+        const tn = await this.config.executor.BuyAll(last_confirmed.close);
         this.message(tn, prev_diff, last_diff);
       } else if (this.dead_cross_line(fast_line, slow_line)) {
-        const tn = await this.executor.SellAll(last_confirmed.close);
+        const tn = await this.config.executor.SellAll(last_confirmed.close);
         this.message(tn, prev_diff, last_diff);
       }
     } catch (e) {
@@ -90,8 +85,8 @@ extends SpotRobot<IParams, IOHLCV, ITestData> {
   //#region 回测运行接口实现
   public GenerateTestData(kline: KLine): ITestData[] {
     const closes = kline.map((item) => item.close);
-    const fast_line = this.sma(closes, this.params.fast_ma);
-    const slow_line = this.sma(closes, this.params.slow_ma);
+    const fast_line = this.sma(closes, this.config.params.fast_ma);
+    const slow_line = this.sma(closes, this.config.params.slow_ma);
     return kline.map((item, index) => {
       const result: ITestData = { ...item };
       if (index >= this.KLineReadyIndex) {
@@ -109,9 +104,9 @@ extends SpotRobot<IParams, IOHLCV, ITestData> {
 
   protected async checkTestData(data: ITestData) {
     if (data.buy) {
-      await this.executor.BuyAll(data.close, data.time);
+      await this.config.executor.BuyAll(data.close, data.time);
     } else if (data.sell) {
-      await this.executor.SellAll(data.close, data.time);
+      await this.config.executor.SellAll(data.close, data.time);
     }
   }
   //#endregion

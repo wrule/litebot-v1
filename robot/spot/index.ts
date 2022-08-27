@@ -23,7 +23,7 @@ abstract class SpotRobot<
   RealData extends ITimeClose,
   TestData extends ITimeClose,
 > {
-  public constructor(private config: ISpotRobotConfig<Params, RealData, TestData>) { }
+  public constructor(protected config: ISpotRobotConfig<Params, RealData, TestData>) { }
 
   protected logger = new Logger();
 
