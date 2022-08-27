@@ -26,3 +26,5 @@
 ## BackTestingBasic 中每一个await都会产生很大性能开销，之后需要优化
 ## 尤其是await this.executor.UpdateSnapshot(last.time, last.close);这个影响很大
 ## 需要思考回测是否应该禁用异步，另外也需要优化各种条件判断结构（是否需要区分成为独立的代码，以减少判断）
+
+## 先投入优化器开发
