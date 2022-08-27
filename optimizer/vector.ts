@@ -4,7 +4,7 @@ interface IVectorElementConfig {
   range: [number, number];
   step?: number;
   current?: number;
-  value?: (num: number) => any;
+  get_value?: (current: number) => any;
 }
 
 export
@@ -31,8 +31,14 @@ class VectorElement {
 
   private config!: IVectorElementConfig;
 
-  public get value() {
+  public get Current(): number {
+    return this.config.current as number;
+  }
 
+  public get Value() {
+    if (this.config.get_value)
+      return this.config.get_value(this.Current);
+    return this.Current;
   }
 }
 
