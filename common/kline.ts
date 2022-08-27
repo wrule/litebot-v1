@@ -1,12 +1,15 @@
-// 2022年08月07日22:01:43
+export
+interface ITimeClose {
+  time: number;
+  close: number;
+}
 
 export
-interface IOHLCV {
-  time: number;
+interface IOHLCV
+extends ITimeClose {
   open: number;
   high: number;
   low: number;
-  close: number;
   volume: number;
 }
 

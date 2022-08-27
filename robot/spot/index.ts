@@ -8,8 +8,8 @@ import { ITransaction } from '../../common/transaction';
 export
 abstract class SpotRobot<
   Params,
-  RealData extends IOHLCV,
-  TestData extends IOHLCV,
+  RealData,
+  TestData,
 > {
   public constructor(
     protected params: Params,
