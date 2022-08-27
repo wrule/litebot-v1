@@ -52,11 +52,7 @@ implements ISpotExecutor {
    * 构造函数
    * @param config 配置信息
    */
-  public constructor(private readonly config: BinanceSpotConfig) {
-    this.available_funds_amount = this.config.init_funds_amount;
-    this.available_assets_amount = this.config.init_assets_amount || 0;
-    [this.assets_name, this.funds_name] = SymbolSplit(this.config.symbol);
-  }
+  public constructor(private readonly config: BinanceSpotConfig) { }
 
   /**
    * 资金名称
@@ -279,6 +275,19 @@ implements ISpotExecutor {
 
   public async UpdateSnapshot() {
     await this.config.snapshot_list?.Append(await this.LatestSnapshot());
+  }
+
+  public async Reset(): Promise<BinanceSpot> {
+    this.account_funds_amount = 0;
+    this.account_assets_amount = 0;
+    this.available_funds_amount = this.config.init_funds_amount;
+    this.available_assets_amount = this.config.init_assets_amount || 0;
+    [this.assets_name, this.funds_name] = SymbolSplit(this.config.symbol);
+    await Promise.all([
+      this.config.transaction_list?.Empty(),
+      this.config.snapshot_list?.Empty(),
+    ]);
+    return this;
   }
   //#endregion
 }
