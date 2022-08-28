@@ -1,3 +1,4 @@
+import { Logger } from '../utils/logger';
 import { IVectorElementConfig, Vector } from "./vector";
 
 export
@@ -11,7 +12,7 @@ interface IOptimizerConfig {
 }
 
 export
-abstract class Optimizer {
+class Optimizer {
   public constructor(private readonly config: IOptimizerConfig) {
     if (this.config.space.length < 1) {
       throw 'space维度必须大于等于1';
@@ -36,6 +37,12 @@ abstract class Optimizer {
     return this.config.input_output_ranking_limit || 10000;
   }
 
+  private logger = new Logger();
+
+  private logOptimal() {
+    this.logger.log(this.input_output_ranking[0]);
+  }
+
   public async Search() {
     for (
       let i = 0;
@@ -51,6 +58,7 @@ abstract class Optimizer {
 
       if (this.input_output_ranking.length <= 0) {
         this.input_output_ranking.push({ input, output });
+        this.logOptimal();
       } else {
         const last = this.input_output_ranking[this.input_output_ranking.length - 1];
         if (output >= last.output) {
@@ -58,6 +66,9 @@ abstract class Optimizer {
         } else {
           const index = this.input_output_ranking.findIndex((item) => item.output > output);
           this.input_output_ranking.splice(index, 0, { input, output });
+          if (index === 0) {
+            this.logOptimal();
+          }
         }
 
         const diff = this.input_output_ranking.length - this.input_output_ranking_limit;
