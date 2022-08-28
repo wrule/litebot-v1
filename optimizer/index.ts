@@ -51,7 +51,6 @@ abstract class Optimizer {
 
       if (this.input_output_ranking.length <= 0)
         this.input_output_ranking.push({ input, output });
-
       const last = this.input_output_ranking[this.input_output_ranking.length - 1];
       if (output >= last.output) {
         this.input_output_ranking.push({ input, output });
