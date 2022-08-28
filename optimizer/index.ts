@@ -59,6 +59,11 @@ abstract class Optimizer {
         const index = this.input_output_ranking.findIndex((item) => item.output > output);
         this.input_output_ranking.splice(index, 0, { input, output });
       }
+
+      const diff = this.input_output_ranking.length - this.input_output_ranking_limit;
+      if (diff > 0) {
+        this.input_output_ranking.splice(this.input_output_ranking_limit, diff);
+      }
     }
   }
 }
