@@ -49,19 +49,21 @@ abstract class Optimizer {
       if (this.config.output_filter && !this.config.output_filter(output))
         continue;
 
-      if (this.input_output_ranking.length <= 0)
-        this.input_output_ranking.push({ input, output });
-      const last = this.input_output_ranking[this.input_output_ranking.length - 1];
-      if (output >= last.output) {
+      if (this.input_output_ranking.length <= 0) {
         this.input_output_ranking.push({ input, output });
       } else {
-        const index = this.input_output_ranking.findIndex((item) => item.output > output);
-        this.input_output_ranking.splice(index, 0, { input, output });
-      }
+        const last = this.input_output_ranking[this.input_output_ranking.length - 1];
+        if (output >= last.output) {
+          this.input_output_ranking.push({ input, output });
+        } else {
+          const index = this.input_output_ranking.findIndex((item) => item.output > output);
+          this.input_output_ranking.splice(index, 0, { input, output });
+        }
 
-      const diff = this.input_output_ranking.length - this.input_output_ranking_limit;
-      if (diff > 0) {
-        this.input_output_ranking.splice(this.input_output_ranking_limit, diff);
+        const diff = this.input_output_ranking.length - this.input_output_ranking_limit;
+        if (diff > 0) {
+          this.input_output_ranking.splice(this.input_output_ranking_limit, diff);
+        }
       }
     }
   }
