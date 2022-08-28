@@ -32,6 +32,10 @@ abstract class Optimizer {
   private vector: Vector;
   private input_output_ranking: { input: any, output: number }[];
 
+  private get input_output_ranking_limit() {
+    return this.config.input_output_ranking_limit || 10000;
+  }
+
   public async Search() {
     for (
       let i = 0;
@@ -39,11 +43,21 @@ abstract class Optimizer {
       ++i
     ) {
       const input = this.vector.RandomKeyValue;
-      if (!this.config.input_filter || this.config.input_filter(input)) {
-        const output = await this.config.loss(input);
-        if (!this.config.output_filter || this.config.output_filter(output)) {
+      if (this.config.input_filter && !this.config.input_filter(input))
+        continue;
+      const output = await this.config.loss(input);
+      if (this.config.output_filter && !this.config.output_filter(output))
+        continue;
 
-        }
+      if (this.input_output_ranking.length <= 0)
+        this.input_output_ranking.push({ input, output });
+
+      const last = this.input_output_ranking[this.input_output_ranking.length - 1];
+      if (output >= last.output) {
+        this.input_output_ranking.push({ input, output });
+      } else {
+        const index = this.input_output_ranking.findIndex((item) => item.output > output);
+        this.input_output_ranking.splice(index, 0, { input, output });
       }
     }
   }
