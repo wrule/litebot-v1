@@ -117,10 +117,10 @@ class Optimizer {
         this.logOptimal();
       } else {
         const last = this.ranking[this.ranking.length - 1];
-        if (output >= last.output) {
+        if (loss >= last.loss) {
           this.ranking.push({ input, output, loss });
         } else {
-          const index = this.ranking.findIndex((item) => item.output > output);
+          const index = this.ranking.findIndex((item) => item.loss > loss);
           this.ranking.splice(index, 0, { input, output, loss });
           if (index === 0) {
             this.logOptimal();

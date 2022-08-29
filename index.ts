@@ -7,7 +7,8 @@ async function main() {
       { name: 'b', range: [-1000, 1000] },
       { name: 'c', range: [-1000, 1000] },
     ],
-    loss: (params) => (params.a * params.b) / (params.a * params.a) + 2 * (params.c * params.c)
+    objective_function: (params) => params.a + params.b + params.c,
+    loss_function: (output: number) => 1 / (output * output),
   });
   await op.Search();
 }
