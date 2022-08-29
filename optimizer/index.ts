@@ -27,6 +27,10 @@ interface IOptimizerConfig {
    */
   output_filter?: (output: number) => boolean;
   /**
+   * 损失过滤器(为空不过滤)
+   */
+  loss_filter?: (loss: number) => boolean;
+  /**
    * 排行长度限制(为空默认10000)
    */
   input_output_ranking_limit?: number;
@@ -71,6 +75,11 @@ class Optimizer {
   private get output_filter() {
     const pass = (output: any) => true;
     return this.config.output_filter || pass;
+  }
+
+  private get loss_filter() {
+    const pass = (loss: any) => true;
+    return this.config.loss_filter || pass;
   }
 
   private get input_output_ranking_limit() {
