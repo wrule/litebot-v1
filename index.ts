@@ -1,16 +1,23 @@
-import { Optimizer } from './optimizer/index';
+import { ArrayToKLine } from './common/kline';
+import ETH_USDT_1d from './data/ETH_USDT-1d.json';
+import { T07 } from './robot/spot/t07';
 
-async function main() {
-  const op = new Optimizer({
-    space: [
-      { name: 'a', range: [-1000, 1000] },
-      { name: 'b', range: [-1000, 1000] },
-      { name: 'c', range: [-1000, 1000] },
-    ],
-    objective_function: (params) => params.a + params.b + params.c,
-    loss_function: (output: number) => 1 / (output * output),
-  });
-  await op.Search();
-}
+const robot = new T07({
+  params: {
+    macd_fast_ma: 9,
+    macd_slow_ma: 44,
+    macd_diff_ma: 9,
+    cross_limit: 3,
+    sold_candles: 16,
+    atr: 7,
+    atr_multiplier: 0.5,
+  },
+  executor: null as any,
+});
 
-main();
+const kline = ArrayToKLine(ETH_USDT_1d);
+const result = robot.GenerateTestData(kline);
+console.log(kline.length);
+console.log(result.dif.length);
+console.log(result.dea.length);
+console.log(result.macd.length);

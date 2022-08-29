@@ -21,6 +21,13 @@ extends IOHLCV {
 }
 
 export
+interface IMACDResult {
+  dif: number[];
+  dea: number[];
+  macd: number[];
+}
+
+export
 class T07
 extends SpotRobot<IParams, IOHLCV, ITestData> {
   public constructor(config: ISpotRobotConfig<IParams, IOHLCV, ITestData>) {
@@ -31,14 +38,16 @@ extends SpotRobot<IParams, IOHLCV, ITestData> {
     macd_fast_ma: number,
     macd_slow_ma: number,
     macd_diff_ma: number,
-  }) {
-    let result: any = null;
+  }): IMACDResult {
+    const result: IMACDResult = { dif: [], dea: [], macd: [], };
     tulind.indicators.macd.indicator(
       [closes],
       [params.macd_fast_ma, params.macd_slow_ma, params.macd_diff_ma],
       (error: any, data: any) => {
         if (error) throw error;
-        result = data;
+        result.dif = data[0];
+        result.dea = data[1];
+        result.macd = data[2];
       },
     );
     return result;
@@ -54,7 +63,7 @@ extends SpotRobot<IParams, IOHLCV, ITestData> {
 
   public GenerateTestData(real_data: IOHLCV[]): ITestData[] {
     const macd = this.macd(real_data.map((item) => item.close), this.config.params);
-    return macd;
+    return macd as any;
   }
 
   protected checkTestData(data: ITestData): void | Promise<void> {
