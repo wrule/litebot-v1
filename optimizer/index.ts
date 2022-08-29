@@ -88,16 +88,12 @@ class Optimizer {
   }
 
   public async Search() {
-    for (
-      let i = 0;
-      this.config.iterations == null || i < this.config.iterations;
-      ++i
-    ) {
+    for (let i = 0; i < this.iterations; ++i) {
       const input = this.vector.RandomKeyValue;
-      if (this.config.input_filter && !this.config.input_filter(input))
+      if (!this.input_filter(input))
         continue;
-      const output = await this.config.loss(input);
-      if (this.config.output_filter && !this.config.output_filter(output))
+      const output = this.loss_function(await this.config.objective_function(input));
+      if (!this.output_filter(output))
         continue;
 
       if (this.input_output_ranking.length <= 0) {
