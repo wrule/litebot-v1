@@ -1,6 +1,9 @@
 import { Logger } from '../utils/logger';
 import { IVectorElementConfig, Vector } from './vector';
 
+/**
+ * 优化器配置
+ */
 export
 interface IOptimizerConfig {
   /**
