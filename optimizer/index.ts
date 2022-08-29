@@ -2,6 +2,16 @@ import { Logger } from '../utils/logger';
 import { IVectorElementConfig, Vector } from './vector';
 
 /**
+ * 排行项目
+ */
+export
+interface IRankingItem {
+  input: any;
+  output: number;
+  loss: number;
+}
+
+/**
  * 优化器配置
  */
 export
@@ -56,11 +66,11 @@ class Optimizer {
       throw 'iterations必须大于等于1或为空(持续迭代)';
     }
     this.vector = new Vector(this.config.space);
-    this.input_output_ranking = [];
+    this.ranking = [];
   }
 
   private vector: Vector;
-  private input_output_ranking: { input: any, output: number }[];
+  private ranking: IRankingItem[];
 
   private get loss_function() {
     const pass = (num: number) => num;
@@ -93,7 +103,7 @@ class Optimizer {
   private logger = new Logger();
 
   private logOptimal() {
-    this.logger.log(this.input_output_ranking[0]);
+    this.logger.log(this.ranking[0]);
   }
 
   public async Search() {
@@ -108,24 +118,24 @@ class Optimizer {
       if (!this.loss_filter(loss))
         continue;
 
-      if (this.input_output_ranking.length <= 0) {
-        this.input_output_ranking.push({ input, output });
+      if (this.ranking.length <= 0) {
+        this.ranking.push({ input, output, loss });
         this.logOptimal();
       } else {
-        const last = this.input_output_ranking[this.input_output_ranking.length - 1];
+        const last = this.ranking[this.ranking.length - 1];
         if (output >= last.output) {
-          this.input_output_ranking.push({ input, output });
+          this.ranking.push({ input, output, loss });
         } else {
-          const index = this.input_output_ranking.findIndex((item) => item.output > output);
-          this.input_output_ranking.splice(index, 0, { input, output });
+          const index = this.ranking.findIndex((item) => item.output > output);
+          this.ranking.splice(index, 0, { input, output, loss });
           if (index === 0) {
             this.logOptimal();
           }
         }
 
-        const diff = this.input_output_ranking.length - this.ranking_limit;
+        const diff = this.ranking.length - this.ranking_limit;
         if (diff > 0) {
-          this.input_output_ranking.splice(this.ranking_limit, diff);
+          this.ranking.splice(this.ranking_limit, diff);
         }
       }
     }
