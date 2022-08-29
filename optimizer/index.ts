@@ -17,7 +17,7 @@ interface IOptimizerConfig {
   /**
    * 损失函数(为空不额外处理)
    */
-  loss_function?: (number: any) => number;
+  loss_function?: (output: number) => number;
   /**
    * 入参过滤器(为空不过滤)
    */
@@ -33,7 +33,7 @@ interface IOptimizerConfig {
   /**
    * 排行长度限制(为空默认10000)
    */
-  input_output_ranking_limit?: number;
+  ranking_limit?: number;
   /**
    * 迭代次数(为空默认持续迭代)
    */
@@ -47,10 +47,10 @@ class Optimizer {
       throw 'space维度必须大于等于1';
     }
     if (
-      this.config.input_output_ranking_limit != null &&
-      this.config.input_output_ranking_limit < 1
+      this.config.ranking_limit != null &&
+      this.config.ranking_limit < 1
     ) {
-      throw 'input_output_ranking_limit必须大于等于1或为空(默认10000)';
+      throw 'ranking_limit必须大于等于1或为空(默认10000)';
     }
     if (this.config.iterations != null && this.config.iterations < 1) {
       throw 'iterations必须大于等于1或为空(持续迭代)';
@@ -82,8 +82,8 @@ class Optimizer {
     return this.config.loss_filter || pass;
   }
 
-  private get input_output_ranking_limit() {
-    return this.config.input_output_ranking_limit || 10000;
+  private get ranking_limit() {
+    return this.config.ranking_limit || 10000;
   }
 
   private get iterations() {
@@ -123,9 +123,9 @@ class Optimizer {
           }
         }
 
-        const diff = this.input_output_ranking.length - this.input_output_ranking_limit;
+        const diff = this.input_output_ranking.length - this.ranking_limit;
         if (diff > 0) {
-          this.input_output_ranking.splice(this.input_output_ranking_limit, diff);
+          this.input_output_ranking.splice(this.ranking_limit, diff);
         }
       }
     }
