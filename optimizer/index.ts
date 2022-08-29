@@ -92,10 +92,10 @@ class Optimizer {
       const input = this.vector.RandomKeyValue;
       if (!this.input_filter(input))
         continue;
-      const output = this.loss_function(await this.config.objective_function(input));
+      const output = await this.config.objective_function(input);
       if (!this.output_filter(output))
         continue;
-
+      const loss = this.loss_function(output);
       if (this.input_output_ranking.length <= 0) {
         this.input_output_ranking.push({ input, output });
         this.logOptimal();
