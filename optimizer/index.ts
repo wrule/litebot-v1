@@ -58,8 +58,27 @@ class Optimizer {
   private vector: Vector;
   private input_output_ranking: { input: any, output: number }[];
 
+  private get loss_function() {
+    const pass = (num: number) => num;
+    return this.config.loss_function || pass;
+  }
+
+  private get input_filter() {
+    const pass = (input: any) => true;
+    return this.config.input_filter || pass;
+  }
+
+  private get output_filter() {
+    const pass = (output: any) => true;
+    return this.config.output_filter || pass;
+  }
+
   private get input_output_ranking_limit() {
     return this.config.input_output_ranking_limit || 10000;
+  }
+
+  private get iterations() {
+    return this.config.iterations || Infinity;
   }
 
   private logger = new Logger();
