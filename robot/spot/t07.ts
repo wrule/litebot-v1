@@ -40,14 +40,13 @@ extends SpotRobot<IParams, IOHLCV, ITestData> {
     macd_diff_ma: number,
   }): IMACDResult {
     const result: IMACDResult = { dif: [], dea: [], macd: [], };
-    tulind.indicators.macd.indicator(
-      [closes],
-      [params.macd_fast_ma, params.macd_slow_ma, params.macd_diff_ma],
-      (error: any, data: any) => {
+    const options = [params.macd_fast_ma, params.macd_slow_ma, params.macd_diff_ma];
+    const fill_size: number = tulind.indicators.macd.start(options);
+    tulind.indicators.macd.indicator([closes], options, (error: any, data: any) => {
         if (error) throw error;
-        result.dif = data[0];
-        result.dea = data[1];
-        result.macd = data[2];
+        result.dif = Array(fill_size).fill(null).concat(data[0]);
+        result.dea = Array(fill_size).fill(null).concat(data[1]);
+        result.macd = Array(fill_size).fill(null).concat(data[2]);
       },
     );
     return result;
