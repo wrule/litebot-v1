@@ -126,7 +126,6 @@ class Optimizer {
             this.logOptimal();
           }
         }
-
         const diff = this.ranking.length - this.ranking_limit;
         if (diff > 0) {
           this.ranking.splice(this.ranking_limit, diff);
