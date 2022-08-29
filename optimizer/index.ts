@@ -1,13 +1,35 @@
 import { Logger } from '../utils/logger';
-import { IVectorElementConfig, Vector } from "./vector";
+import { IVectorElementConfig, Vector } from './vector';
 
 export
 interface IOptimizerConfig {
+  /**
+   * 超参数空间
+   */
   space: IVectorElementConfig[],
-  loss: (params: any) => number;
+  /**
+   * 目标函数
+   */
+  objective_function: (params: any) => number;
+  /**
+   * 损失函数(为空不额外处理)
+   */
+  loss_function?: (number: any) => number;
+  /**
+   * 入参过滤器(为空不过滤)
+   */
   input_filter?: (input: any) => boolean;
+  /**
+   * 出参过滤器(为空不过滤)
+   */
   output_filter?: (output: number) => boolean;
+  /**
+   * 排行长度限制(为空默认10000)
+   */
   input_output_ranking_limit?: number;
+  /**
+   * 迭代次数(为空默认持续迭代)
+   */
   iterations?: number;
 }
 
