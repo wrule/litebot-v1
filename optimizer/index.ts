@@ -53,18 +53,12 @@ interface IOptimizerConfig {
 export
 class Optimizer {
   public constructor(private readonly config: IOptimizerConfig) {
-    if (this.config.space.length < 1) {
+    if (this.config.space.length < 1)
       throw 'space维度必须大于等于1';
-    }
-    if (
-      this.config.ranking_limit != null &&
-      this.config.ranking_limit < 1
-    ) {
+    if (this.config.ranking_limit != null && this.config.ranking_limit < 1)
       throw 'ranking_limit必须大于等于1或为空(默认10000)';
-    }
-    if (this.config.iterations != null && this.config.iterations < 1) {
+    if (this.config.iterations != null && this.config.iterations < 1)
       throw 'iterations必须大于等于1或为空(持续迭代)';
-    }
     this.vector = new Vector(this.config.space);
     this.ranking = [];
   }
@@ -73,7 +67,7 @@ class Optimizer {
   private ranking: IRankingItem[];
 
   private get loss_function() {
-    const pass = (num: number) => num;
+    const pass = (output: number) => output;
     return this.config.loss_function || pass;
   }
 
@@ -83,12 +77,12 @@ class Optimizer {
   }
 
   private get output_filter() {
-    const pass = (output: any) => true;
+    const pass = (output: number) => true;
     return this.config.output_filter || pass;
   }
 
   private get loss_filter() {
-    const pass = (loss: any) => true;
+    const pass = (loss: number) => true;
     return this.config.loss_filter || pass;
   }
 
