@@ -105,6 +105,9 @@ class Optimizer {
       if (!this.output_filter(output))
         continue;
       const loss = this.loss_function(output);
+      if (!this.loss_filter(loss))
+        continue;
+
       if (this.input_output_ranking.length <= 0) {
         this.input_output_ranking.push({ input, output });
         this.logOptimal();
