@@ -1,3 +1,4 @@
+import tulind from 'tulind';
 import { IOHLCV } from '../../common/kline';
 import { ISpotRobotConfig, SpotRobot } from '.';
 
