@@ -59,7 +59,7 @@ interface ITestData
 extends IOHLCV {
   buy?: boolean;
   sell?: boolean;
-  price?: boolean;
+  price?: number;
 }
 
 export
@@ -132,6 +132,14 @@ extends SpotRobot<IParams, IOHLCV, ITestData> {
       if (index >= this.KLineReadyIndex) {
         const macd_last = macd[index];
         const macd_prev = macd[index - 1];
+
+        // 买入点信号生成
+        const break_up_price = BreakUp(item, this.buy_queue.High);
+        if (break_up_price != null) {
+          result.buy = true;
+          result.price = break_up_price;
+        }
+
         // 记录金叉或死叉
         if ((macd_last > 0 && macd_prev <= 0) || (macd_last < 0 && macd_prev >= 0))
           this.buy_queue.Push(item);
