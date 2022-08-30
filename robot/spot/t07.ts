@@ -140,9 +140,12 @@ extends SpotRobot<IParams, IOHLCV, ITestData> {
           result.price = break_up_price;
         }
 
-        // 记录金叉或死叉
+        // 记录买入信号数据源(金叉死叉)
         if ((macd_last > 0 && macd_prev <= 0) || (macd_last < 0 && macd_prev >= 0))
           this.buy_queue.Push(item);
+
+        // 记录卖出信号数据源(K线)
+        this.sell_queue.Push(item);
       }
       return result;
     });
