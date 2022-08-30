@@ -17,7 +17,3 @@ const robot = new T07({
 
 const kline = ArrayToKLine(ETH_USDT_1d);
 const result = robot.GenerateTestData(kline);
-console.log(kline.length);
-console.log(result.dif.length);
-console.log(result.dea.length);
-console.log(result.macd.length);

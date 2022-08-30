@@ -22,6 +22,7 @@ extends IOHLCV {
 
 export
 interface IMACDResult {
+  start: number;
   dif: number[];
   dea: number[];
   macd: number[];
@@ -39,14 +40,14 @@ extends SpotRobot<IParams, IOHLCV, ITestData> {
     macd_slow_ma: number,
     macd_diff_ma: number,
   }): IMACDResult {
-    const result: IMACDResult = { dif: [], dea: [], macd: [], };
+    const result: IMACDResult = { start: 0, dif: [], dea: [], macd: [], };
     const options = [params.macd_fast_ma, params.macd_slow_ma, params.macd_diff_ma];
-    const fill_size: number = tulind.indicators.macd.start(options);
+    result.start = tulind.indicators.macd.start(options);
     tulind.indicators.macd.indicator([closes], options, (error: any, data: any) => {
         if (error) throw error;
-        result.dif = Array(fill_size).fill(null).concat(data[0]);
-        result.dea = Array(fill_size).fill(null).concat(data[1]);
-        result.macd = Array(fill_size).fill(null).concat(data[2]);
+        result.dif = Array(result.start).fill(null).concat(data[0]);
+        result.dea = Array(result.start).fill(null).concat(data[1]);
+        result.macd = Array(result.start).fill(null).concat(data[2]);
       },
     );
     return result;
@@ -62,7 +63,10 @@ extends SpotRobot<IParams, IOHLCV, ITestData> {
 
   public GenerateTestData(real_data: IOHLCV[]): ITestData[] {
     const macd = this.macd(real_data.map((item) => item.close), this.config.params);
-    return macd as any;
+    console.log(macd.dif.length);
+    console.log(macd.dea.length);
+    console.log(macd.macd.length);
+    return [];
   }
 
   protected checkTestData(data: ITestData): void | Promise<void> {
