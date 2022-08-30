@@ -81,6 +81,7 @@ extends SpotRobot<IParams, IOHLCV, ITestData> {
     const { macd } = this.macd(real_data.map((item) => item.close), this.config.params);
     console.log(macd.length);
     console.log(this.KLineReadyIndex);
+
     const a = real_data.map((item, index) => {
       const result: ITestData = { ...item };
       if (index >= this.KLineReadyIndex) {
@@ -95,10 +96,7 @@ extends SpotRobot<IParams, IOHLCV, ITestData> {
       }
       return result;
     });
-    const b = a
-      .filter((item) => item.buy || item.sell)
-      .map((item) => ({ ...item, time: moment(new Date(item.time)).format('YYYY-MM-DD HH:mm:ss') }));
-    console.log(b.slice(b.length - 3));
+
     return [];
   }
 
