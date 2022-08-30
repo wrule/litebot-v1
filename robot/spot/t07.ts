@@ -143,26 +143,33 @@ extends SpotRobot<IParams, IOHLCV, ITestData> {
 
   public GenerateTestData(real_data: IOHLCV[]): ITestData[] {
     const { macd } = this.macd(real_data.map((item) => item.close), this.config.params);
+    let prev_signal = '';
     return real_data.map((item, index) => {
-      const result: ITestData = { ...item };
+      const data: ITestData = { ...item };
       if (index >= this.KLineReadyIndex) {
         const macd_last = macd[index];
         const macd_prev = macd[index - 1];
-        // 买入点信号生成
-        const break_up_price = BreakUp(item, this.buy_queue.High);
-        result.buy = break_up_price != null;
-        result.price = break_up_price != null ? break_up_price : result.price;
-        // 卖出点信号生成
-        const break_down_price = BreakDown(item, this.sell_queue.Low);
-        result.sell = break_down_price != null;
-        result.price = break_down_price != null ? break_down_price : result.price;
+        if (!prev_signal || prev_signal === 'sell') {
+          // 买入点信号检测
+          const break_up_price = BreakUp(item, this.buy_queue.High);
+          data.buy = break_up_price != null;
+          data.price = (data.buy ? break_up_price : data.price) as number;
+          prev_signal = data.buy ? 'buy' : prev_signal;
+        }
+        if (!prev_signal || prev_signal === 'buy') {
+          // 卖出点信号检测
+          const break_down_price = BreakDown(item, this.sell_queue.Low);
+          data.sell = break_down_price != null;
+          data.price = (data.sell ? break_down_price : data.price) as number;
+          prev_signal = data.sell ? 'sell' : prev_signal;
+        }
         // 记录买入信号数据源(金叉死叉)
         if ((macd_last > 0 && macd_prev <= 0) || (macd_last < 0 && macd_prev >= 0))
           this.buy_queue.Push(item);
         // 记录卖出信号数据源(K线)
         this.sell_queue.Push(item);
       }
-      return result;
+      return data;
     });
   }
 
