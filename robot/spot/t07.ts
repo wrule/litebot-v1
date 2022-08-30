@@ -143,16 +143,11 @@ extends SpotRobot<IParams, IOHLCV, ITestData> {
 
   public GenerateTestData(real_data: IOHLCV[]): ITestData[] {
     const { macd } = this.macd(real_data.map((item) => item.close), this.config.params);
-    console.log(macd.length);
-    console.log(this.KLineReadyIndex);
-    console.log(tulind.indicators.atr);
-
-    const a = real_data.map((item, index) => {
+    return real_data.map((item, index) => {
       const result: ITestData = { ...item };
       if (index >= this.KLineReadyIndex) {
         const macd_last = macd[index];
         const macd_prev = macd[index - 1];
-
         // 买入点信号生成
         const break_up_price = BreakUp(item, this.buy_queue.High);
         result.buy = break_up_price != null;
@@ -169,8 +164,6 @@ extends SpotRobot<IParams, IOHLCV, ITestData> {
       }
       return result;
     });
-
-    return [];
   }
 
   protected checkTestData(data: ITestData): void | Promise<void> {
