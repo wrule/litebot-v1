@@ -1,7 +1,34 @@
 import tulind from 'tulind';
-import { IOHLCV } from '../../common/kline';
+import { IOHLCV, KLine } from '../../common/kline';
 import { ISpotRobotConfig, SpotRobot } from '.';
 import moment from 'moment';
+
+
+export
+class OHLCVQueue {
+  public constructor(private readonly limit: number) {
+    if (this.limit < 1) throw 'limit必须大于等于1';
+  }
+
+  private kline: KLine = [];
+
+  public Push(ohlcv: IOHLCV) {
+    this.kline.push(ohlcv);
+    const diff = this.kline.length - this.limit;
+    if (diff > 0) this.kline.splice(this.limit, diff);
+  }
+
+  public get High() {
+    if (this.kline.length < this.limit) return Infinity;
+    return Math.max(...this.kline.map((item) => item.high));
+  }
+
+  public get Low() {
+    if (this.kline.length < this.limit) return -Infinity;
+    return Math.min(...this.kline.map((item) => item.low));
+  }
+}
+
 
 export
 interface IParams {
