@@ -29,6 +29,19 @@ class OHLCVQueue {
   }
 }
 
+export
+function BreakUp(ohlcv: IOHLCV, threshold: number) {
+  if (ohlcv.open > threshold) return ohlcv.open;
+  if (ohlcv.high > threshold) return threshold;
+  return null;
+}
+
+export
+function BreakDown(ohlcv: IOHLCV, threshold: number) {
+  if (ohlcv.open < threshold) return ohlcv.open;
+  if (ohlcv.low < threshold) return threshold;
+  return null;
+}
 
 export
 interface IParams {
