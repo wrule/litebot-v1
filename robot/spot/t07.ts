@@ -19,10 +19,10 @@ class OHLCVQueue {
 
   private kline: KLine = [];
 
-  public Push(ohlcv: IOHLCV) {
+  public Append(ohlcv: IOHLCV) {
     this.kline.push(ohlcv);
     const diff = this.kline.length - this.limit;
-    if (diff > 0) this.kline.splice(this.limit, diff);
+    if (diff > 0) this.kline.splice(0, diff);
   }
 
   public get High() {
@@ -165,9 +165,9 @@ extends SpotRobot<IParams, IOHLCV, ITestData> {
         }
         // 记录买入信号数据源(金叉死叉)
         if ((macd_last > 0 && macd_prev <= 0) || (macd_last < 0 && macd_prev >= 0))
-          this.buy_queue.Push(item);
+          this.buy_queue.Append(item);
         // 记录卖出信号数据源(K线)
-        this.sell_queue.Push(item);
+        this.sell_queue.Append(item);
       }
       return data;
     });
