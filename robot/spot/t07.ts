@@ -140,6 +140,13 @@ extends SpotRobot<IParams, IOHLCV, ITestData> {
           result.price = break_up_price;
         }
 
+        // 卖出点信号生成
+        const break_down_price = BreakDown(item, this.sell_queue.Low);
+        if (break_down_price != null) {
+          result.sell = true;
+          result.price = break_down_price;
+        }
+
         // 记录买入信号数据源(金叉死叉)
         if ((macd_last > 0 && macd_prev <= 0) || (macd_last < 0 && macd_prev >= 0))
           this.buy_queue.Push(item);
