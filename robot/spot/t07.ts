@@ -146,13 +146,6 @@ extends SpotRobot<IParams, IOHLCV, ITestData> {
     let prev_signal = '';
     return real_data.map((item, index) => {
       const data: ITestData = { ...item };
-      if (index >= this.KLineReadyIndex) {
-        const macd_last = macd[index];
-        const macd_prev = macd[index - 1];
-        // 记录买入信号数据源(金叉死叉)
-        if ((macd_last > 0 && macd_prev <= 0) || (macd_last < 0 && macd_prev >= 0))
-          this.buy_queue.Append(item);
-      }
       // 卖出点信号检测
       if (prev_signal || prev_signal === 'buy') {
         const break_down_price = BreakDown(item, this.sell_queue.Low);
@@ -169,6 +162,13 @@ extends SpotRobot<IParams, IOHLCV, ITestData> {
       }
       // 记录卖出信号数据源(K线)
       this.sell_queue.Append(item);
+      // 记录买入信号数据源(金叉死叉)
+      if (index >= this.KLineReadyIndex) {
+        const macd_last = macd[index];
+        const macd_prev = macd[index - 1];
+        if ((macd_last > 0 && macd_prev <= 0) || (macd_last < 0 && macd_prev >= 0))
+          this.buy_queue.Append(item);
+      }
       return data;
     });
   }
