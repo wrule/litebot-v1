@@ -62,7 +62,12 @@ class T07
 extends SpotRobot<IParams, IOHLCV, ITestData> {
   public constructor(config: ISpotRobotConfig<IParams, IOHLCV, ITestData>) {
     super(config);
+    this.buy_queue = new OHLCVQueue(this.config.params.cross_limit);
+    this.sell_queue = new OHLCVQueue(this.config.params.sold_candles);
   }
+
+  private buy_queue!: OHLCVQueue;
+  private sell_queue!: OHLCVQueue;
 
   private macd_start(params: {
     macd_fast_ma: number,
@@ -114,12 +119,9 @@ extends SpotRobot<IParams, IOHLCV, ITestData> {
       if (index >= this.KLineReadyIndex) {
         const macd_last = macd[index];
         const macd_prev = macd[index - 1];
-        if (macd_last > 0 && macd_prev <= 0) {
-          result.buy = true;
-        }
-        if (macd_last < 0 && macd_prev >= 0) {
-          result.sell = true;
-        }
+        // 记录金叉或死叉
+        if ((macd_last > 0 && macd_prev <= 0) || (macd_last < 0 && macd_prev >= 0))
+          this.buy_queue.Push(item);
       }
       return result;
     });
