@@ -147,14 +147,14 @@ extends SpotRobot<IParams, IOHLCV, ITestData> {
     return real_data.map((item, index) => {
       const data: ITestData = { ...item };
       // 卖出点信号检测
-      if (prev_signal || prev_signal === 'buy') {
+      if (!prev_signal || prev_signal === 'buy') {
         const break_down_price = BreakDown(item, this.sell_queue.Low);
         data.sell = break_down_price != null;
         data.price = (data.sell ? break_down_price : data.price) as number;
         prev_signal = data.sell ? 'sell' : prev_signal;
       }
       // 买入点信号检测
-      if (prev_signal || prev_signal === 'sell') {
+      if (!prev_signal || prev_signal === 'sell') {
         const break_up_price = BreakUp(item, this.buy_queue.High);
         data.buy = break_up_price != null;
         data.price = (data.buy ? break_up_price : data.price) as number;
