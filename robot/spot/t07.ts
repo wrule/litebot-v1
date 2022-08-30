@@ -135,22 +135,15 @@ extends SpotRobot<IParams, IOHLCV, ITestData> {
 
         // 买入点信号生成
         const break_up_price = BreakUp(item, this.buy_queue.High);
-        if (break_up_price != null) {
-          result.buy = true;
-          result.price = break_up_price;
-        }
-
+        result.buy = break_up_price != null;
+        result.price = break_up_price as number;
         // 卖出点信号生成
         const break_down_price = BreakDown(item, this.sell_queue.Low);
-        if (break_down_price != null) {
-          result.sell = true;
-          result.price = break_down_price;
-        }
-
+        result.sell = break_down_price != null;
+        result.price = break_down_price as number;
         // 记录买入信号数据源(金叉死叉)
         if ((macd_last > 0 && macd_prev <= 0) || (macd_last < 0 && macd_prev >= 0))
           this.buy_queue.Push(item);
-
         // 记录卖出信号数据源(K线)
         this.sell_queue.Push(item);
       }
