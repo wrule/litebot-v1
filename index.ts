@@ -18,4 +18,4 @@ const robot = new T07({
 const kline = ArrayToKLine(ETH_USDT_1d);
 const result = robot.GenerateTestData(kline);
 const v_result = result.filter((item) => item.buy || item.sell);
-console.log(v_result);
+console.log(v_result.slice(0, 10));

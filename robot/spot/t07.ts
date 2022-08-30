@@ -153,14 +153,20 @@ extends SpotRobot<IParams, IOHLCV, ITestData> {
         if ((macd_last > 0 && macd_prev <= 0) || (macd_last < 0 && macd_prev >= 0))
           this.buy_queue.Append(item);
       }
-      // 买入点信号检测
-      const break_up_price = BreakUp(item, this.buy_queue.High);
-      data.buy = break_up_price != null;
-      data.price = (data.buy ? break_up_price : data.price) as number;
-      // 卖出点信号检测
-      const break_down_price = BreakDown(item, this.sell_queue.Low);
-      data.sell = break_down_price != null;
-      data.price = (data.sell ? break_down_price : data.price) as number;
+      if (prev_signal || prev_signal === 'sell') {
+        // 买入点信号检测
+        const break_up_price = BreakUp(item, this.buy_queue.High);
+        data.buy = break_up_price != null;
+        data.price = (data.buy ? break_up_price : data.price) as number;
+        prev_signal = data.buy ? 'buy' : prev_signal;
+      }
+      if (prev_signal || prev_signal === 'buy') {
+        // 卖出点信号检测
+        const break_down_price = BreakDown(item, this.sell_queue.Low);
+        data.sell = break_down_price != null;
+        data.price = (data.sell ? break_down_price : data.price) as number;
+        prev_signal = data.sell ? 'sell' : prev_signal;
+      }
       // 记录卖出信号数据源(K线)
       this.sell_queue.Append(item);
       return data;
