@@ -3,6 +3,13 @@ import { IOHLCV, KLine } from '../../common/kline';
 import { ISpotRobotConfig, SpotRobot } from '.';
 import moment from 'moment';
 
+export
+interface IMACDResult {
+  dif: number[];
+  dea: number[];
+  macd: number[];
+}
+
 
 export
 class OHLCVQueue {
@@ -63,14 +70,6 @@ extends IOHLCV {
 }
 
 export
-interface IMACDResult {
-  start: number;
-  dif: number[];
-  dea: number[];
-  macd: number[];
-}
-
-export
 class T07
 extends SpotRobot<IParams, IOHLCV, ITestData> {
   public constructor(config: ISpotRobotConfig<IParams, IOHLCV, ITestData>) {
@@ -99,14 +98,14 @@ extends SpotRobot<IParams, IOHLCV, ITestData> {
     macd_slow_ma: number,
     macd_diff_ma: number,
   }): IMACDResult {
-    const result: IMACDResult = { start: 0, dif: [], dea: [], macd: [], };
+    const result: IMACDResult = { dif: [], dea: [], macd: [], };
     const options = [params.macd_fast_ma, params.macd_slow_ma, params.macd_diff_ma];
-    result.start = this.macd_start(params);
+    const start = this.macd_start(params);
     tulind.indicators.macd.indicator([closes], options, (error: any, data: any) => {
         if (error) throw error;
-        result.dif = Array(result.start).fill(null).concat(data[0]);
-        result.dea = Array(result.start).fill(null).concat(data[1]);
-        result.macd = Array(result.start).fill(null).concat(data[2]);
+        result.dif = Array(start).fill(null).concat(data[0]);
+        result.dea = Array(start).fill(null).concat(data[1]);
+        result.macd = Array(start).fill(null).concat(data[2]);
       },
     );
     return result;
