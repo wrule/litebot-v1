@@ -9,7 +9,7 @@ const robot = new T07({
     macd_slow_ma: 44,
     macd_diff_ma: 9,
     cross_limit: 2,
-    sold_candles: 16,
+    sold_candles: 9,
     atr: 7,
     atr_multiplier: 0.5,
   },
