@@ -23,7 +23,7 @@ interface IOptimizerConfig {
   /**
    * 目标函数
    */
-  objective_function: (params: any) => number;
+  objective_function: (params: any) => number | Promise<number>;
   /**
    * 损失函数(为空不额外处理)
    */
