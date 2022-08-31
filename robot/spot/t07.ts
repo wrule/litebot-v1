@@ -173,7 +173,11 @@ extends SpotRobot<IParams, IOHLCV, ITestData> {
     });
   }
 
-  protected checkTestData(data: ITestData): void | Promise<void> {
-
+  protected async checkTestData(data: ITestData) {
+    if (data.buy) {
+      await this.config.executor.BuyAll(data.price, data.time);
+    } else if (data.sell) {
+      await this.config.executor.SellAll(data.price, data.time);
+    }
   }
 }
