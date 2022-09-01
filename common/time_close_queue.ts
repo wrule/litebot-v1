@@ -6,7 +6,7 @@ class TimeCloseQueue<T extends ITimeClose> {
     if (this.limit < 1) throw 'limit必须大于等于1';
   }
 
-  private queue: T[] = [];
+  protected queue: T[] = [];
 
   public get Length() {
     return this.queue.length;

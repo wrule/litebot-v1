@@ -2,6 +2,7 @@ import tulind from 'tulind';
 import { IOHLCV, KLine } from '../../common/kline';
 import { ISpotRobotConfig, SpotRobot } from '.';
 import moment from 'moment';
+import { TimeCloseQueue } from '@/common/time_close_queue';
 
 export
 interface IMACDResult {
@@ -35,6 +36,43 @@ class OHLCVQueue {
     return Math.min(...this.kline.map((item) => item.low));
   }
 }
+
+export
+interface OHLCV_MACD
+extends IOHLCV {
+  is_cross?: boolean;
+}
+
+export
+class OpenQueue
+extends TimeCloseQueue<OHLCV_MACD> {
+  public constructor(
+    limit: number,
+    private readonly cross_num: number,
+  ) {
+    super(limit);
+  }
+
+  private get_cross_list() {
+    const result = this.queue.filter((item) => item.is_cross);
+    const diff = result.length - this.cross_num;
+    if (diff > 0) result.splice(0, diff);
+    return result;
+  }
+
+  public High() {
+    const cross_list = this.get_cross_list();
+    if (cross_list.length < this.cross_num) return Infinity;
+    return Math.max(...cross_list.map((cross) => cross.high));
+  }
+
+  public Low() {
+    const cross_list = this.get_cross_list();
+    if (cross_list.length < this.cross_num) return -Infinity;
+    return Math.min(...cross_list.map((cross) => cross.low));
+  }
+}
+
 
 export
 function BreakUp(ohlcv: IOHLCV, threshold: number) {
