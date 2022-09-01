@@ -2,7 +2,7 @@ import { IOHLCV, ITimeClose } from './kline';
 
 export
 class TimeCloseQueue<T extends ITimeClose> {
-  public constructor(private readonly limit: number) {
+  public constructor(protected readonly limit: number) {
     if (this.limit < 1) throw 'limit必须大于等于1';
   }
 
@@ -10,6 +10,10 @@ class TimeCloseQueue<T extends ITimeClose> {
 
   public get Length() {
     return this.queue.length;
+  }
+
+  public get IsFull() {
+    return this.queue.length >= this.limit;
   }
 
   public Append(item: T) {
