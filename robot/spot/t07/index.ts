@@ -4,6 +4,7 @@ import { ISpotRobotConfig, SpotRobot } from '..';
 import moment from 'moment';
 import { TimeCloseQueue } from '@/common/time_close_queue';
 import { IOHLCV_IsCross, OpenQueue } from './open_queue';
+import { CloseQueue } from './close_queue';
 
 export
 interface IMACDResult {
@@ -35,7 +36,7 @@ interface IParams {
   cross_window_limit: number;
   cross_limit: number;
 
-  sold_candles: number;
+  close_candles: number;
 
   atr: number;
   atr_multiplier: number;
@@ -54,12 +55,12 @@ class T07
 extends SpotRobot<IParams, IOHLCV, ITestData> {
   public constructor(config: ISpotRobotConfig<IParams, IOHLCV, ITestData>) {
     super(config);
-    this.buy_queue = new OpenQueue(this.config.params);
-    this.sell_queue = new TimeCloseQueue<IOHLCV>(this.config.params.sold_candles);
+    this.open_queue = new OpenQueue(this.config.params);
+    this.close_queue = new CloseQueue(this.config.params);
   }
 
-  private buy_queue!: OpenQueue;
-  private sell_queue!: TimeCloseQueue<IOHLCV>;
+  private open_queue!: OpenQueue;
+  private close_queue!: CloseQueue;
 
   private macd_start(params: {
     macd_fast_ma: number,
@@ -128,20 +129,20 @@ extends SpotRobot<IParams, IOHLCV, ITestData> {
       const data: ITestData = { ...item };
       // 卖出点信号检测
       if (!prev_signal || prev_signal === 'buy') {
-        const break_down_price = BreakDown(item, this.sell_queue.Low);
+        const break_down_price = BreakDown(item, this.close_queue.Low());
         data.sell = break_down_price != null;
         data.price = (data.sell ? break_down_price : data.price) as number;
         prev_signal = data.sell ? 'sell' : prev_signal;
       }
       // 买入点信号检测
       if (!prev_signal || prev_signal === 'sell') {
-        const break_up_price = BreakUp(item, this.buy_queue.High());
+        const break_up_price = BreakUp(item, this.open_queue.High());
         data.buy = break_up_price != null;
         data.price = (data.buy ? break_up_price : data.price) as number;
         prev_signal = data.buy ? 'buy' : prev_signal;
       }
       // 记录卖出信号数据源(K线)
-      this.sell_queue.Append(item);
+      this.close_queue.Append(item);
 
       // 记录买入信号数据源(金叉死叉)
       const ohlcv_macd: IOHLCV_IsCross = { ...item };
@@ -151,7 +152,7 @@ extends SpotRobot<IParams, IOHLCV, ITestData> {
         if ((macd_last > 0 && macd_prev <= 0) || (macd_last < 0 && macd_prev >= 0))
         ohlcv_macd.is_cross = true;
       }
-      this.buy_queue.Append(ohlcv_macd);
+      this.open_queue.Append(ohlcv_macd);
       return data;
     });
   }
