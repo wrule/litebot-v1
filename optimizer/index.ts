@@ -1,5 +1,16 @@
+import { IDict } from '../common/types';
 import { Logger } from '../utils/logger';
-import { IVectorElementConfig, Vector } from './params_space';
+import { IParamSpaceConfig, ParamsSpace } from './params_space';
+
+/**
+ * 优化器输入输出结构(优化结果)
+ */
+export
+interface IOptimizerIO<T> {
+  input: IDict,
+  output: number,
+  data: T,
+}
 
 /**
  * 排行项目
