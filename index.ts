@@ -4,7 +4,7 @@ import ETH_USDT_2h from './data/ETH_USDT-2h.json';
 import { TestSpot } from './executor/spot/test_spot';
 import { Optimizer } from './optimizer';
 import { Vector } from './optimizer/vector';
-import { T07 } from './robot/spot/t07/t07';
+import { T07 } from './robot/spot/t07';
 
 const kline = ArrayToKLine(ETH_USDT_2h);
 
