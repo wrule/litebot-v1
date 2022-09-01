@@ -91,6 +91,9 @@ implements Iterator<unknown> {
   }
 }
 
+/**
+ * 多个参数组成的多维参数空间
+ */
 export
 class ParamsSpace {
   public constructor(config: IParamSpaceConfig[]) {
