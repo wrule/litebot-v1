@@ -38,14 +38,14 @@ class OHLCVQueue {
 }
 
 export
-interface OHLCV_MACD
+interface IOHLCV_MACD
 extends IOHLCV {
   is_cross?: boolean;
 }
 
 export
 class OpenQueue
-extends TimeCloseQueue<OHLCV_MACD> {
+extends TimeCloseQueue<IOHLCV_MACD> {
   public constructor(config: {
     cross_window_limit: number,
     cross_limit: number,
@@ -200,20 +200,23 @@ extends SpotRobot<IParams, IOHLCV, ITestData> {
       }
       // 买入点信号检测
       if (!prev_signal || prev_signal === 'sell') {
-        const break_up_price = BreakUp(item, this.buy_queue.High);
+        const break_up_price = BreakUp(item, this.buy_queue.High());
         data.buy = break_up_price != null;
         data.price = (data.buy ? break_up_price : data.price) as number;
         prev_signal = data.buy ? 'buy' : prev_signal;
       }
       // 记录卖出信号数据源(K线)
       this.sell_queue.Append(item);
+
       // 记录买入信号数据源(金叉死叉)
+      const ohlcv_macd: IOHLCV_MACD = { ...item };
       if (index >= this.KLineReadyIndex) {
         const macd_last = macd[index];
         const macd_prev = macd[index - 1];
         if ((macd_last > 0 && macd_prev <= 0) || (macd_last < 0 && macd_prev >= 0))
-          this.buy_queue.Append(item);
+        ohlcv_macd.is_cross = true;
       }
+      this.buy_queue.Append(ohlcv_macd);
       return data;
     });
   }
