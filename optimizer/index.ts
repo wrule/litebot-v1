@@ -99,7 +99,7 @@ interface IOptimizerConfig<T> {
    */
   loss_filter?: (loss: number) => boolean;
   /**
-   * 排行长度限制(为空默认10000)
+   * 排行榜长度限制(为空默认10000)
    */
   ranking_limit?: number;
   /**
