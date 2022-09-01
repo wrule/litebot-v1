@@ -99,8 +99,8 @@ class ParamsSpace {
 
   private params_space: ParamSpace[];
 
-  public RandomKeyValues() {
-    let result: object = { };
+  public RandomKeyValues(): IDict {
+    let result: IDict = { };
     this.params_space.forEach((space) => {
       result = {
         ...result,
