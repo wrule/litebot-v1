@@ -61,19 +61,22 @@ implements Iterator<unknown> {
     return { [this.config.name]: this.RandomValue(), };
   }
 
-  public next(): IteratorResult<any> {
-    let result: IteratorResult<any>;
+  /**
+   * 实现迭代器
+   */
+  public next(): IteratorResult<unknown> {
+    let result: IteratorResult<unknown>;
     if (this.current <= this.config.range[1]) {
-      result = { done: false, value: this.Value };
+      result = { done: false, value: this.Value(), };
       this.current++;
     } else {
-      result = { done: true, value: null };
+      result = { done: true, value: null, };
       this.current = this.config.range[0];
     }
     return result;
   }
 
-  [Symbol.iterator](): IterableIterator<any> {
+  [Symbol.iterator](): IterableIterator<unknown> {
     return this;
   }
 }
