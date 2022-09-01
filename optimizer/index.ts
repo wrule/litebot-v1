@@ -85,7 +85,7 @@ interface IOptimizerConfig<T> {
   /**
    * 损失函数(为空不额外处理)
    */
-  loss_function?: (output: number) => number;
+  loss_function?: (output: IFunctionOutput<T>) => number;
   /**
    * 入参过滤器(为空不过滤)
    */
