@@ -10,7 +10,7 @@ interface IOptimizerIO<T> {
   input: IDict,
   loss: number,
   output: number,
-  data: T,
+  data?: T,
 }
 
 /**
