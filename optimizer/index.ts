@@ -26,6 +26,10 @@ class OptimizerRanking<T> {
 
   private ranking: IOptimizerIO<T>[];
 
+  public get Ranking() {
+    return this.ranking;
+  }
+
   public TryAdd(new_item: IOptimizerIO<T>) {
     let result_index = 0;
     if (this.ranking.length < 1) {

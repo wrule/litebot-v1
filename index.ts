@@ -1,10 +1,10 @@
 
-import { ParamSpace, ParamsSpace } from './optimizer/params_space';
+import { OptimizerRanking } from './optimizer'
 
-const s = new ParamsSpace([
-  { name: 'fast', range: [0, 10], },
-  { name: 'slow', range: [0, 20], },
-  { name: 'sex', range: [0, 1], get_value: (current) => ['女', '男'][current], },
-]);
-
-console.log(s.RandomKeyValues());
+const ranking = new OptimizerRanking({ ranking_limit: 10, });
+console.log(ranking.TryAdd({ input: { }, loss: 5, output: 0, }));
+console.log(ranking.TryAdd({ input: { }, loss: 1, output: 0, }));
+console.log(ranking.TryAdd({ input: { }, loss: 0.1, output: 0, }));
+console.log(ranking.TryAdd({ input: { }, loss: 3, output: 0, }));
+console.log(ranking.TryAdd({ input: { }, loss: 10, output: 0, }));
+console.log(ranking.Ranking);
