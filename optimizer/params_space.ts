@@ -46,11 +46,19 @@ implements Iterator<unknown> {
     return { [this.config.name]: this.Value(), };
   }
 
+  /**
+   * 获取参数空间内随机索引
+   * @returns 随机索引
+   */
   private random_current() {
     const length = this.config.range[1] - this.config.range[0] + 1;
     return this.config.range[0] + Math.floor(Math.random() * length);
   }
 
+  /**
+   * 在参数空间内随机取值
+   * @returns 随机值
+   */
   public RandomValue() {
     if (this.config.get_value)
       return this.config.get_value(this.random_current());
