@@ -46,29 +46,32 @@ extends IOHLCV {
 export
 class OpenQueue
 extends TimeCloseQueue<OHLCV_MACD> {
-  public constructor(
-    limit: number,
-    private readonly cross_num: number,
-  ) {
-    super(limit);
+  public constructor(config: {
+    cross_window_limit: number,
+    cross_limit: number,
+  }) {
+    super(config.cross_window_limit);
+    this.cross_limit = config.cross_limit;
   }
+
+  private readonly cross_limit: number;
 
   private get_cross_list() {
     const result = this.queue.filter((item) => item.is_cross);
-    const diff = result.length - this.cross_num;
+    const diff = result.length - this.cross_limit;
     if (diff > 0) result.splice(0, diff);
     return result;
   }
 
   public High() {
     const cross_list = this.get_cross_list();
-    if (cross_list.length < this.cross_num) return Infinity;
+    if (cross_list.length < this.cross_limit) return Infinity;
     return Math.max(...cross_list.map((cross) => cross.high));
   }
 
   public Low() {
     const cross_list = this.get_cross_list();
-    if (cross_list.length < this.cross_num) return -Infinity;
+    if (cross_list.length < this.cross_limit) return -Infinity;
     return Math.min(...cross_list.map((cross) => cross.low));
   }
 }
@@ -93,8 +96,12 @@ interface IParams {
   macd_fast_ma: number;
   macd_slow_ma: number;
   macd_diff_ma: number;
+
+  cross_window_limit: number;
   cross_limit: number;
+
   sold_candles: number;
+
   atr: number;
   atr_multiplier: number;
 }
@@ -112,11 +119,11 @@ class T07
 extends SpotRobot<IParams, IOHLCV, ITestData> {
   public constructor(config: ISpotRobotConfig<IParams, IOHLCV, ITestData>) {
     super(config);
-    this.buy_queue = new OHLCVQueue(this.config.params.cross_limit);
+    this.buy_queue = new OpenQueue(this.config.params);
     this.sell_queue = new OHLCVQueue(this.config.params.sold_candles);
   }
 
-  private buy_queue!: OHLCVQueue;
+  private buy_queue!: OpenQueue;
   private sell_queue!: OHLCVQueue;
 
   private macd_start(params: {
