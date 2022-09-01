@@ -1,4 +1,4 @@
-import { ITimeClose } from './kline';
+import { IOHLCV, ITimeClose } from './kline';
 
 export
 class TimeCloseQueue<T extends ITimeClose> {
@@ -20,3 +20,7 @@ class TimeCloseQueue<T extends ITimeClose> {
     }
   }
 }
+
+export
+class OHLCV_Queue
+extends TimeCloseQueue<IOHLCV> { }

@@ -55,11 +55,11 @@ extends SpotRobot<IParams, IOHLCV, ITestData> {
   public constructor(config: ISpotRobotConfig<IParams, IOHLCV, ITestData>) {
     super(config);
     this.buy_queue = new OpenQueue(this.config.params);
-    this.sell_queue = new OHLCVQueue(this.config.params.sold_candles);
+    this.sell_queue = new TimeCloseQueue<IOHLCV>(this.config.params.sold_candles);
   }
 
   private buy_queue!: OpenQueue;
-  private sell_queue!: OHLCVQueue;
+  private sell_queue!: TimeCloseQueue<IOHLCV>;
 
   private macd_start(params: {
     macd_fast_ma: number,
