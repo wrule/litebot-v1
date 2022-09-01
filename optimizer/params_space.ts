@@ -43,22 +43,22 @@ implements Iterator<unknown> {
   }
 
   public KeyValue() {
-    return { [this.config.name]: this.Value() };
+    return { [this.config.name]: this.Value(), };
   }
 
-  public get randomCurrent() {
+  private random_current() {
     const length = this.config.range[1] - this.config.range[0] + 1;
     return this.config.range[0] + Math.floor(Math.random() * length);
   }
 
-  public get RandomValue() {
+  public RandomValue() {
     if (this.config.get_value)
-      return this.config.get_value(this.randomCurrent);
-    return this.randomCurrent;
+      return this.config.get_value(this.random_current());
+    return this.random_current();
   }
 
-  public get RandomKeyValue() {
-    return { [this.config.name]: this.RandomValue };
+  public RandomKeyValue() {
+    return { [this.config.name]: this.RandomValue(), };
   }
 
   public next(): IteratorResult<any> {
