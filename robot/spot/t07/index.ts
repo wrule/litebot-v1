@@ -3,7 +3,7 @@ import { IOHLCV, KLine } from '../../../common/kline';
 import { ISpotRobotConfig, SpotRobot } from '..';
 import moment from 'moment';
 import { TimeCloseQueue } from '@/common/time_close_queue';
-import { IOHLCV_MACD, OpenQueue } from './open_queue';
+import { IOHLCV_IsCross, OpenQueue } from './open_queue';
 
 export
 interface IMACDResult {
@@ -170,7 +170,7 @@ extends SpotRobot<IParams, IOHLCV, ITestData> {
       this.sell_queue.Append(item);
 
       // 记录买入信号数据源(金叉死叉)
-      const ohlcv_macd: IOHLCV_MACD = { ...item };
+      const ohlcv_macd: IOHLCV_IsCross = { ...item };
       if (index >= this.KLineReadyIndex) {
         const macd_last = macd[index];
         const macd_prev = macd[index - 1];

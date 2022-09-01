@@ -2,14 +2,14 @@ import { IOHLCV } from '../../../common/kline';
 import { TimeCloseQueue } from '../../../common/time_close_queue';
 
 export
-interface IOHLCV_MACD
+interface IOHLCV_IsCross
 extends IOHLCV {
   is_cross?: boolean;
 }
 
 export
 class OpenQueue
-extends TimeCloseQueue<IOHLCV_MACD> {
+extends TimeCloseQueue<IOHLCV_IsCross> {
   public constructor(config: {
     cross_window_limit: number,
     cross_limit: number,
