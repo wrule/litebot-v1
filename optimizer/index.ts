@@ -1,5 +1,5 @@
 import { Logger } from '../utils/logger';
-import { IVectorElementConfig, Vector } from './vector';
+import { IVectorElementConfig, Vector } from './params_space';
 
 /**
  * 排行项目
