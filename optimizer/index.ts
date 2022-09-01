@@ -13,6 +13,14 @@ interface IOptimizerIO<T> {
 }
 
 /**
+ * 优化结果排行榜
+ */
+export
+class OptimizerRanking<T> {
+
+}
+
+/**
  * 排行项目
  */
 export
