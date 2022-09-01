@@ -141,7 +141,6 @@ extends SpotRobot<IParams, IOHLCV, ITestData> {
         data.price = (data.buy ? break_up_price : data.price) as number;
         prev_signal = data.buy ? 'buy' : prev_signal;
       }
-
       // 记录卖出信号数据源(K线)
       this.close_queue.Append(item);
       // 记录买入信号数据源(金叉死叉)
