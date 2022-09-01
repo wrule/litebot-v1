@@ -99,6 +99,24 @@ class ParamsSpace {
 
   private params_space: ParamSpace[];
 
+  /**
+   * 暂时没什么用
+   */
+  public KeyValues(): IDict {
+    let result: IDict = { };
+    this.params_space.forEach((space) => {
+      result = {
+        ...result,
+        ...space.KeyValue(),
+      };
+    });
+    return result;
+  }
+
+  /**
+   * 根据多个参数空间随机生成键值对
+   * @returns 随机生成的键值对
+   */
   public RandomKeyValues(): IDict {
     let result: IDict = { };
     this.params_space.forEach((space) => {
