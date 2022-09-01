@@ -6,7 +6,7 @@ class TimeCloseQueue<T extends ITimeClose> {
     if (this.limit < 1) throw 'limit必须大于等于1';
   }
 
-  protected queue: T[] = [];
+  protected readonly queue: T[] = [];
 
   public get Length() {
     return this.queue.length;
@@ -26,5 +26,5 @@ class TimeCloseQueue<T extends ITimeClose> {
 }
 
 export
-class OHLCV_Queue
-extends TimeCloseQueue<IOHLCV> { }
+class OHLCV_Queue<T extends IOHLCV>
+extends TimeCloseQueue<T> { }
