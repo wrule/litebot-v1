@@ -73,7 +73,7 @@ class OptimizerRanking<T> {
  * 优化器配置
  */
 export
-interface IOptimizerConfig {
+interface IOptimizerConfig<T> {
   /**
    * 超参数空间
    */
@@ -81,7 +81,7 @@ interface IOptimizerConfig {
   /**
    * 目标函数
    */
-  objective_function: (params: IDict) => number | Promise<number>;
+  objective_function: (input: IDict) => IFunctionOutput<T> | Promise<IFunctionOutput<T>>;
   /**
    * 损失函数(为空不额外处理)
    */
@@ -89,11 +89,11 @@ interface IOptimizerConfig {
   /**
    * 入参过滤器(为空不过滤)
    */
-  input_filter?: (input: any) => boolean;
+  input_filter?: (input: IDict) => boolean;
   /**
    * 出参过滤器(为空不过滤)
    */
-  output_filter?: (output: number) => boolean;
+  output_filter?: (output: IFunctionOutput<T>) => boolean;
   /**
    * 损失过滤器(为空不过滤)
    */
