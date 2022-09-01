@@ -141,18 +141,18 @@ extends SpotRobot<IParams, IOHLCV, ITestData> {
         data.price = (data.buy ? break_up_price : data.price) as number;
         prev_signal = data.buy ? 'buy' : prev_signal;
       }
+
       // 记录卖出信号数据源(K线)
       this.close_queue.Append(item);
-
       // 记录买入信号数据源(金叉死叉)
-      const ohlcv_macd: IOHLCV_IsCross = { ...item };
+      const ohlcv_is_cross: IOHLCV_IsCross = { ...item };
       if (index >= this.KLineReadyIndex) {
         const macd_last = macd[index];
         const macd_prev = macd[index - 1];
         if ((macd_last > 0 && macd_prev <= 0) || (macd_last < 0 && macd_prev >= 0))
-        ohlcv_macd.is_cross = true;
+          ohlcv_is_cross.is_cross = true;
       }
-      this.open_queue.Append(ohlcv_macd);
+      this.open_queue.Append(ohlcv_is_cross);
       return data;
     });
   }
