@@ -1,6 +1,6 @@
 import tulind from 'tulind';
-import { IOHLCV, KLine } from '../../common/kline';
-import { ISpotRobotConfig, SpotRobot } from '.';
+import { IOHLCV, KLine } from '../../../common/kline';
+import { ISpotRobotConfig, SpotRobot } from '..';
 import moment from 'moment';
 import { TimeCloseQueue } from '@/common/time_close_queue';
 
