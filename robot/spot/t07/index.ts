@@ -3,6 +3,7 @@ import { IOHLCV, KLine } from '../../../common/kline';
 import { ISpotRobotConfig, SpotRobot } from '..';
 import moment from 'moment';
 import { TimeCloseQueue } from '@/common/time_close_queue';
+import { IOHLCV_MACD, OpenQueue } from './open_queue';
 
 export
 interface IMACDResult {
@@ -36,46 +37,6 @@ class OHLCVQueue {
     return Math.min(...this.kline.map((item) => item.low));
   }
 }
-
-export
-interface IOHLCV_MACD
-extends IOHLCV {
-  is_cross?: boolean;
-}
-
-export
-class OpenQueue
-extends TimeCloseQueue<IOHLCV_MACD> {
-  public constructor(config: {
-    cross_window_limit: number,
-    cross_limit: number,
-  }) {
-    super(config.cross_window_limit);
-    this.cross_limit = config.cross_limit;
-  }
-
-  private readonly cross_limit: number;
-
-  private get_cross_list() {
-    const result = this.queue.filter((item) => item.is_cross);
-    const diff = result.length - this.cross_limit;
-    if (diff > 0) result.splice(0, diff);
-    return result;
-  }
-
-  public High() {
-    const cross_list = this.get_cross_list();
-    if (cross_list.length < this.cross_limit) return Infinity;
-    return Math.max(...cross_list.map((cross) => cross.high));
-  }
-
-  public Low() {
-    const cross_list = this.get_cross_list();
-    if (cross_list.length < this.cross_limit) return -Infinity;
-    return Math.min(...cross_list.map((cross) => cross.low));
-  }
-}
-
 
 export
 function BreakUp(ohlcv: IOHLCV, threshold: number) {
