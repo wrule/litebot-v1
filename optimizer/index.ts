@@ -109,33 +109,33 @@ interface IOptimizerConfig<T> {
 }
 
 export
-class Optimizer {
-  public constructor(private readonly config: IOptimizerConfig) {
+class Optimizer<T> {
+  public constructor(private readonly config: IOptimizerConfig<T>) {
     if (this.config.space.length < 1)
       throw 'space维度必须大于等于1';
     if (this.config.ranking_limit != null && this.config.ranking_limit < 1)
       throw 'ranking_limit必须大于等于1或为空(默认10000)';
     if (this.config.iterations != null && this.config.iterations < 1)
       throw 'iterations必须大于等于1或为空(持续迭代)';
-    this.vector = new Vector(this.config.space);
-    this.ranking = [];
+    this.space = new ParamsSpace(this.config.space);
+    this.ranking = new OptimizerRanking({ ranking_limit: this.config.ranking_limit || 10000 });
   }
 
-  private vector: Vector;
-  private ranking: IRankingItem[];
+  private space: ParamsSpace;
+  private ranking: OptimizerRanking<T>;
 
   private get loss_function() {
-    const pass = (output: number) => output;
+    const pass = (output: IFunctionOutput<T>) => output.output;
     return this.config.loss_function || pass;
   }
 
   private get input_filter() {
-    const pass = (input: any) => true;
+    const pass = (input: IDict) => true;
     return this.config.input_filter || pass;
   }
 
   private get output_filter() {
-    const pass = (output: number) => true;
+    const pass = (output: IFunctionOutput<T>) => true;
     return this.config.output_filter || pass;
   }
 
@@ -152,15 +152,9 @@ class Optimizer {
     return this.config.iterations || Infinity;
   }
 
-  private logger = new Logger();
-
-  private logOptimal() {
-    this.logger.log(this.ranking[0]);
-  }
-
   public async Search() {
     for (let i = 0; i < this.iterations; ++i) {
-      const input = this.vector.RandomKeyValue;
+      const input = this.space.RandomKeyValues();
       if (!this.input_filter(input))
         continue;
       const output = await this.config.objective_function(input);
@@ -169,26 +163,6 @@ class Optimizer {
       const loss = this.loss_function(output);
       if (!this.loss_filter(loss))
         continue;
-
-      if (this.ranking.length <= 0) {
-        this.ranking.push({ input, output, loss });
-        this.logOptimal();
-      } else {
-        const last = this.ranking[this.ranking.length - 1];
-        if (loss >= last.loss) {
-          this.ranking.push({ input, output, loss });
-        } else {
-          const index = this.ranking.findIndex((item) => item.loss > loss);
-          this.ranking.splice(index, 0, { input, output, loss });
-          if (index === 0) {
-            this.logOptimal();
-          }
-        }
-        const diff = this.ranking.length - this.ranking_limit;
-        if (diff > 0) {
-          this.ranking.splice(this.ranking_limit, diff);
-        }
-      }
     }
   }
 }
