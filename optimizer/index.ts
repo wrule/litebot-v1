@@ -3,10 +3,19 @@ import { Logger } from '../utils/logger';
 import { IParamSpaceConfig, ParamsSpace } from './params_space';
 
 /**
- * 优化器输入输出结构(优化结果)
+ * 目标函数输出结构
  */
 export
-interface IOptimizerIO<T> {
+interface IFunctionOutput<T> {
+  output: number,
+  data?: T,
+}
+
+/**
+ * 目标函数输入输出结构(测试记录)
+ */
+export
+interface IFunctionIO<T> {
   input: IDict,
   loss: number,
   output: number,
@@ -24,7 +33,7 @@ class OptimizerRanking<T> {
     this.ranking = [];
   }
 
-  private ranking: IOptimizerIO<T>[];
+  private ranking: IFunctionIO<T>[];
 
   public get Ranking() {
     return this.ranking;
@@ -35,7 +44,7 @@ class OptimizerRanking<T> {
    * @param new_item 新的结果
    * @returns 如果添加成功则返回插入索引，不成功则返回-1
    */
-  public TryAdd(new_item: IOptimizerIO<T>) {
+  public TryAdd(new_item: IFunctionIO<T>) {
     let result_index = 0;
     if (this.ranking.length < 1) {
       this.ranking.push(new_item);
