@@ -1,3 +1,5 @@
+import { IDict } from '../common/types';
+
 /**
  * 参数空间配置
  */
@@ -42,7 +44,7 @@ implements Iterator<unknown> {
     return this.current;
   }
 
-  public KeyValue() {
+  public KeyValue(): IDict {
     return { [this.config.name]: this.Value(), };
   }
 
@@ -65,7 +67,7 @@ implements Iterator<unknown> {
     return this.random_current();
   }
 
-  public RandomKeyValue() {
+  public RandomKeyValue(): IDict {
     return { [this.config.name]: this.RandomValue(), };
   }
 
