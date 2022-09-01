@@ -19,8 +19,9 @@ async function func(params: any) {
       // macd_fast_ma: 9,
       // macd_slow_ma: 44,
       // macd_diff_ma: 9,
+      // cross_window_limit: 100,
       // cross_limit: 3,
-      // sold_candles: 5,
+      // close_candles: 5,
       ...params,
       atr: 7,
       atr_multiplier: 0.5,
@@ -32,25 +33,14 @@ async function func(params: any) {
 }
 
 async function main() {
-  // const vector = new Vector([
-  //   { name: 'macd_fast_ma', range: [2, 100], },
-  //   { name: 'macd_slow_ma', range: [2, 100], },
-  //   { name: 'macd_diff_ma', range: [2, 100], },
-  //   { name: 'cross_limit', range: [2, 5], },
-  //   { name: 'sold_candles', range: [2, 50], },
-  // ]);
-  // const input = vector.RandomKeyValue;
-  // console.log(input);
-  // const output = await func(input);
-  // console.log(output);
-  // return;
   const opt = new Optimizer({
     space: [
-      { name: 'macd_fast_ma', range: [10, 30], },
-      { name: 'macd_slow_ma', range: [40, 60], },
-      { name: 'macd_diff_ma', range: [80, 100], },
-      { name: 'cross_limit', range: [2, 3], },
-      { name: 'sold_candles', range: [10, 20], },
+      { name: 'macd_fast_ma', range: [2, 100], },
+      { name: 'macd_slow_ma', range: [2, 100], },
+      { name: 'macd_diff_ma', range: [2, 100], },
+      { name: 'cross_window_limit', range: [40, 300], },
+      { name: 'cross_limit', range: [2, 5], },
+      { name: 'close_candles', range: [2, 150], },
     ],
     objective_function: func,
     loss_function: (output) => 1 / output,
