@@ -45,6 +45,7 @@ class OptimizerRanking<T> {
       if (diff > 0)
         this.ranking.splice(this.config.ranking_limit, diff);
     }
+    return result_index;
   }
 }
 
