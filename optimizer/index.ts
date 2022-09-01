@@ -44,6 +44,8 @@ class OptimizerRanking<T> {
       const diff = this.ranking.length - this.config.ranking_limit;
       if (diff > 0)
         this.ranking.splice(this.config.ranking_limit, diff);
+      if (result_index > this.config.ranking_limit - 1)
+        result_index = -1;
     }
     return result_index;
   }
