@@ -61,16 +61,6 @@ class OptimizerRanking<T> {
 }
 
 /**
- * 排行项目
- */
-export
-interface IRankingItem {
-  input: any;
-  output: number;
-  loss: number;
-}
-
-/**
  * 优化器配置
  */
 export
@@ -78,11 +68,11 @@ interface IOptimizerConfig {
   /**
    * 超参数空间
    */
-  space: IVectorElementConfig[],
+  space: IParamSpaceConfig[],
   /**
    * 目标函数
    */
-  objective_function: (params: any) => number | Promise<number>;
+  objective_function: (params: IDict) => number | Promise<number>;
   /**
    * 损失函数(为空不额外处理)
    */
