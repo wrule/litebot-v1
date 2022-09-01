@@ -24,9 +24,13 @@ export
 class ParamSpace
 implements Iterator<unknown> {
   public constructor(private readonly config: IParamSpaceConfig) {
-    if (this.config.range[1] < this.config.range[0]) {
+    if (this.config.range[1] < this.config.range[0])
       throw 'range[1]必须大于等于range[0]';
-    }
+    if (this.config.range[0] % 1 !== 0)
+      throw 'range[0]必须为整数';
+    if (this.config.range[1] % 1 !== 0)
+      throw 'range[1]必须为整数';
+    // current默认为range[0]
     this.current = this.config.range[0];
   }
 
