@@ -16,6 +16,7 @@ extends TimeCloseQueue<IOHLCV_IsCross> {
   }) {
     super(config.cross_window_limit);
     this.cross_limit = config.cross_limit;
+    if (this.cross_limit < 1) throw 'cross_limit必须大于等于1';
   }
 
   private readonly cross_limit: number;
