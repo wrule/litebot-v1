@@ -1,7 +1,7 @@
 import { ITimeClose } from './kline';
 
 export
-abstract class TimeCloseQueue<T extends ITimeClose> {
+class TimeCloseQueue<T extends ITimeClose> {
   public constructor(private readonly limit: number) {
     if (this.limit < 1) throw 'limit必须大于等于1';
   }
