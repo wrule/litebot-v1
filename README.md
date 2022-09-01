@@ -32,3 +32,9 @@
 ## 考夫曼均线， T07，SRSI
 
 ## 优化器先放一下，目前全局随机
+
+## TODO LIST
+  T07 ATR止损 视频学习
+  SRSI 指标实现
+  随机优化器代码review
+  fast >= slow bug排查
