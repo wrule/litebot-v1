@@ -90,19 +90,19 @@ implements Iterator<unknown> {
 }
 
 export
-class Vector {
-  public constructor(config: IVectorElementConfig[]) {
-    this.elements = config.map((item) => new VectorElement(item));
+class ParamsSpace {
+  public constructor(config: IParamSpaceConfig[]) {
+    this.params_space = config.map((item) => new ParamSpace(item));
   }
 
-  private elements!: VectorElement[];
+  private params_space: ParamSpace[];
 
-  public get RandomKeyValue() {
-    let result: any = { };
-    this.elements.forEach((element) => {
+  public RandomKeyValues() {
+    let result: object = { };
+    this.params_space.forEach((space) => {
       result = {
         ...result,
-        ...element.RandomKeyValue,
+        ...space.RandomKeyValue(),
       };
     });
     return result;
