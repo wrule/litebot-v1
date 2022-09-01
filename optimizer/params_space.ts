@@ -1,30 +1,45 @@
+/**
+ * 参数空间配置
+ */
 export
-interface IVectorElementConfig {
+interface IParamSpaceConfig {
+  /**
+   * 参数名
+   */
   name: string;
+  /**
+   * 参数范围
+   */
   range: [number, number];
-  get_value?: (current: number) => any;
+  /**
+   * 参数取值映射
+   */
+  get_value?: (current: number) => unknown;
 }
 
+/**
+ * 参数空间
+ */
 export
-class VectorElement
-implements Iterator<any> {
-  public constructor(private readonly config: IVectorElementConfig) {
+class ParamSpace
+implements Iterator<unknown> {
+  public constructor(private readonly config: IParamSpaceConfig) {
     if (this.config.range[1] < this.config.range[0]) {
       throw 'range[1]必须大于等于range[0]';
     }
     this.current = this.config.range[0];
   }
 
-  private current!: number;
+  private current: number;
 
-  public get Value() {
+  public Value() {
     if (this.config.get_value)
       return this.config.get_value(this.current);
     return this.current;
   }
 
-  public get KeyValue() {
-    return { [this.config.name]: this.Value };
+  public KeyValue() {
+    return { [this.config.name]: this.Value() };
   }
 
   public get randomCurrent() {
