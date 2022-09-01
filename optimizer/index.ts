@@ -8,6 +8,7 @@ import { IParamSpaceConfig, ParamsSpace } from './params_space';
 export
 interface IOptimizerIO<T> {
   input: IDict,
+  loss: number,
   output: number,
   data: T,
 }
@@ -17,7 +18,34 @@ interface IOptimizerIO<T> {
  */
 export
 class OptimizerRanking<T> {
+  public constructor(private readonly config: { ranking_limit: number }) {
+    if (this.config.ranking_limit < 1)
+      throw 'ranking_limit必须大于等于1';
+    this.ranking = [];
+  }
 
+  private ranking: IOptimizerIO<T>[];
+
+  public TryAdd(new_item: IOptimizerIO<T>) {
+    let result_index = 0;
+    if (this.ranking.length < 1) {
+      this.ranking.push(new_item);
+      result_index = 0;
+    } else {
+      const last = this.ranking[this.ranking.length - 1];
+      if (new_item.loss >= last.loss) {
+        this.ranking.push(new_item);
+        result_index = this.ranking.length - 1;
+      } else {
+        const index = this.ranking.findIndex((item) => item.loss > new_item.loss);
+        this.ranking.splice(index, 0, new_item);
+        result_index = index;
+      }
+      const diff = this.ranking.length - this.config.ranking_limit;
+      if (diff > 0)
+        this.ranking.splice(this.config.ranking_limit, diff);
+    }
+  }
 }
 
 /**
