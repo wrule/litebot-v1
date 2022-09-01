@@ -1,6 +1,6 @@
 // 2022年09月01日15:42:13
 import { IOHLCV } from '../../../common/kline';
-import { TimeCloseQueue } from '../../../common/time_close_queue';
+import { OHLCV_Queue } from '../../../common/time_close_queue';
 
 export
 interface IOHLCV_IsCross
@@ -10,7 +10,7 @@ extends IOHLCV {
 
 export
 class OpenQueue
-extends TimeCloseQueue<IOHLCV_IsCross> {
+extends OHLCV_Queue<IOHLCV_IsCross> {
   public constructor(config: {
     cross_window_limit: number,
     cross_limit: number,
