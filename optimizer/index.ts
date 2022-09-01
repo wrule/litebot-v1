@@ -30,6 +30,11 @@ class OptimizerRanking<T> {
     return this.ranking;
   }
 
+  /**
+   * 尝试把结果添加入排行榜
+   * @param new_item 新的结果
+   * @returns 如果添加成功则返回插入索引，不成功则返回-1
+   */
   public TryAdd(new_item: IOptimizerIO<T>) {
     let result_index = 0;
     if (this.ranking.length < 1) {
