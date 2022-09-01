@@ -12,32 +12,6 @@ interface IMACDResult {
   macd: number[];
 }
 
-
-export
-class OHLCVQueue {
-  public constructor(private readonly limit: number) {
-    if (this.limit < 1) throw 'limit必须大于等于1';
-  }
-
-  private kline: KLine = [];
-
-  public Append(ohlcv: IOHLCV) {
-    this.kline.push(ohlcv);
-    const diff = this.kline.length - this.limit;
-    if (diff > 0) this.kline.splice(0, diff);
-  }
-
-  public get High() {
-    if (this.kline.length < this.limit) return Infinity;
-    return Math.max(...this.kline.map((item) => item.high));
-  }
-
-  public get Low() {
-    if (this.kline.length < this.limit) return -Infinity;
-    return Math.min(...this.kline.map((item) => item.low));
-  }
-}
-
 export
 function BreakUp(ohlcv: IOHLCV, threshold: number) {
   if (ohlcv.open > threshold) return ohlcv.open;

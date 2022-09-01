@@ -1,3 +1,4 @@
+// 2022年09月01日15:42:13
 import { IOHLCV } from '../../../common/kline';
 import { TimeCloseQueue } from '../../../common/time_close_queue';
 
