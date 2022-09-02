@@ -26,10 +26,10 @@ interface ITestRecord<T> {
  */
 export
 class OptimizerRanking<T> {
-  public constructor(private readonly config: { ranking_limit?: number }) {
-    if (this.config.ranking_limit != null && this.config.ranking_limit < 1)
+  public constructor(config: { ranking_limit?: number }) {
+    if (config.ranking_limit != null && config.ranking_limit < 1)
       throw 'ranking_limit必须大于等于1或为空(默认10000)';
-    this.ranking_limit = this.config.ranking_limit || 10000;
+    this.ranking_limit = config.ranking_limit || 10000;
     this.ranking = [];
   }
 
