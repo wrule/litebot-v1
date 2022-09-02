@@ -26,13 +26,15 @@ interface ITestRecord<T> {
  */
 export
 class OptimizerRanking<T> {
-  public constructor(private readonly config: { ranking_limit: number }) {
-    if (this.config.ranking_limit < 1)
-      throw 'ranking_limit必须大于等于1';
+  public constructor(private readonly config: { ranking_limit?: number }) {
+    if (this.config.ranking_limit != null && this.config.ranking_limit < 1)
+      throw 'ranking_limit必须大于等于1或为空(默认10000)';
+    this.ranking_limit = this.config.ranking_limit || 10000;
     this.ranking = [];
   }
 
-  private ranking: ITestRecord<T>[];
+  private readonly ranking_limit: number;
+  private readonly ranking: ITestRecord<T>[];
 
   public get Ranking() {
     return this.ranking;
@@ -58,10 +60,10 @@ class OptimizerRanking<T> {
         this.ranking.splice(index, 0, new_item);
         result_index = index;
       }
-      const diff = this.ranking.length - this.config.ranking_limit;
+      const diff = this.ranking.length - this.ranking_limit;
       if (diff > 0)
-        this.ranking.splice(this.config.ranking_limit, diff);
-      if (result_index > this.config.ranking_limit - 1)
+        this.ranking.splice(this.ranking_limit, diff);
+      if (result_index > this.ranking_limit - 1)
         result_index = -1;
     }
     return result_index;
