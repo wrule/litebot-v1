@@ -114,14 +114,14 @@ class Optimizer<T> {
   public constructor(private readonly config: IOptimizerConfig<T>) {
     if (this.config.space.length < 1)
       throw 'space维度必须大于等于1';
-    if (this.config.ranking_limit != null && this.config.ranking_limit < 1)
-      throw 'ranking_limit必须大于等于1或为空(默认10000)';
     if (this.config.iterations != null && this.config.iterations < 1)
       throw 'iterations必须大于等于1或为空(持续迭代)';
     this.space = new ParamsSpace(this.config.space);
+    this.ranking = new OptimizerRanking(this.config);
   }
 
   private space: ParamsSpace;
+  private ranking: OptimizerRanking<T>;
 
   private get loss_function() {
     const pass = (output: IFunctionOutput<T>) => output.output;
