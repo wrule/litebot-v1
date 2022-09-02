@@ -165,7 +165,7 @@ class Optimizer<T> {
     for (let i = 0; i < this.iterations; ++i) {
       // 生成随机输入参数
       const input = this.input_mapper(this.space.RandomKeyValues());
-      // 过滤器判断
+      // 过滤器判断与目标函数计算
       if (!this.input_filter(input)) continue;
       let output: IFunctionOutput<T> = null as any;
       try {
