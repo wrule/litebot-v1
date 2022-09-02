@@ -158,6 +158,15 @@ class Optimizer<T> {
       const loss = this.loss_function(output);
       if (!this.loss_filter(loss))
         continue;
+      const test_record: ITestRecord<T> = {
+        input,
+        output: output.output,
+        loss,
+        data: output.data,
+      };
+      const index = this.ranking.TryAdd(test_record);
+      if (index < 1)
+        console.log(test_record);
     }
   }
 }
