@@ -121,6 +121,9 @@ interface IOptimizerConfig<T> {
   logger?: Logger;
 }
 
+/**
+ * 优化器
+ */
 export
 class Optimizer<T> {
   public constructor(private readonly config: IOptimizerConfig<T>) {
