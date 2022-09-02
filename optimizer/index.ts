@@ -37,28 +37,31 @@ class OptimizerRanking<T> {
   private readonly ranking_limit: number;
   private readonly ranking: ITestRecord<T>[];
 
+  /**
+   * 排行榜数据
+   */
   public get Ranking() {
     return this.ranking;
   }
 
   /**
-   * 尝试把结果添加入排行榜
-   * @param new_item 新的结果
+   * 尝试把测试记录添加入排行榜
+   * @param test_record 新的测试记录
    * @returns 如果添加成功则返回插入索引，不成功则返回-1
    */
-  public TryAdd(new_item: ITestRecord<T>) {
-    let result_index = 0;
+  public TryAdd(test_record: ITestRecord<T>) {
+    let result_index = -1;
     if (this.ranking.length < 1) {
-      this.ranking.push(new_item);
+      this.ranking.push(test_record);
       result_index = 0;
     } else {
       const last = this.ranking[this.ranking.length - 1];
-      if (new_item.loss >= last.loss) {
-        this.ranking.push(new_item);
+      if (test_record.loss >= last.loss) {
+        this.ranking.push(test_record);
         result_index = this.ranking.length - 1;
       } else {
-        const index = this.ranking.findIndex((item) => item.loss > new_item.loss);
-        this.ranking.splice(index, 0, new_item);
+        const index = this.ranking.findIndex((item) => item.loss > test_record.loss);
+        this.ranking.splice(index, 0, test_record);
         result_index = index;
       }
       const diff = this.ranking.length - this.ranking_limit;
