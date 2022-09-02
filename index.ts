@@ -9,9 +9,12 @@ async function main() {
     ],
     objective_function: (input: any) => ({ output: (input.a * input.a) + (input.b * input.b) }),
     loss_function: (output) => 1 / output.output,
+    ranking_limit: 10,
+    iterations: 10000000,
     logger: new Logger(),
   });
-  opt.Search();
+  const ranking = await opt.Search();
+  console.log(ranking);
 }
 
 main();
