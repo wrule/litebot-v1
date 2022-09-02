@@ -1,9 +1,19 @@
-import { OptimizerRanking } from './optimizer';
+import { OptimizerRanking, Optimizer } from './optimizer';
+import { Logger } from './utils/logger';
 
-const ranking = new OptimizerRanking({ ranking_limit: 3 });
-console.log(ranking.TryAdd({ input: { }, output: 1, loss: 0.1 }));
-console.log(ranking.TryAdd({ input: { }, output: 1, loss: 1 }));
-console.log(ranking.TryAdd({ input: { }, output: 1, loss: 2 }));
-console.log(ranking.TryAdd({ input: { }, output: 1, loss: 0.5 }));
-console.log(ranking.TryAdd({ input: { }, output: 1, loss: 0.2 }));
-console.log(ranking.Ranking);
+async function main() {
+  console.log('你好，世界');
+  const opt = new Optimizer({
+    space: [
+      { name: 'a', range: [-1000, 1000], },
+      { name: 'b', range: [-1000, 1000], },
+      { name: 'c', range: [-1000, 1000], },
+    ],
+    objective_function: (input: any) => ({ output: input.a * input.a + input.b * input.b }),
+    loss_function: (output) => 1 / output.output,
+    logger: new Logger(),
+  });
+  opt.Search();
+}
+
+main();

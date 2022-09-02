@@ -190,7 +190,7 @@ class Optimizer<T> {
       const test_record: ITestRecord<T> = { input, loss, ...output, };
       const index = this.ranking.TryAdd(test_record);
       // 如果最优记录变化，则输出日志
-      if (index < 1) this.config.logger?.log(test_record);
+      if (index === 0) this.config.logger?.log(test_record);
     }
   }
 }
