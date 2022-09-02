@@ -184,12 +184,7 @@ class Optimizer<T> {
       const loss = this.loss_function(output);
       if (!this.loss_filter(loss)) continue;
       // 构造测试记录并尝试加入排行榜
-      const test_record: ITestRecord<T> = {
-        input,
-        output: output.output,
-        loss,
-        data: output.data,
-      };
+      const test_record: ITestRecord<T> = { input, loss, ...output, };
       const index = this.ranking.TryAdd(test_record);
       // 如果最优记录变化，则输出日志
       if (index < 1) this.config.logger?.log(test_record);
