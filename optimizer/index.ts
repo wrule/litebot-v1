@@ -1,3 +1,4 @@
+import { Logger } from '../utils/logger';
 import { IDict } from '../common/types';
 import { IParamSpaceConfig, ParamsSpace } from './params_space';
 
@@ -111,6 +112,10 @@ interface IOptimizerConfig<T> {
    * 迭代次数(为空默认持续迭代)
    */
   iterations?: number;
+  /**
+   * 优化日志记录器
+   */
+  logger?: Logger;
 }
 
 export
@@ -162,11 +167,17 @@ class Optimizer<T> {
       const input = this.input_mapper(this.space.RandomKeyValues());
       // 过滤器判断
       if (!this.input_filter(input)) continue;
-      const output = await this.config.objective_function(input);
+      let output: IFunctionOutput<T> = null as any;
+      try {
+        output = await this.config.objective_function(input);
+      } catch (e) {
+        this.config.logger?.error(e);
+        continue;
+      }
       if (!this.output_filter(output)) continue;
       const loss = this.loss_function(output);
       if (!this.loss_filter(loss)) continue;
-      // 处理测试记录
+      // 构造测试记录并尝试加入排行榜
       const test_record: ITestRecord<T> = {
         input,
         output: output.output,
@@ -174,8 +185,8 @@ class Optimizer<T> {
         data: output.data,
       };
       const index = this.ranking.TryAdd(test_record);
-      if (index < 1)
-        console.log(test_record);
+      // 如果最优记录变化，则输出日志
+      if (index < 1) this.config.logger?.log(test_record);
     }
   }
 }
