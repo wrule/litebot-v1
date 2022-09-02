@@ -193,6 +193,7 @@ class Optimizer<T> {
       // 如果最优记录变化，则输出日志
       if (index === 0) this.config.logger?.log(test_record);
     }
-    this.config.logger?.log('结束搜索');
+    this.config.logger?.log('搜索结束');
+    return this.ranking.Ranking;
   }
 }
