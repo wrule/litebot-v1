@@ -119,11 +119,9 @@ class Optimizer<T> {
     if (this.config.iterations != null && this.config.iterations < 1)
       throw 'iterations必须大于等于1或为空(持续迭代)';
     this.space = new ParamsSpace(this.config.space);
-    this.ranking = new OptimizerRanking({ ranking_limit: this.config.ranking_limit || 10000 });
   }
 
   private space: ParamsSpace;
-  private ranking: OptimizerRanking<T>;
 
   private get loss_function() {
     const pass = (output: IFunctionOutput<T>) => output.output;
@@ -143,10 +141,6 @@ class Optimizer<T> {
   private get loss_filter() {
     const pass = (loss: number) => true;
     return this.config.loss_filter || pass;
-  }
-
-  private get ranking_limit() {
-    return this.config.ranking_limit || 10000;
   }
 
   private get iterations() {
