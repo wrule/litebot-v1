@@ -1,4 +1,4 @@
-import { OptimizerRanking, Optimizer } from './optimizer';
+import { Optimizer } from './optimizer';
 import { Logger } from './utils/logger';
 
 async function main() {
