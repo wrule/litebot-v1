@@ -171,6 +171,7 @@ class Optimizer<T> {
    * 搜索参数空间
    */
   public async Search() {
+    this.config.logger?.log('开始搜索...');
     for (let i = 0; i < this.iterations; ++i) {
       // 生成随机输入参数
       const input = this.input_mapper(this.space.RandomKeyValues());
@@ -192,5 +193,6 @@ class Optimizer<T> {
       // 如果最优记录变化，则输出日志
       if (index === 0) this.config.logger?.log(test_record);
     }
+    this.config.logger?.log('结束搜索');
   }
 }
