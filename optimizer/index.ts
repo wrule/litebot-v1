@@ -88,6 +88,10 @@ interface IOptimizerConfig<T> {
    */
   loss_function?: (output: IFunctionOutput<T>) => number;
   /**
+   * 入参映射器(为空不处理)
+   */
+  input_mapper?: (input: IDict) => IDict;
+  /**
    * 入参过滤器(为空不过滤)
    */
   input_filter?: (input: IDict) => boolean;
@@ -128,6 +132,11 @@ class Optimizer<T> {
     return this.config.loss_function || pass;
   }
 
+  private get input_mapper() {
+    const pass = (input: IDict) => input;
+    return this.config.input_mapper || pass;
+  }
+
   private get input_filter() {
     const pass = (input: IDict) => true;
     return this.config.input_filter || pass;
@@ -149,15 +158,15 @@ class Optimizer<T> {
 
   public async Search() {
     for (let i = 0; i < this.iterations; ++i) {
-      const input = this.space.RandomKeyValues();
-      if (!this.input_filter(input))
-        continue;
+      // 生成随机输入参数
+      const input = this.input_mapper(this.space.RandomKeyValues());
+      // 过滤器判断
+      if (!this.input_filter(input)) continue;
       const output = await this.config.objective_function(input);
-      if (!this.output_filter(output))
-        continue;
+      if (!this.output_filter(output)) continue;
       const loss = this.loss_function(output);
-      if (!this.loss_filter(loss))
-        continue;
+      if (!this.loss_filter(loss)) continue;
+      // 处理测试记录
       const test_record: ITestRecord<T> = {
         input,
         output: output.output,
