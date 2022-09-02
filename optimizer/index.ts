@@ -167,6 +167,9 @@ class Optimizer<T> {
     return this.config.iterations || Infinity;
   }
 
+  /**
+   * 搜索参数空间
+   */
   public async Search() {
     for (let i = 0; i < this.iterations; ++i) {
       // 生成随机输入参数
