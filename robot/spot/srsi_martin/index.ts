@@ -68,10 +68,18 @@ extends SpotRobot<IParams, IOHLCV, ITestData> {
   //#endregion
 
   //#region 回测运行接口实现
-  public GenerateTestData(real_data: IOHLCV[]): ITestData[] {
-    const { diff } = this.srsi(real_data.map((item) => item.close), this.config.params);
-    console.log(diff.slice(diff.length - 10));
-    return [];
+  public GenerateTestData(kline: IOHLCV[]): ITestData[] {
+    const { diff } = this.srsi(kline.map((item) => item.close), this.config.params);
+    return kline.map((item, index) => {
+      const result: ITestData = { ...item };
+      if (index >= this.KLineReadyIndex) {
+        const diff_last = diff[index];
+        const diff_prev = diff[index - 1];
+        if (diff_last > 0 && diff_prev <= 0) result.buy = true;
+        if (diff_last < 0 && diff_prev >= 0) result.sell = true;
+      }
+      return result;
+    });
   }
   //#endregion
 }
