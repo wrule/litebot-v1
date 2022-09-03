@@ -93,7 +93,7 @@ implements Iterator<unknown> {
  * 多个参数组成的多维参数空间
  */
 export
-class ParamsSpace {
+class ParamsSpace<T> {
   public constructor(config: IParamSpaceConfig[]) {
     this.params_space = config.map((item) => new ParamSpace(item));
   }
@@ -103,7 +103,7 @@ class ParamsSpace {
   /**
    * 暂时没什么用
    */
-  public KeyValues() {
+  public KeyValues(): T {
     let result = { };
     this.params_space.forEach((space) => {
       result = {
@@ -111,14 +111,14 @@ class ParamsSpace {
         ...space.KeyValue(),
       };
     });
-    return result;
+    return result as T;
   }
 
   /**
    * 根据多个参数空间随机生成键值对
    * @returns 随机生成的键值对
    */
-  public RandomKeyValues() {
+  public RandomKeyValues(): T {
     let result = { };
     this.params_space.forEach((space) => {
       result = {
@@ -126,6 +126,6 @@ class ParamsSpace {
         ...space.RandomKeyValue(),
       };
     });
-    return result;
+    return result as T;
   }
 }
