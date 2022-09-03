@@ -69,7 +69,7 @@ extends SpotRobot<IParams, IOHLCV, ITestData> {
 
   //#region 回测运行接口实现
   public GenerateTestData(real_data: IOHLCV[]): ITestData[] {
-    const { k, d, diff } = this.srsi(real_data.map((item) => item.close), this.config.params);
+    const { diff } = this.srsi(real_data.map((item) => item.close), this.config.params);
     console.log(diff.slice(diff.length - 10));
     return [];
   }
