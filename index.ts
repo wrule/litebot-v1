@@ -5,7 +5,7 @@ import { IFunctionOutput, Optimizer } from './optimizer';
 import { IParams, TwoMaCross } from './robot/spot/two_ma_cross';
 import { Logger } from './utils/logger';
 
-const kline = ArrayToKLine(ETH_USDT_2h);
+const kline = ArrayToKLine(ETH_USDT_2h as any[]);
 
 async function back_testing(params: IParams): Promise<IFunctionOutput<any>> {
   const executor = new TestSpot({ symbol: 'ETH/USDT', fee: 0.001, init_funds_amount: 100, });
