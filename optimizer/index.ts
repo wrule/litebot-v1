@@ -133,7 +133,7 @@ class Optimizer<InputType, OutputDataType> {
     this.ranking = new OptimizerRanking(this.config);
   }
 
-  private space: ParamsSpace;
+  private space: ParamsSpace<InputType>;
   private ranking: OptimizerRanking<InputType, OutputDataType>;
 
   private get loss_function() {
