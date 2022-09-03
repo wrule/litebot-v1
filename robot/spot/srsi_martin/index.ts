@@ -56,7 +56,12 @@ extends SpotRobot<IParams, IOHLCV, ITestData> {
       },
     );
     const diff = k.map((num, index) => num - d[index]);
-    return { k, d, diff };
+    const fill_num = data.length - k.length;
+    return {
+      k: Array(fill_num).fill(null).concat(k),
+      d: Array(fill_num).fill(null).concat(d),
+      diff: Array(fill_num).fill(null).concat(diff),
+    };
   }
 
   //#region 实盘运行接口实现
