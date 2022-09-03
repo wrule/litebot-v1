@@ -1,32 +1,30 @@
 import { Logger } from '../utils/logger';
-import { IDict } from '../common/types';
 import { IParamSpaceConfig, ParamsSpace } from './params_space';
 
 /**
  * 目标函数输出结构
  */
 export
-interface IFunctionOutput<T> {
+interface IFunctionOutput<OutputDataType> {
   output: number,
-  data?: T,
+  data?: OutputDataType,
 }
 
 /**
  * 测试记录(目标函数输入输出结构)
  */
 export
-interface ITestRecord<T> {
-  input: IDict,
+interface ITestRecord<InputType, OutputDataType>
+extends IFunctionOutput<OutputDataType> {
+  input: InputType,
   loss: number,
-  output: number,
-  data?: T,
 }
 
 /**
  * 优化结果排行榜
  */
 export
-class OptimizerRanking<T> {
+class OptimizerRanking<InputType, OutputDataType> {
   public constructor(config?: { ranking_limit?: number }) {
     if (config?.ranking_limit != null && config?.ranking_limit < 1)
       throw 'ranking_limit必须大于等于1或为空(默认10000)';
@@ -35,7 +33,7 @@ class OptimizerRanking<T> {
   }
 
   private readonly ranking_limit: number;
-  private readonly ranking: ITestRecord<T>[];
+  private readonly ranking: ITestRecord<InputType, OutputDataType>[];
 
   /**
    * 排行榜数据
@@ -49,7 +47,7 @@ class OptimizerRanking<T> {
    * @param test_record 新的测试记录
    * @returns 如果添加成功则返回插入索引，不成功则返回-1
    */
-  public TryAdd(test_record: ITestRecord<T>) {
+  public TryAdd(test_record: ITestRecord<InputType, OutputDataType>) {
     let result_index = -1;
     if (this.ranking.length < 1) {
       this.ranking.push(test_record);
@@ -78,7 +76,7 @@ class OptimizerRanking<T> {
  * 优化器配置
  */
 export
-interface IOptimizerConfig<T> {
+interface IOptimizerConfig<InputType, OutputDataType> {
   /**
    * 超参数空间
    */
@@ -86,23 +84,23 @@ interface IOptimizerConfig<T> {
   /**
    * 目标函数
    */
-  objective_function: (input: IDict) => IFunctionOutput<T> | Promise<IFunctionOutput<T>>;
+  objective_function: (input: InputType) => IFunctionOutput<OutputDataType> | Promise<IFunctionOutput<OutputDataType>>;
   /**
    * 损失函数(为空不额外处理)
    */
-  loss_function?: (output: IFunctionOutput<T>) => number;
+  loss_function?: (output: IFunctionOutput<OutputDataType>) => number;
   /**
    * 入参映射器(为空不处理)
    */
-  input_mapper?: (input: IDict) => IDict;
+  input_mapper?: (input: InputType) => InputType;
   /**
    * 入参过滤器(为空不过滤)
    */
-  input_filter?: (input: IDict) => boolean;
+  input_filter?: (input: InputType) => boolean;
   /**
    * 出参过滤器(为空不过滤)
    */
-  output_filter?: (output: IFunctionOutput<T>) => boolean;
+  output_filter?: (output: IFunctionOutput<OutputDataType>) => boolean;
   /**
    * 损失过滤器(为空不过滤)
    */
@@ -125,8 +123,8 @@ interface IOptimizerConfig<T> {
  * 优化器
  */
 export
-class Optimizer<T> {
-  public constructor(private readonly config: IOptimizerConfig<T>) {
+class Optimizer<InputType, OutputDataType> {
+  public constructor(private readonly config: IOptimizerConfig<InputType, OutputDataType>) {
     if (this.config.space.length < 1)
       throw 'space维度必须大于等于1';
     if (this.config.iterations != null && this.config.iterations < 1)
@@ -136,25 +134,25 @@ class Optimizer<T> {
   }
 
   private space: ParamsSpace;
-  private ranking: OptimizerRanking<T>;
+  private ranking: OptimizerRanking<InputType, OutputDataType>;
 
   private get loss_function() {
-    const pass = (output: IFunctionOutput<T>) => output.output;
+    const pass = (output: IFunctionOutput<OutputDataType>) => output.output;
     return this.config.loss_function || pass;
   }
 
   private get input_mapper() {
-    const pass = (input: IDict) => input;
+    const pass = (input: InputType) => input;
     return this.config.input_mapper || pass;
   }
 
   private get input_filter() {
-    const pass = (input: IDict) => true;
+    const pass = (input: InputType) => true;
     return this.config.input_filter || pass;
   }
 
   private get output_filter() {
-    const pass = (output: IFunctionOutput<T>) => true;
+    const pass = (output: IFunctionOutput<OutputDataType>) => true;
     return this.config.output_filter || pass;
   }
 
@@ -177,7 +175,7 @@ class Optimizer<T> {
       const input = this.input_mapper(this.space.RandomKeyValues());
       // 过滤器判断与目标函数计算
       if (!this.input_filter(input)) continue;
-      let output: IFunctionOutput<T> = null as any;
+      let output: IFunctionOutput<OutputDataType> = null as any;
       try {
         output = await this.config.objective_function(input);
       } catch (e) {
@@ -188,7 +186,7 @@ class Optimizer<T> {
       const loss = this.loss_function(output);
       if (!this.loss_filter(loss)) continue;
       // 构造测试记录并尝试加入排行榜
-      const test_record: ITestRecord<T> = { input, loss, ...output, };
+      const test_record: ITestRecord<InputType, OutputDataType> = { input, loss, ...output, };
       const index = this.ranking.TryAdd(test_record);
       // 如果最优记录变化，则输出日志
       if (index === 0) this.config.logger?.log(test_record);
