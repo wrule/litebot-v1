@@ -1,9 +1,9 @@
-import { ArrayToKLine } from './common/kline';
-import ETH_USDT_2h from './data/ETH_USDT-2h.json';
-import { TestSpot } from './executor/spot/test_spot';
-import { IFunctionOutput, Optimizer } from './optimizer';
-import { IParams, TwoMaCross } from './robot/spot/two_ma_cross';
-import { Logger } from './utils/logger';
+import { ArrayToKLine } from '../common/kline';
+import ETH_USDT_2h from '../data/ETH_USDT-2h.json';
+import { TestSpot } from '../executor/spot/test_spot';
+import { IFunctionOutput, Optimizer } from '../optimizer';
+import { IParams, TwoMaCross } from '../robot/spot/two_ma_cross';
+import { Logger } from '../utils/logger';
 
 const kline = ArrayToKLine(ETH_USDT_2h);
 
