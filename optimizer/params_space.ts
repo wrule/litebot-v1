@@ -1,5 +1,3 @@
-import { IDict } from '../common/types';
-
 /**
  * 参数空间配置
  */
@@ -44,7 +42,7 @@ implements Iterator<unknown> {
     return this.current;
   }
 
-  public KeyValue(): IDict {
+  public KeyValue() {
     return { [this.config.name]: this.Value(), };
   }
 
@@ -67,7 +65,7 @@ implements Iterator<unknown> {
     return this.random_current();
   }
 
-  public RandomKeyValue(): IDict {
+  public RandomKeyValue() {
     return { [this.config.name]: this.RandomValue(), };
   }
 
@@ -105,8 +103,8 @@ class ParamsSpace {
   /**
    * 暂时没什么用
    */
-  public KeyValues(): IDict {
-    let result: IDict = { };
+  public KeyValues() {
+    let result = { };
     this.params_space.forEach((space) => {
       result = {
         ...result,
@@ -120,8 +118,8 @@ class ParamsSpace {
    * 根据多个参数空间随机生成键值对
    * @returns 随机生成的键值对
    */
-  public RandomKeyValues(): IDict {
-    let result: IDict = { };
+  public RandomKeyValues() {
+    let result = { };
     this.params_space.forEach((space) => {
       result = {
         ...result,
