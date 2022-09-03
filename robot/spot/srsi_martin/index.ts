@@ -65,6 +65,7 @@ extends SpotRobot<IParams, IOHLCV, ITestData> {
   }
 
   //#region 实盘运行接口实现
+  protected async checkKLine(confirmed_kline: KLine, last_confirmed: IOHLCV) { }
   //#endregion
 
   //#region 回测运行接口实现
@@ -80,6 +81,14 @@ extends SpotRobot<IParams, IOHLCV, ITestData> {
       }
       return result;
     });
+  }
+
+  protected async checkTestData(data: ITestData) {
+    if (data.buy) {
+      await this.config.executor.BuyAll(data.close, data.time);
+    } else if (data.sell) {
+      await this.config.executor.SellAll(data.close, data.time);
+    }
   }
   //#endregion
 }
