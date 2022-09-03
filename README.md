@@ -39,3 +39,5 @@
   SRSI 指标实现
   随机优化器代码review
   fast >= slow bug排查
+
+## IDict的泛型问题
