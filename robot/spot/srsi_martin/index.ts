@@ -64,6 +64,21 @@ extends SpotRobot<IParams, IOHLCV, ITestData> {
     };
   }
 
+  private srsi_start(options: {
+    rsi_size: number,
+    k_size: number,
+    d_size: number,
+    stoch_size: number,
+  }) {
+    const rsi_start = tulind.indicators.rsi.start([options.rsi_size]);
+    const stoch_start = tulind.indicators.stoch.start([options.stoch_size, options.k_size, options.d_size]);
+    return rsi_start + stoch_start;
+  }
+
+  public get KLineReadyLength() {
+    return this.srsi_start(this.config.params) + 1;
+  }
+
   //#region 实盘运行接口实现
   protected async checkKLine(confirmed_kline: KLine, last_confirmed: IOHLCV) { }
   //#endregion
