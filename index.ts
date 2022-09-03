@@ -7,9 +7,10 @@ const kline = ArrayToKLine(ETH_USDT_1h);
 async function main() {
   const robot = new SRSI_Martin({
     params: {
-      fast_size: 12,
-      slow_size: 26,
-      smoothing_size: 9,
+      rsi_size: 27,
+      k_size: 4,
+      d_size: 21,
+      stoch_size: 33,
     },
     executor: null as any,
   });

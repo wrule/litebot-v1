@@ -9,9 +9,10 @@ import { Report } from '@/report';
 
 export
 interface IParams {
-  fast_size: number;
-  slow_size: number;
-  smoothing_size: number;
+  rsi_size: number,
+  k_size: number,
+  d_size: number,
+  stoch_size: number,
 }
 
 export
@@ -28,36 +29,34 @@ extends SpotRobot<IParams, IOHLCV, ITestData> {
     super(config);
   }
 
-  private srsi(close: number[]) {
+  private srsi(data: number[], options: {
+    rsi_size: number,
+    k_size: number,
+    d_size: number,
+    stoch_size: number,
+  }) {
     let rsi: number[] = [];
     tulind.indicators.rsi.indicator(
-      [close],
-      [27],
+      [data],
+      [options.rsi_size],
       (error: any, data: any) => {
-        if (error) {
-          throw error;
-        }
+        if (error) throw error;
         rsi = data[0];
       },
     );
-    console.log(rsi.length);
-    console.log(tulind.indicators.stoch);
     let k: number[] = [];
     let d: number[] = [];
     tulind.indicators.stoch.indicator(
-      [rsi, rsi, rsi,],
-      [4, 33, 21],
+      [rsi, rsi, rsi],
+      [options.stoch_size, options.k_size, options.d_size],
       (error: any, data: any) => {
-        if (error) {
-          throw error;
-        }
+        if (error) throw error;
         k = data[0];
         d = data[1];
       },
     );
-    console.log(k.slice(k.length - 15));
-    console.log(d.slice(d.length - 15));
-    // console.log(d.length);
+    const diff = k.map((num, index) => num - d[index]);
+    return { k, d, diff };
   }
 
   //#region 实盘运行接口实现
@@ -65,9 +64,8 @@ extends SpotRobot<IParams, IOHLCV, ITestData> {
 
   //#region 回测运行接口实现
   public GenerateTestData(real_data: IOHLCV[]): ITestData[] {
-    const last = real_data[real_data.length - 1];
-    console.log(moment(new Date(last.time)).format('YYYY-MM-DD HH:mm:ss'));
-    this.srsi(real_data.map((item) => item.close));
+    const { k, d, diff } = this.srsi(real_data.map((item) => item.close), this.config.params);
+    console.log(diff.slice(diff.length - 10));
     return [];
   }
   //#endregion
