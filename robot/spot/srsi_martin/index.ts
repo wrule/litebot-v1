@@ -83,7 +83,7 @@ extends SpotRobot<IParams, IOHLCV, ITestData> {
   }
 
   public get KLineReadyLength() {
-    return this.srsi_start(this.config.params) + 1;
+    return this.srsi_start(this.config.params) + 2;
   }
 
   //#region 实盘运行接口实现
@@ -91,13 +91,14 @@ extends SpotRobot<IParams, IOHLCV, ITestData> {
     try {
       const data = this.GenerateTestData(confirmed_kline);
       const last = data[data.length - 1];
-      if (last.sell) {
-        const tn = await this.config.executor.SellAll(last_confirmed.close);
-        this.message(tn, 0, 0);
-      } else if (last.buy) {
-        const tn = await this.config.executor.BuyAll(last_confirmed.close);
-        this.message(tn, 0, 0);
-      }
+      console.log(last);
+      // if (last.sell) {
+      //   const tn = await this.config.executor.SellAll(last_confirmed.close);
+      //   this.message(tn, 0, 0);
+      // } else if (last.buy) {
+      //   const tn = await this.config.executor.BuyAll(last_confirmed.close);
+      //   this.message(tn, 0, 0);
+      // }
     } catch (e) {
       this.logger.error(e);
     }
@@ -107,6 +108,7 @@ extends SpotRobot<IParams, IOHLCV, ITestData> {
   //#region 回测运行接口实现
   public GenerateTestData(kline: IOHLCV[]): ITestData[] {
     const { diff } = this.srsi(kline.map((item) => item.close), this.config.params);
+    console.log(diff.slice(diff.length - 2));
     return kline.map((item, index) => {
       const result: ITestData = { ...item };
       if (index >= this.KLineReadyIndex) {
