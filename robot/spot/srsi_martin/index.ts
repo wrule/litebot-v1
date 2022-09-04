@@ -86,6 +86,21 @@ extends SpotRobot<IParams, IOHLCV, ITestData> {
     return this.srsi_start(this.config.params) + 2;
   }
 
+  public GenerateTestData(kline: IOHLCV[]): ITestData[] {
+    const { diff } = this.srsi(kline.map((item) => item.close), this.config.params);
+    console.log(diff.slice(diff.length - 2));
+    return kline.map((item, index) => {
+      const result: ITestData = { ...item };
+      if (index >= this.KLineReadyIndex) {
+        const diff_last = diff[index];
+        const diff_prev = diff[index - 1];
+        if (diff_last > 0 && diff_prev <= 0) result.buy = true;
+        if (diff_last < 0 && diff_prev >= 0) result.sell = true;
+      }
+      return result;
+    });
+  }
+
   //#region 实盘运行接口实现
   protected async checkKLine(confirmed_kline: KLine, last_confirmed: IOHLCV) {
     try {
@@ -106,21 +121,6 @@ extends SpotRobot<IParams, IOHLCV, ITestData> {
   //#endregion
 
   //#region 回测运行接口实现
-  public GenerateTestData(kline: IOHLCV[]): ITestData[] {
-    const { diff } = this.srsi(kline.map((item) => item.close), this.config.params);
-    console.log(diff.slice(diff.length - 2));
-    return kline.map((item, index) => {
-      const result: ITestData = { ...item };
-      if (index >= this.KLineReadyIndex) {
-        const diff_last = diff[index];
-        const diff_prev = diff[index - 1];
-        if (diff_last > 0 && diff_prev <= 0) result.buy = true;
-        if (diff_last < 0 && diff_prev >= 0) result.sell = true;
-      }
-      return result;
-    });
-  }
-
   protected async checkTestData(data: ITestData) {
     if (data.sell) {
       await this.config.executor.SellAll(data.close, data.time);
