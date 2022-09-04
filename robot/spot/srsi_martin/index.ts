@@ -88,12 +88,8 @@ extends SpotRobot<IParams, IOHLCV, ITestData> {
 
   public GenerateTestData(kline: IOHLCV[]): ITestData[] {
     const close = kline.map((item) => item.close);
-    const { k, d, diff } = this.srsi(close, this.config.params);
-    console.log(close.slice(close.length - 10));
-    console.log(k.slice(k.length - 10));
-    // console.log(k.slice(k.length - 3));
-    // console.log(d.slice(d.length - 3));
-    // console.log(diff.slice(diff.length - 3));
+    const { diff } = this.srsi(close, this.config.params);
+    console.log(diff.slice(diff.length - 2));
     return kline.map((item, index) => {
       const result: ITestData = { ...item };
       if (index >= this.KLineReadyIndex) {
@@ -110,15 +106,15 @@ extends SpotRobot<IParams, IOHLCV, ITestData> {
   protected async checkKLine(confirmed_kline: KLine, last_confirmed: IOHLCV) {
     try {
       const data = this.GenerateTestData(confirmed_kline);
-      // const last = data[data.length - 1];
-      // console.log(last);
-      // if (last.sell) {
-      //   const tn = await this.config.executor.SellAll(last_confirmed.close);
-      //   this.message(tn, 0, 0);
-      // } else if (last.buy) {
-      //   const tn = await this.config.executor.BuyAll(last_confirmed.close);
-      //   this.message(tn, 0, 0);
-      // }
+      const last = data[data.length - 1];
+      console.log(last);
+      if (last.sell) {
+        const tn = await this.config.executor.SellAll(last_confirmed.close);
+        this.message(tn, 0, 0);
+      } else if (last.buy) {
+        const tn = await this.config.executor.BuyAll(last_confirmed.close);
+        this.message(tn, 0, 0);
+      }
     } catch (e) {
       this.logger.error(e);
     }
