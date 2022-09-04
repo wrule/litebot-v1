@@ -6,7 +6,6 @@ import secret from '../.secret.json';
 import { DingTalk } from '../notifier/ding_talk';
 import dingConfig from '../.dingtalk.json';
 import { BinanceSpot } from '../executor/spot/binance_spot';
-import { TwoMaCross } from '../robot/spot/two_ma_cross';
 import { INotifier } from '../notifier';
 import { JSONList } from '../utils/list/json_list';
 import { ITransaction } from '../common/transaction';
@@ -15,20 +14,23 @@ import { Logger, logger } from '../utils/logger';
 import { SymbolPathization } from '../common/symbol';
 import yargs from 'yargs/yargs';
 import { hideBin }  from 'yargs/helpers';
+import { SRSI_Martin } from '@/robot/spot/srsi_martin';
 
 export
 interface IConfig {
   symbol: string;
   timeframe: string;
   interval?: number;
-  fast_ma: number;
-  slow_ma: number;
+  rsi_size: number;
+  k_size: number;
+  d_size: number;
+  stoch_size: number;
   funds: number;
   assets?: number;
 }
 
 export
-class MACrosser
+class Strategy
 extends App {
   public constructor(private readonly config: IConfig) {
     super();
@@ -51,12 +53,16 @@ extends App {
       snapshot_list: new JSONList<ISnapshot>(`output/${SymbolPathization(this.config.symbol)}-ss.json`),
       logger: new Logger(),
     });
-    this.robot = new TwoMaCross(
-      { fast_ma: this.config.fast_ma, slow_ma: this.config.slow_ma },
-      this.executor,
-      undefined,
-      this.notifier,
-    );
+    this.robot = new SRSI_Martin({
+      params: {
+        rsi_size: this.config.rsi_size,
+        k_size: this.config.k_size,
+        d_size: this.config.d_size,
+        stoch_size: this.config.stoch_size,
+      },
+      executor: this.executor,
+      notifier: this.notifier,
+    });
     this.watcher = new KLineWatcher(
       this.client,
       this.config.interval,
@@ -69,7 +75,7 @@ extends App {
   private notifier!: INotifier;
   private client!: binance;
   private executor!: BinanceSpot;
-  private robot!: TwoMaCross;
+  private robot!: SRSI_Martin;
   private watcher!: KLineWatcher;
 
   protected async run(...args: string[]) {
@@ -87,8 +93,10 @@ const config = {
   symbol: 'ETH/USDT',
   timeframe: '1m',
   interval: 1000,
-  fast_ma: 9,
-  slow_ma: 44,
+  rsi_size: 13,
+  k_size: 32,
+  d_size: 45,
+  stoch_size: 45,
   funds: 11,
   assets: 0,
   ...(yargs(hideBin(process.argv)).argv),
@@ -96,6 +104,6 @@ const config = {
 
 logger.log('配置:\n', config);
 
-const app = new MACrosser(config);
+const app = new Strategy(config);
 
 app.Run();
