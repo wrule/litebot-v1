@@ -89,8 +89,8 @@ extends SpotRobot<IParams, IOHLCV, ITestData> {
   public GenerateTestData(kline: IOHLCV[]): ITestData[] {
     const close = kline.map((item) => item.close);
     const { k, d, diff } = this.srsi(close, this.config.params);
-    console.log(close.slice(close.length - 5));
-    console.log(k.slice(k.length - 3));
+    console.log(close.slice(close.length - 10));
+    console.log(k.slice(k.length - 10));
     // console.log(k.slice(k.length - 3));
     // console.log(d.slice(d.length - 3));
     // console.log(diff.slice(diff.length - 3));
