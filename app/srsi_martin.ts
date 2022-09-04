@@ -14,7 +14,7 @@ import { Logger, logger } from '../utils/logger';
 import { SymbolPathization } from '../common/symbol';
 import yargs from 'yargs/yargs';
 import { hideBin }  from 'yargs/helpers';
-import { SRSI_Martin } from '@/robot/spot/srsi_martin';
+import { SRSI_Martin } from '../robot/spot/srsi_martin';
 
 export
 interface IConfig {
