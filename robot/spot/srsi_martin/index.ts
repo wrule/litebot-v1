@@ -99,10 +99,10 @@ extends SpotRobot<IParams, IOHLCV, ITestData> {
   }
 
   protected async checkTestData(data: ITestData) {
-    if (data.buy) {
-      await this.config.executor.BuyAll(data.close, data.time);
-    } else if (data.sell) {
+    if (data.sell) {
       await this.config.executor.SellAll(data.close, data.time);
+    } else if (data.buy) {
+      await this.config.executor.BuyAll(data.close, data.time);
     }
   }
   //#endregion
