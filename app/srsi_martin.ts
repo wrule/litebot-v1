@@ -68,7 +68,7 @@ extends App {
       this.config.interval,
       this.config.symbol,
       this.config.timeframe,
-      this.robot.KLineReadyLength + 1,
+      (this.robot.KLineReadyLength + 1) * 2,
     );
   }
 
