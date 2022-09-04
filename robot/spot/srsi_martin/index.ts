@@ -1,11 +1,8 @@
-const tulind = require('tulind');
-import { IOHLCV, KLine } from '@/common/kline';
-import { ISpotExecutor } from '@/executor/spot';
-import { ISpotRobotConfig, SpotRobot } from '..';
 import moment from 'moment';
-import { INotifier } from '@/notifier';
-import { ITransaction } from '@/common/transaction';
-import { Report } from '@/report';
+const tulind = require('tulind');
+import { IOHLCV, KLine } from '../../../common/kline';
+import { ISpotRobotConfig, SpotRobot } from '..';
+import { ITransaction } from '../../../common/transaction';
 
 export
 interface IParams {
@@ -75,12 +72,36 @@ extends SpotRobot<IParams, IOHLCV, ITestData> {
     return rsi_start + stoch_start;
   }
 
+  private message(tn: ITransaction, prev_diff: number, last_diff: number) {
+    this.SendMessage(`[${
+      moment(new Date(tn.transaction_time)).format('HH:mm:ss')
+    }  ${
+      { 'BUY': '买', 'SELL': '卖' }[tn.action as string]
+    }  ${
+      `${tn.in_amount}${tn.in_name} =(${tn.price})=> ${tn.out_amount}${tn.out_name}`
+    }]\n前差: ${prev_diff}  现差: ${last_diff}\n走单耗时: ${(tn.transaction_time - tn.request_time) / 1000}秒`);
+  }
+
   public get KLineReadyLength() {
     return this.srsi_start(this.config.params) + 1;
   }
 
   //#region 实盘运行接口实现
-  protected async checkKLine(confirmed_kline: KLine, last_confirmed: IOHLCV) { }
+  protected async checkKLine(confirmed_kline: KLine, last_confirmed: IOHLCV) {
+    try {
+      const data = this.GenerateTestData(confirmed_kline);
+      const last = data[data.length - 1];
+      if (last.sell) {
+        const tn = await this.config.executor.SellAll(last_confirmed.close);
+        this.message(tn, 0, 0);
+      } else if (last.buy) {
+        const tn = await this.config.executor.BuyAll(last_confirmed.close);
+        this.message(tn, 0, 0);
+      }
+    } catch (e) {
+      this.logger.error(e);
+    }
+  }
   //#endregion
 
   //#region 回测运行接口实现
