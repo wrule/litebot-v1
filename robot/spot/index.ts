@@ -49,17 +49,17 @@ abstract class SpotRobot<
 
   public async CheckHistoricalData(historical_data: HistoricalData[]): Promise<void> {
     if (historical_data.length < 1) return;
-    const last = historical_data[historical_data.length - 1];
-    if (last.time > this.kline_last_time) {
+    const last_historical = historical_data[historical_data.length - 1];
+    if (last_historical.time > this.kline_last_time) {
       if (historical_data.length >= this.ReadyLength) {
         const signal_data = this.GenerateSignalData(historical_data);
         const last_signal = signal_data[signal_data.length - 1];
-        await this.check_real(historical_data, last);
+        await this.check_real(historical_data, last_historical);
       }
       await this.config.report?.AppendRealData(
         ...historical_data.filter((item) => item.time > this.kline_last_time)
       );
-      this.kline_last_time = last.time;
+      this.kline_last_time = last_historical.time;
     }
   }
 
