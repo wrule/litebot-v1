@@ -47,7 +47,7 @@ abstract class SpotRobot<
   //#region 实盘运行相关
   private kline_last_time = -1;
 
-  public async CheckReal(historical_data: HistoricalData[]): Promise<void> {
+  public async CheckHistoricalData(historical_data: HistoricalData[]): Promise<void> {
     if (historical_data.length < 1) return;
     const last = historical_data[historical_data.length - 1];
     if (last.time > this.kline_last_time) {
