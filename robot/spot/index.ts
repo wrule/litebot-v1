@@ -49,19 +49,19 @@ abstract class SpotRobot<
 
   public async CheckReal(historical_data: HistoricalData[]): Promise<void> {
     if (historical_data.length < 1) return;
-    const last_confirmed = historical_data[historical_data.length - 1];
-    if (last_confirmed.time > this.kline_last_time) {
+    const last = historical_data[historical_data.length - 1];
+    if (last.time > this.kline_last_time) {
       if (historical_data.length >= this.ReadyLength) {
-        await this.check_real(historical_data, last_confirmed);
+        await this.check_real(historical_data, last);
       }
       await this.config.report?.AppendRealData(
         ...historical_data.filter((item) => item.time > this.kline_last_time)
       );
-      this.kline_last_time = last_confirmed.time;
+      this.kline_last_time = last.time;
     }
   }
 
-  protected abstract check_real(historical_data: HistoricalData[], last_confirmed: HistoricalData): Promise<void>;
+  protected abstract check_real(historical_data: HistoricalData[], last: HistoricalData): Promise<void>;
   //#endregion
 
   //#region 回测运行相关
