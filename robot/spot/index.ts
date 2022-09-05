@@ -9,7 +9,7 @@ export
 interface ISpotRobotConfig<
   Params,
   HistoricalData extends ITimeClose,
-  SignalData extends ITimeClose,
+  SignalData extends HistoricalData,
 > {
   params: Params,
   executor: ISpotExecutor,
