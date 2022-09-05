@@ -45,6 +45,13 @@ abstract class SpotRobot<
     return this.ReadyLength - 1;
   }
 
+  /**
+   * 生成信号数据
+   * @param historical_data 历史数据
+   * @returns 信号数据
+   */
+  public abstract generate_signal_data(historical_data: HistoricalData[]): SignalData[];
+
   protected abstract signal_action(signal: SignalData): Promise<ITransaction | undefined>;
 
   protected abstract transaction_message(tn: ITransaction): Promise<void>;
@@ -133,11 +140,5 @@ abstract class SpotRobot<
     const signal_data = this.generate_signal_data(historical_data);
     await this.BackTestingBasic(signal_data);
   }
-  /**
-   * 生成信号数据
-   * @param historical_data 历史数据
-   * @returns 信号数据
-   */
-  public abstract generate_signal_data(historical_data: HistoricalData[]): SignalData[];
   //#endregion
 }
