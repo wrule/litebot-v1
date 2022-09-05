@@ -4,6 +4,7 @@ import { Report } from '@/report';
 import { Logger } from '../../utils/logger';
 import { ISpotExecutor } from '../../executor/spot';
 import { ITransaction } from '@/common/transaction';
+import moment from 'moment';
 
 export
 interface ISpotRobotConfig<
@@ -54,7 +55,13 @@ abstract class SpotRobot<
 
   protected abstract signal_action(signal: SignalData): Promise<ITransaction | undefined>;
 
-  protected abstract transaction_message(tn: ITransaction): Promise<void>;
+  protected transaction_message(tn: ITransaction) {
+    const time = moment(new Date(tn.transaction_time)).format('HH:mm:ss');
+    const icon = { 'BUY' : '🤔', 'SELL' : '😱' }[tn.action];
+    const action = { 'BUY' : '买', 'SELL' : '卖' }[tn.action];
+    const seconds = Number(((tn.transaction_time - tn.request_time) / 1000).toFixed(3));
+    this.SendMessage(`[${icon} ${time} ${seconds}s]\n使用 ${tn.in_amount} 个 ${tn.in_name} ${action}了 ${tn.out_amount} 个 ${tn.out_name}`);
+  }
 
   //#region 实盘运行相关
   private kline_last_time = -1;
