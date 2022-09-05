@@ -3,6 +3,7 @@ import { INotifier } from '@/notifier';
 import { Report } from '@/report';
 import { Logger } from '../../utils/logger';
 import { ISpotExecutor } from '../../executor/spot';
+import { ITransaction } from '@/common/transaction';
 
 export
 interface ISpotRobotConfig<
@@ -44,6 +45,10 @@ abstract class SpotRobot<
     return this.ReadyLength - 1;
   }
 
+  protected abstract signal_action(signal: SignalData): Promise<ITransaction | undefined>;
+
+  protected abstract transaction_message(tn: ITransaction): Promise<void>;
+
   //#region 实盘运行相关
   private kline_last_time = -1;
 
@@ -54,7 +59,8 @@ abstract class SpotRobot<
       if (historical_data.length >= this.ReadyLength) {
         const signal_data = this.GenerateSignalData(historical_data);
         const last_signal = signal_data[signal_data.length - 1];
-        await this.check_real(historical_data, last_historical);
+        const tn = await this.signal_action(last_signal);
+        if (tn) this.transaction_message(tn);
       }
       await this.config.report?.AppendRealData(
         ...historical_data.filter((item) => item.time > this.kline_last_time)
@@ -62,8 +68,6 @@ abstract class SpotRobot<
       this.kline_last_time = last_historical.time;
     }
   }
-
-  protected abstract check_real(historical_data: HistoricalData[], last: HistoricalData): Promise<void>;
   //#endregion
 
   //#region 回测运行相关
