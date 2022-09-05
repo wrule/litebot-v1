@@ -42,12 +42,12 @@ abstract class SpotRobot<
   //#region 实盘运行
   private kline_last_time = -1;
 
-  public async CheckKLine(confirmed_kline: HistoricalData[]): Promise<void> {
+  public async CheckReal(confirmed_kline: HistoricalData[]): Promise<void> {
     if (confirmed_kline.length < 1) return;
     const last_confirmed = confirmed_kline[confirmed_kline.length - 1];
     if (last_confirmed.time > this.kline_last_time) {
       if (confirmed_kline.length >= this.KLineReadyLength) {
-        await this.checkKLine(confirmed_kline, last_confirmed);
+        await this.check_real(confirmed_kline, last_confirmed);
       }
       await this.config.report?.AppendRealData(
         ...confirmed_kline.filter((item) => item.time > this.kline_last_time)
@@ -56,7 +56,7 @@ abstract class SpotRobot<
     }
   }
 
-  protected abstract checkKLine(confirmed_kline: HistoricalData[], last_confirmed: HistoricalData): Promise<void>;
+  protected abstract check_real(confirmed_kline: HistoricalData[], last_confirmed: HistoricalData): Promise<void>;
   //#endregion
 
   //#region 回测运行
@@ -110,7 +110,7 @@ abstract class SpotRobot<
     for (let i = 0; i < this.signal_data.length; ++i) {
       this.current_index = i;
       const last = this.last();
-      await this.checkTestData(last);
+      await this.check_backtesting(last);
       await this.config.executor.UpdateSnapshot(last.time, last.close);
     }
   }
@@ -132,7 +132,7 @@ abstract class SpotRobot<
    * 检查测试数据
    * @param data 测试数据
    */
-  protected abstract checkTestData(data: SignalData): void | Promise<void>;
+  protected abstract check_backtesting(data: SignalData): void | Promise<void>;
   //#endregion
 
   //#region 工具方法
