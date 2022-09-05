@@ -52,6 +52,8 @@ abstract class SpotRobot<
     const last = historical_data[historical_data.length - 1];
     if (last.time > this.kline_last_time) {
       if (historical_data.length >= this.ReadyLength) {
+        const signal_data = this.GenerateSignalData(historical_data);
+        const last_signal = signal_data[signal_data.length - 1];
         await this.check_real(historical_data, last);
       }
       await this.config.report?.AppendRealData(
