@@ -57,7 +57,7 @@ abstract class SpotRobot<
     const last_historical = historical_data[historical_data.length - 1];
     if (last_historical.time > this.kline_last_time) {
       if (historical_data.length >= this.ReadyLength) {
-        const signal_data = this.GenerateSignalData(historical_data);
+        const signal_data = this.generate_signal_data(historical_data);
         const last_signal = signal_data[signal_data.length - 1];
         const tn = await this.signal_action(last_signal);
         if (tn) this.transaction_message(tn);
@@ -130,15 +130,15 @@ abstract class SpotRobot<
    * @param historical_data 真实数据
    */
   public async BackTesting(historical_data: HistoricalData[]) {
-    const signal_data = this.GenerateSignalData(historical_data);
+    const signal_data = this.generate_signal_data(historical_data);
     await this.BackTestingBasic(signal_data);
   }
   /**
-   * 生成测试数据
-   * @param historical_data 真实历史数据
-   * @returns 测试数据
+   * 生成信号数据
+   * @param historical_data 历史数据
+   * @returns 信号数据
    */
-  public abstract GenerateSignalData(historical_data: HistoricalData[]): SignalData[];
+  public abstract generate_signal_data(historical_data: HistoricalData[]): SignalData[];
   //#endregion
 
   //#region 工具方法
