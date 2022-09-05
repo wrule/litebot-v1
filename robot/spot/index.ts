@@ -52,7 +52,7 @@ abstract class SpotRobot<
     if (confirmed_kline.length < 1) return;
     const last_confirmed = confirmed_kline[confirmed_kline.length - 1];
     if (last_confirmed.time > this.kline_last_time) {
-      if (confirmed_kline.length >= this.KLineReadyLength) {
+      if (confirmed_kline.length >= this.ReadyLength) {
         await this.check_real(confirmed_kline, last_confirmed);
       }
       await this.config.report?.AppendRealData(
