@@ -8,22 +8,22 @@ import { ITransaction } from '../../common/transaction';
 export
 interface ISpotRobotConfig<
   Params,
-  RealData extends ITimeClose,
-  TestData extends ITimeClose,
+  HistoricalData extends ITimeClose,
+  SignalData extends ITimeClose,
 > {
   params: Params,
   executor: ISpotExecutor,
   notifier?: INotifier,
-  report?: Report<Params, RealData, TestData>,
+  report?: Report<Params, HistoricalData, SignalData>,
 }
 
 export
 abstract class SpotRobot<
   Params,
-  RealData extends ITimeClose,
-  TestData extends ITimeClose,
+  HistoricalData extends ITimeClose,
+  SignalData extends HistoricalData,
 > {
-  public constructor(protected config: ISpotRobotConfig<Params, RealData, TestData>) { }
+  public constructor(protected config: ISpotRobotConfig<Params, HistoricalData, SignalData>) { }
 
   protected logger = new Logger();
 
@@ -42,7 +42,7 @@ abstract class SpotRobot<
   //#region 实盘运行
   private kline_last_time = -1;
 
-  public async CheckKLine(confirmed_kline: RealData[]): Promise<void> {
+  public async CheckKLine(confirmed_kline: HistoricalData[]): Promise<void> {
     if (confirmed_kline.length < 1) return;
     const last_confirmed = confirmed_kline[confirmed_kline.length - 1];
     if (last_confirmed.time > this.kline_last_time) {
@@ -56,14 +56,14 @@ abstract class SpotRobot<
     }
   }
 
-  protected abstract checkKLine(confirmed_kline: RealData[], last_confirmed: RealData): Promise<void>;
+  protected abstract checkKLine(confirmed_kline: HistoricalData[], last_confirmed: HistoricalData): Promise<void>;
   //#endregion
 
   //#region 回测运行
   /**
    * 用于回测的历史数据
    */
-  private test_data: TestData[] = [];
+  private signal_data: SignalData[] = [];
   /**
    * 历史数据当前索引
    */
@@ -71,10 +71,10 @@ abstract class SpotRobot<
   /**
    * 重置回测状态
    */
-  public async Reset(): Promise<SpotRobot<Params, RealData, TestData>> {
+  public async Reset(): Promise<SpotRobot<Params, HistoricalData, SignalData>> {
     this.kline_last_time = -1;
     this.current_index = 0;
-    this.test_data = [];
+    this.signal_data = [];
     await this.config.executor.Reset();
     return this;
   }
@@ -91,7 +91,7 @@ abstract class SpotRobot<
     if (dst_index < 0) {
       throw 'dst_index必须大于等于0';
     }
-    return this.test_data[dst_index];
+    return this.signal_data[dst_index];
   }
   /**
    * 上一个测试数据
@@ -102,12 +102,12 @@ abstract class SpotRobot<
   }
   /**
    * 测试数据回测
-   * @param test_data 测试数据
+   * @param signal_data 测试数据
    */
-  public async BackTestingBasic(test_data: TestData[]) {
+  public async BackTestingBasic(signal_data: SignalData[]) {
     await this.Reset();
-    this.test_data = test_data;
-    for (let i = 0; i < this.test_data.length; ++i) {
+    this.signal_data = signal_data;
+    for (let i = 0; i < this.signal_data.length; ++i) {
       this.current_index = i;
       const last = this.last();
       await this.checkTestData(last);
@@ -116,23 +116,23 @@ abstract class SpotRobot<
   }
   /**
    * 真实数据回测
-   * @param real_data 真实数据
+   * @param historical_data 真实数据
    */
-  public async BackTesting(real_data: RealData[]) {
-    const test_data = this.GenerateTestData(real_data);
-    await this.BackTestingBasic(test_data);
+  public async BackTesting(historical_data: HistoricalData[]) {
+    const signal_data = this.GenerateSignalData(historical_data);
+    await this.BackTestingBasic(signal_data);
   }
   /**
    * 生成测试数据
-   * @param real_data 真实历史数据
+   * @param historical_data 真实历史数据
    * @returns 测试数据
    */
-  public abstract GenerateTestData(real_data: RealData[]): TestData[];
+  public abstract GenerateSignalData(historical_data: HistoricalData[]): SignalData[];
   /**
    * 检查测试数据
    * @param data 测试数据
    */
-  protected abstract checkTestData(data: TestData): void | Promise<void>;
+  protected abstract checkTestData(data: SignalData): void | Promise<void>;
   //#endregion
 
   //#region 工具方法
