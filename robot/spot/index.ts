@@ -140,46 +140,4 @@ abstract class SpotRobot<
    */
   public abstract generate_signal_data(historical_data: HistoricalData[]): SignalData[];
   //#endregion
-
-  //#region 工具方法
-  protected gold_cross(
-    fast_prev: number,
-    slow_prev: number,
-    fast_last: number,
-    slow_last: number,
-  ) {
-    return (fast_prev <= slow_prev) && (fast_last > slow_last);
-  }
-
-  protected gold_cross_line(
-    fast_line: number[],
-    slow_line: number[],
-  ) {
-    const fast_prev = fast_line[fast_line.length - 2];
-    const slow_prev = slow_line[slow_line.length - 2];
-    const fast_last = fast_line[fast_line.length - 1];
-    const slow_last = slow_line[slow_line.length - 1];
-    return this.gold_cross(fast_prev, slow_prev, fast_last, slow_last);
-  }
-
-  protected dead_cross(
-    fast_prev: number,
-    slow_prev: number,
-    fast_last: number,
-    slow_last: number,
-  ) {
-    return (fast_prev >= slow_prev) && (fast_last < slow_last);
-  }
-
-  protected dead_cross_line(
-    fast_line: number[],
-    slow_line: number[],
-  ) {
-    const fast_prev = fast_line[fast_line.length - 2];
-    const slow_prev = slow_line[slow_line.length - 2];
-    const fast_last = fast_line[fast_line.length - 1];
-    const slow_last = slow_line[slow_line.length - 1];
-    return this.dead_cross(fast_prev, slow_prev, fast_last, slow_last);
-  }
-  //#endregion
 }
