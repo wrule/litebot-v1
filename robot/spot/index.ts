@@ -55,6 +55,10 @@ abstract class SpotRobot<
 
   protected abstract signal_action(signal: SignalData): Promise<ITransaction | undefined>;
 
+  /**
+   * 默认的交易消息方法，可在子类中覆盖
+   * @param tn 交易数据
+   */
   protected transaction_message(tn: ITransaction) {
     const time = moment(new Date(tn.transaction_time)).format('HH:mm:ss');
     const icon = { 'BUY' : '🤔', 'SELL' : '😱' }[tn.action];
