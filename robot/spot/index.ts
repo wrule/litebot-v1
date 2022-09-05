@@ -44,27 +44,27 @@ abstract class SpotRobot<
     return this.ReadyLength - 1;
   }
 
-  //#region 实盘运行
+  //#region 实盘运行相关
   private kline_last_time = -1;
 
-  public async CheckReal(confirmed_kline: HistoricalData[]): Promise<void> {
-    if (confirmed_kline.length < 1) return;
-    const last_confirmed = confirmed_kline[confirmed_kline.length - 1];
+  public async CheckReal(confirmed_data: HistoricalData[]): Promise<void> {
+    if (confirmed_data.length < 1) return;
+    const last_confirmed = confirmed_data[confirmed_data.length - 1];
     if (last_confirmed.time > this.kline_last_time) {
-      if (confirmed_kline.length >= this.ReadyLength) {
-        await this.check_real(confirmed_kline, last_confirmed);
+      if (confirmed_data.length >= this.ReadyLength) {
+        await this.check_real(confirmed_data, last_confirmed);
       }
       await this.config.report?.AppendRealData(
-        ...confirmed_kline.filter((item) => item.time > this.kline_last_time)
+        ...confirmed_data.filter((item) => item.time > this.kline_last_time)
       );
       this.kline_last_time = last_confirmed.time;
     }
   }
 
-  protected abstract check_real(confirmed_kline: HistoricalData[], last_confirmed: HistoricalData): Promise<void>;
+  protected abstract check_real(confirmed_data: HistoricalData[], last_confirmed: HistoricalData): Promise<void>;
   //#endregion
 
-  //#region 回测运行
+  //#region 回测运行相关
   /**
    * 用于回测的历史数据
    */
