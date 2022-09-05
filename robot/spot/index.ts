@@ -33,10 +33,16 @@ abstract class SpotRobot<
   }
   //#endregion
 
-  public abstract KLineReadyLength: number;
+  /**
+   * 计算可用信号所需要的最小数据长度
+   */
+  public abstract ReadyLength: number;
 
-  public get KLineReadyIndex() {
-    return this.KLineReadyLength - 1;
+  /**
+   * 第一个可用信号的数据索引
+   */
+  public get ReadyIndex() {
+    return this.ReadyLength - 1;
   }
 
   //#region 实盘运行
