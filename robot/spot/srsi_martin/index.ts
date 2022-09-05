@@ -89,16 +89,11 @@ extends SpotRobot<IParams, IOHLCV, ITestData> {
   public GenerateTestData(kline: IOHLCV[]): ITestData[] {
     const close = kline.map((item) => item.close);
     const { diff } = this.srsi(close, this.config.params);
-    console.log(diff.slice(diff.length - 2));
-    return kline.map((item, index) => {
-      const result: ITestData = { ...item };
-      if (index >= this.KLineReadyIndex) {
-        const diff_last = diff[index];
-        const diff_prev = diff[index - 1];
-        if (diff_last > 0 && diff_prev <= 0) result.buy = true;
-        if (diff_last < 0 && diff_prev >= 0) result.sell = true;
-      }
-      return result;
+    return this.fill_signal_data(kline, (signal, index) => {
+      const diff_last = diff[index];
+      const diff_prev = diff[index - 1];
+      if (diff_last > 0 && diff_prev <= 0) signal.buy = true;
+      if (diff_last < 0 && diff_prev >= 0) signal.sell = true;
     });
   }
 

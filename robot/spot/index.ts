@@ -53,6 +53,17 @@ abstract class SpotRobot<
    */
   public abstract generate_signal_data(historical_data: HistoricalData[]): SignalData[];
 
+  protected fill_signal_data(
+    historical_data: HistoricalData[],
+    filler: (data: SignalData, index: number) => void,
+  ): SignalData[] {
+    return historical_data.map((history, index) => {
+      const signal = { ...history } as SignalData;
+      if (index >= this.ReadyIndex) filler(signal, index);
+      return signal;
+    });
+  }
+
   protected abstract signal_action(signal: SignalData): Promise<ITransaction | undefined>;
 
   /**
