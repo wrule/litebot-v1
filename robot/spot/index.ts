@@ -121,7 +121,7 @@ abstract class SpotRobot<
     for (let i = 0; i < this.signal_data.length; ++i) {
       this.current_index = i;
       const last = this.last();
-      await this.check_backtesting(last);
+      await this.signal_action(last);
       await this.config.executor.UpdateSnapshot(last.time, last.close);
     }
   }
@@ -139,11 +139,6 @@ abstract class SpotRobot<
    * @returns 测试数据
    */
   public abstract GenerateSignalData(historical_data: HistoricalData[]): SignalData[];
-  /**
-   * 检查测试数据
-   * @param data 测试数据
-   */
-  protected abstract check_backtesting(data: SignalData): void | Promise<void>;
   //#endregion
 
   //#region 工具方法
