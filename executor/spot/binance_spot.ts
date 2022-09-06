@@ -151,7 +151,7 @@ implements ISpotExecutor {
     await this.config.transaction_list?.Append(tn);
     this.available_funds_amount -= tn.in_amount;
     this.available_assets_amount += tn.out_amount;
-    this.config.logger?.log('购买结果\n', tn);
+    this.config.logger?.log('购买结果', tn);
     return tn;
   }
 
