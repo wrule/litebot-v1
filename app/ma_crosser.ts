@@ -51,18 +51,17 @@ extends App {
       snapshot_list: new JSONList<ISnapshot>(`output/${SymbolPathization(this.config.symbol)}-ss.json`),
       logger: new Logger(),
     });
-    this.robot = new TwoMaCross(
-      { fast_ma: this.config.fast_ma, slow_ma: this.config.slow_ma },
-      this.executor,
-      undefined,
-      this.notifier,
-    );
+    this.robot = new TwoMaCross({
+      params: { fast_size: this.config.fast_ma, slow_size: this.config.slow_ma, },
+      executor: this.executor,
+      notifier: this.notifier,
+    });
     this.watcher = new KLineWatcher(
       this.client,
       this.config.interval,
       this.config.symbol,
       this.config.timeframe,
-      this.robot.KLineReadyLength + 1,
+      this.robot.ReadyLength,
     );
   }
 
@@ -77,7 +76,7 @@ extends App {
     await this.client.loadMarkets();
     this.logger.log('加载完成');
     this.watcher.Subscribe((kline_snapshot) => {
-      this.robot.CheckKLine(kline_snapshot.confirmed_kline);
+      this.robot.CheckHistoricalData(kline_snapshot.confirmed_kline);
     });
     this.watcher.Start();
   }
