@@ -123,17 +123,21 @@ abstract class SpotRobot<
    * @param historical_data 实盘历史数据
    */
   public async CheckHistoricalData(historical_data: HistoricalData[]): Promise<void> {
-    if (historical_data.length < 1) return;
-    const last_history = historical_data[historical_data.length - 1];
-    if (last_history.time > this.historical_last_time) {
-      this.historical_last_time = last_history.time;
-      if (historical_data.length >= this.ReadyLength) {
-        const signal_data = this.generate_signal_data(historical_data);
-        const last_signal = signal_data[signal_data.length - 1];
-        this.logger.log('新信号', last_signal);
-        const tn = await this.signal_action(last_signal);
-        if (tn) this.transaction_message(tn);
+    try {
+      if (historical_data.length < 1) return;
+      const last_history = historical_data[historical_data.length - 1];
+      if (last_history.time > this.historical_last_time) {
+        this.historical_last_time = last_history.time;
+        if (historical_data.length >= this.ReadyLength) {
+          const signal_data = this.generate_signal_data(historical_data);
+          const last_signal = signal_data[signal_data.length - 1];
+          this.logger.log('新信号', last_signal);
+          const tn = await this.signal_action(last_signal);
+          if (tn) this.transaction_message(tn);
+        }
       }
+    } catch (e) {
+      this.logger.error(e);
     }
   }
   //#endregion
