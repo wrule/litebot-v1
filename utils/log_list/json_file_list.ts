@@ -14,9 +14,6 @@ implements ILogList<T> {
   }
 
   public async All() {
-    // if (!fsPromise. (this.file_path)) {
-    //   fs.writeFileSync(this.file, '', 'utf-8');
-    // }
     let json_text = await fsPromise.readFile(this.file_path, 'utf-8');
     json_text = json_text.trim();
     if (json_text.endsWith(',')) json_text = json_text.slice(0, json_text.length - 1);
