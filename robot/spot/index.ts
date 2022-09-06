@@ -85,13 +85,13 @@ abstract class SpotRobot<
     if (historical_data.length < 1) return;
     const last_history = historical_data[historical_data.length - 1];
     if (last_history.time > this.kline_last_time) {
+      this.kline_last_time = last_history.time;
       if (historical_data.length >= this.ReadyLength) {
         const signal_data = this.generate_signal_data(historical_data);
         const last_signal = signal_data[signal_data.length - 1];
         const tn = await this.signal_action(last_signal);
         if (tn) this.transaction_message(tn);
       }
-      this.kline_last_time = last_history.time;
     }
   }
   //#endregion
