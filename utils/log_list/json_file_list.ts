@@ -30,6 +30,11 @@ implements ILogList<T> {
     await fsPromise.writeFile(this.file_path, '', 'utf-8');
   }
 
+  public async Replace(data: T[]) {
+    await this.Empty();
+    await this.Append(...data);
+  }
+
   public async GetFirst() {
     const list = await this.All();
     if (list.length < 1) return null;
@@ -40,7 +45,6 @@ implements ILogList<T> {
     const list = await this.All();
     if (list.length < 1) list.push(data);
     else list[0] = data;
-    await this.Empty();
-    await this.Append(...list);
+    await this.Replace(list);
   }
 }
