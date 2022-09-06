@@ -72,6 +72,7 @@ extends App {
   private watcher!: KLineWatcher;
 
   protected async run(...args: string[]) {
+    await this.robot.Reset();
     this.logger.log('加载市场');
     await this.client.loadMarkets();
     this.logger.log('加载完成');
