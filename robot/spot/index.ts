@@ -79,8 +79,15 @@ abstract class SpotRobot<
   }
 
   //#region 实盘运行相关
+  /**
+   * 记录最后一个实盘历史数据的时间
+   */
   private kline_last_time = -1;
 
+  /**
+   * 检查实盘历史数据
+   * @param historical_data 实盘历史数据
+   */
   public async CheckHistoricalData(historical_data: HistoricalData[]): Promise<void> {
     if (historical_data.length < 1) return;
     const last_history = historical_data[historical_data.length - 1];
