@@ -2,9 +2,7 @@
 import { App } from './app';
 import { KLineWatcher } from '../watcher/kline_watcher';
 import { binance } from 'ccxt';
-import secret from '../.secret.json';
 import { DingTalk } from '../notifier/ding_talk';
-import dingConfig from '../.dingtalk.json';
 import { BinanceSpot } from '../executor/spot/binance_spot';
 import { INotifier } from '../notifier';
 import { JSONList } from '../utils/list/json_list';
@@ -15,6 +13,9 @@ import { SymbolPathization } from '../common/symbol';
 import yargs from 'yargs/yargs';
 import { hideBin }  from 'yargs/helpers';
 import { SRSI_Martin } from '../robot/spot/srsi_martin';
+
+const secret = require('../.secret.json');
+const dingConfig = require('../.dingtalk.json');
 
 export
 interface IConfig {
