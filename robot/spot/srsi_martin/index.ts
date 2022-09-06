@@ -87,9 +87,9 @@ extends SpotRobot<IParams, IOHLCV, ISignal> {
 
   protected async signal_action(signal: ISignal) {
     if (signal.sell) {
-      return await this.config.executor.SellAll(signal.close);
+      return await this.config.executor.SellAll(signal.close, signal.time);
     } else if (signal.buy) {
-      return await this.config.executor.BuyAll(signal.close);
+      return await this.config.executor.BuyAll(signal.close, signal.time);
     }
   }
 }
