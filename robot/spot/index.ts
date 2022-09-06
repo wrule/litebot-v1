@@ -82,9 +82,13 @@ abstract class SpotRobot<
   }
   //#endregion
 
-
-
-
+  //#region 内部工具方法
+  /**
+   * 便利的信号数据填充工具方法
+   * @param historical_data 历史数据
+   * @param filler 信号填充函数
+   * @returns 信号数据
+   */
   protected fill_signal_data(
     historical_data: HistoricalData[],
     filler: (data: SignalData, index: number) => void,
@@ -95,7 +99,6 @@ abstract class SpotRobot<
       return signal;
     });
   }
-
   /**
    * 默认的交易消息方法，可在子类中覆盖
    * @param tn 交易数据
@@ -107,6 +110,7 @@ abstract class SpotRobot<
     const seconds = Number(((tn.transaction_time - tn.request_time) / 1000).toFixed(3));
     this.SendMessage(`[${icon} ${time} ${seconds}s]\n使用 ${tn.in_amount} 个 ${tn.in_name} ${action}了 ${tn.out_amount} 个 ${tn.out_name}`);
   }
+  //#endregion
 
   //#region 实盘运行相关
   /**
