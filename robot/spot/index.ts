@@ -135,13 +135,6 @@ abstract class SpotRobot<
     return this.signal_data[dst_index];
   }
   /**
-   * 上一个信号数据
-   * @returns 信号数据
-   */
-  protected prev() {
-    return this.last(1);
-  }
-  /**
    * 信号数据回测
    * @param signal_data 信号数据
    */
