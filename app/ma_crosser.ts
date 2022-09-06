@@ -28,7 +28,7 @@ interface IConfig {
 }
 
 export
-class MACrosser
+class Strategy
 extends App {
   public constructor(private readonly config: IConfig) {
     super();
@@ -95,6 +95,6 @@ const config = {
 
 logger.log('配置:\n', config);
 
-const app = new MACrosser(config);
+const app = new Strategy(config);
 
 app.Run();
