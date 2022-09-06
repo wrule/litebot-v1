@@ -124,30 +124,26 @@ abstract class SpotRobot<
    */
   private current_index = 0;
   /**
-   * 回溯获取测试数据
+   * 回溯获取信号数据
    * @param offset 偏移量
-   * @returns 测试数据
+   * @returns 信号数据
    */
   protected last(offset = 0) {
-    if (offset < 0) {
-      throw 'offset必须大于等于0';
-    }
+    if (offset < 0) throw 'offset必须大于等于0';
     const dst_index = this.current_index - offset;
-    if (dst_index < 0) {
-      throw 'dst_index必须大于等于0';
-    }
+    if (dst_index < 0) throw 'dst_index必须大于等于0';
     return this.signal_data[dst_index];
   }
   /**
-   * 上一个测试数据
-   * @returns 测试数据
+   * 上一个信号数据
+   * @returns 信号数据
    */
   protected prev() {
     return this.last(1);
   }
   /**
-   * 测试数据回测
-   * @param signal_data 测试数据
+   * 信号数据回测
+   * @param signal_data 信号数据
    */
   public async BackTestingBasic(signal_data: SignalData[]) {
     await this.Reset();
@@ -160,8 +156,8 @@ abstract class SpotRobot<
     }
   }
   /**
-   * 真实数据回测
-   * @param historical_data 真实数据
+   * 历史数据回测
+   * @param historical_data 历史数据
    */
   public async BackTesting(historical_data: HistoricalData[]) {
     const signal_data = this.generate_signal_data(historical_data);
