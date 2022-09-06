@@ -46,7 +46,7 @@ abstract class SpotRobot<
   protected abstract signal_action(signal: SignalData): Promise<ITransaction | undefined>;
   //#endregion
 
-  //#region 对外暴露的工具方法
+  //#region 对外暴露的方法
   public async SendMessage(message: string) {
     await this.config.notifier?.SendMessage(message);
   }
@@ -82,7 +82,7 @@ abstract class SpotRobot<
   }
   //#endregion
 
-  //#region 内部工具方法
+  //#region 内部方法
   /**
    * 便利的信号数据填充工具方法
    * @param historical_data 历史数据
