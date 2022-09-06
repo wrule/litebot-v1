@@ -14,11 +14,16 @@ implements ILogList<T> {
   }
 
   public async All() {
-    let json_text = await fsPromise.readFile(this.file_path, 'utf-8');
-    json_text = json_text.trim();
-    if (json_text.endsWith(',')) json_text = json_text.slice(0, json_text.length - 1);
-    json_text = `[${json_text}]`;
-    return JSON.parse(json_text) as T[];
+    try {
+      let json_text = await fsPromise.readFile(this.file_path, 'utf-8');
+      json_text = json_text.trim();
+      if (json_text.endsWith(',')) json_text = json_text.slice(0, json_text.length - 1);
+      json_text = `[${json_text}]`;
+      return JSON.parse(json_text) as T[];
+    } catch (e) {
+      console.error(e);
+      return [];
+    }
   }
 
   public async Length() {
