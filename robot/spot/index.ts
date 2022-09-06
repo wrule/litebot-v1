@@ -28,16 +28,29 @@ abstract class SpotRobot<
 
   protected logger = new Logger();
 
+  //#region 子类需实现部分
+  /**
+   * 计算可用信号所需要的最小数据长度
+   */
+  public abstract ReadyLength: number;
+  /**
+   * 生成信号数据
+   * @param historical_data 历史数据
+   * @returns 信号数据
+   */
+  public abstract generate_signal_data(historical_data: HistoricalData[]): SignalData[];
+  /**
+   * 信号行为
+   * @param signal 最新的信号
+   */
+  protected abstract signal_action(signal: SignalData): Promise<ITransaction | undefined>;
+  //#endregion
+
   //#region 消息通知部分
   public async SendMessage(message: string) {
     await this.config.notifier?.SendMessage(message);
   }
   //#endregion
-
-  /**
-   * 计算可用信号所需要的最小数据长度
-   */
-  public abstract ReadyLength: number;
 
   /**
    * 第一个可用信号的数据索引
@@ -46,12 +59,7 @@ abstract class SpotRobot<
     return this.ReadyLength - 1;
   }
 
-  /**
-   * 生成信号数据
-   * @param historical_data 历史数据
-   * @returns 信号数据
-   */
-  public abstract generate_signal_data(historical_data: HistoricalData[]): SignalData[];
+
 
   protected fill_signal_data(
     historical_data: HistoricalData[],
@@ -63,8 +71,6 @@ abstract class SpotRobot<
       return signal;
     });
   }
-
-  protected abstract signal_action(signal: SignalData): Promise<ITransaction | undefined>;
 
   /**
    * 默认的交易消息方法，可在子类中覆盖
