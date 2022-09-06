@@ -68,7 +68,7 @@ extends App {
       this.config.interval,
       this.config.symbol,
       this.config.timeframe,
-      (this.robot.KLineReadyLength + 1) * 2,
+      this.robot.ReadyLength * 2,
     );
   }
 
@@ -84,7 +84,7 @@ extends App {
     await this.client.loadMarkets();
     this.logger.log('加载完成');
     this.watcher.Subscribe((kline_snapshot) => {
-      this.robot.CheckKLine(kline_snapshot.confirmed_kline);
+      this.robot.CheckHistoricalData(kline_snapshot.confirmed_kline);
     });
     this.watcher.Start();
   }
