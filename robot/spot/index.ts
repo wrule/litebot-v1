@@ -128,7 +128,7 @@ abstract class SpotRobot<
    * @param offset 偏移量
    * @returns 信号数据
    */
-  protected last(offset = 0) {
+  protected look_back(offset = 0) {
     if (offset < 0) throw 'offset必须大于等于0';
     const dst_index = this.current_index - offset;
     if (dst_index < 0) throw 'dst_index必须大于等于0';
@@ -143,9 +143,9 @@ abstract class SpotRobot<
     this.signal_data = signal_data;
     for (let i = 0; i < this.signal_data.length; ++i) {
       this.current_index = i;
-      const last = this.last();
-      await this.signal_action(last);
-      await this.config.executor.UpdateSnapshot(last.time, last.close);
+      const last_signal = this.look_back();
+      await this.signal_action(last_signal);
+      await this.config.executor.UpdateSnapshot(last_signal.time, last_signal.close);
     }
   }
   /**
