@@ -145,7 +145,7 @@ abstract class SpotRobot<
    * 信号数据回测
    * @param signal_data 信号数据
    */
-  public async BackTestingBasic(signal_data: SignalData[]) {
+  public async BackTestingSignal(signal_data: SignalData[]) {
     await this.Reset();
     this.signal_data = signal_data;
     for (let i = 0; i < this.signal_data.length; ++i) {
@@ -161,7 +161,7 @@ abstract class SpotRobot<
    */
   public async BackTesting(historical_data: HistoricalData[]) {
     const signal_data = this.generate_signal_data(historical_data);
-    await this.BackTestingBasic(signal_data);
+    await this.BackTestingSignal(signal_data);
   }
   //#endregion
 }
