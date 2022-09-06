@@ -91,9 +91,6 @@ abstract class SpotRobot<
         const tn = await this.signal_action(last_signal);
         if (tn) this.transaction_message(tn);
       }
-      await this.config.report?.AppendRealData(
-        ...historical_data.filter((item) => item.time > this.kline_last_time)
-      );
       this.kline_last_time = last_history.time;
     }
   }
