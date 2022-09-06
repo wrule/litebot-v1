@@ -105,10 +105,10 @@ abstract class SpotRobot<
    */
   protected transaction_message(tn: ITransaction) {
     const time = moment(new Date(tn.transaction_time)).format('HH:mm:ss');
-    const icon = { 'BUY' : '🤔', 'SELL' : '😱' }[tn.action];
-    const action = { 'BUY' : '买', 'SELL' : '卖' }[tn.action];
+    const icon = { 'BUY' : '🚀', 'SELL' : '💰' }[tn.action];
+    const action = { 'BUY' : '🤔买了🤔', 'SELL' : '😱卖了😱' }[tn.action];
     const seconds = Number(((tn.transaction_time - tn.request_time) / 1000).toFixed(3));
-    this.SendMessage(`[${icon} ${time} ${seconds}s]\n使用 ${tn.in_amount} 个 ${tn.in_name} ${action}了 ${tn.out_amount} 个 ${tn.out_name}`);
+    this.SendMessage(`[${icon} ${time} 耗时: ${seconds}s]\n使用  ${tn.in_amount}个${tn.in_name}   ${action}   ${tn.out_amount}个${tn.out_name}`);
   }
   //#endregion
 
