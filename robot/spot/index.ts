@@ -32,13 +32,13 @@ abstract class SpotRobot<
   /**
    * 计算可用信号所需要的最小数据长度
    */
-  public abstract ReadyLength: number;
+  protected abstract ready_length(): number;
   /**
    * 生成信号数据
    * @param historical_data 历史数据
    * @returns 信号数据
    */
-  public abstract generate_signal_data(historical_data: HistoricalData[]): SignalData[];
+  protected abstract generate_signal_data(historical_data: HistoricalData[]): SignalData[];
   /**
    * 信号行为
    * @param signal 最新的信号
@@ -46,18 +46,26 @@ abstract class SpotRobot<
   protected abstract signal_action(signal: SignalData): Promise<ITransaction | undefined>;
   //#endregion
 
-  //#region 消息通知部分
+  //#region 对外暴露的工具方法
   public async SendMessage(message: string) {
     await this.config.notifier?.SendMessage(message);
   }
-  //#endregion
 
+  public get ReadyLength() {
+    return this.ready_length();
+  }
   /**
    * 第一个可用信号的数据索引
    */
   public get ReadyIndex() {
     return this.ReadyLength - 1;
   }
+
+  public GenerateSignalData(historical_data: HistoricalData[]) {
+    return this.generate_signal_data(historical_data);
+  }
+  //#endregion
+
 
 
 
