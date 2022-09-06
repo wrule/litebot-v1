@@ -130,6 +130,7 @@ abstract class SpotRobot<
       if (historical_data.length >= this.ReadyLength) {
         const signal_data = this.generate_signal_data(historical_data);
         const last_signal = signal_data[signal_data.length - 1];
+        this.logger.log('新信号', last_signal);
         const tn = await this.signal_action(last_signal);
         if (tn) this.transaction_message(tn);
       }
