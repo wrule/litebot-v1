@@ -70,7 +70,7 @@ extends SpotRobot<IParams, IOHLCV, ISignal> {
     return rsi_start + stoch_start;
   }
 
-  public ready_length() {
+  protected ready_length() {
     return this.srsi_start(this.config.params) + 2;
   }
 
