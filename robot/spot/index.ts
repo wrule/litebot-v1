@@ -50,7 +50,9 @@ abstract class SpotRobot<
   public async SendMessage(message: string) {
     await this.config.notifier?.SendMessage(message);
   }
-
+  /**
+   * 计算可用信号所需要的最小数据长度
+   */
   public get ReadyLength() {
     return this.ready_length();
   }
@@ -60,9 +62,23 @@ abstract class SpotRobot<
   public get ReadyIndex() {
     return this.ReadyLength - 1;
   }
-
+  /**
+   * 生成信号数据
+   * @param historical_data 历史数据
+   * @returns 信号数据
+   */
   public GenerateSignalData(historical_data: HistoricalData[]) {
     return this.generate_signal_data(historical_data);
+  }
+  /**
+   * 重置回测状态
+   */
+  public async Reset(): Promise<SpotRobot<Params, HistoricalData, SignalData>> {
+    this.kline_last_time = -1;
+    this.signal_data = [];
+    this.current_index = 0;
+    await this.config.executor.Reset();
+    return this;
   }
   //#endregion
 
@@ -90,17 +106,6 @@ abstract class SpotRobot<
     const action = { 'BUY' : '买', 'SELL' : '卖' }[tn.action];
     const seconds = Number(((tn.transaction_time - tn.request_time) / 1000).toFixed(3));
     this.SendMessage(`[${icon} ${time} ${seconds}s]\n使用 ${tn.in_amount} 个 ${tn.in_name} ${action}了 ${tn.out_amount} 个 ${tn.out_name}`);
-  }
-
-  /**
-   * 重置回测状态
-   */
-  public async Reset(): Promise<SpotRobot<Params, HistoricalData, SignalData>> {
-    this.kline_last_time = -1;
-    this.signal_data = [];
-    this.current_index = 0;
-    await this.config.executor.Reset();
-    return this;
   }
 
   //#region 实盘运行相关
