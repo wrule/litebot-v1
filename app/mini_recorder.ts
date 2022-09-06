@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 import { binance } from 'ccxt';
 import { TickerWatcher } from '../watcher/ticker_watcher';
-import { JSONList } from '../utils/list/json_list';
+import { JSONFileList } from '../utils/log_list/json_file_list';
 
 function getArgs() {
   if (process.argv.length === 4) {
@@ -17,7 +17,7 @@ function main() {
   const { symbol, interval } = getArgs();
   const client = new binance({ enableRateLimit: true });
   const watcher = new TickerWatcher(client, interval, symbol);
-  const recorder = new JSONList(`output/${symbol.replace('/', '-')}.json`);
+  const recorder = new JSONFileList(`output/${symbol.replace('/', '-')}.json`);
   watcher.Subscribe((ticker) => {
     recorder.Append([ticker.timestamp, ticker.close]);
   });

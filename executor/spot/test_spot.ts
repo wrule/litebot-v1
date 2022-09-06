@@ -1,7 +1,7 @@
 import { ISpotExecutor } from '.';
 import { ITransaction } from '../../common/transaction';
 import { ISnapshot } from '../../common/snapshot';
-import { IList } from '../../utils/list';
+import { ILogList } from '../../utils/log_list';
 import { SymbolSplit } from '../../common/symbol';
 
 export
@@ -25,11 +25,11 @@ interface ITestSpotConfig {
   /**
    * 交易记录器
    */
-  transaction_list?: IList<ITransaction>;
+  transaction_list?: ILogList<ITransaction>;
   /**
    * 快照记录器
    */
-  snapshot_list?: IList<ISnapshot>;
+  snapshot_list?: ILogList<ISnapshot>;
 }
 
 export

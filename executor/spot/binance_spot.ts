@@ -3,9 +3,9 @@ import { binance } from 'ccxt';
 import { ISpotExecutor } from '.';
 import { ITransaction } from '../../common/transaction';
 import { Logger } from '../../utils/logger';
-import { IList } from '../../utils/list';
 import { ISnapshot } from '../../common/snapshot';
-import { JSONList } from '../../utils/list/json_list';
+import { ILogList } from '../../utils/log_list';
+import { JSONFileList } from '../../utils/log_list/json_file_list';
 
 /**
  * 币安现货执行者配置参数
@@ -31,11 +31,11 @@ interface BinanceSpotConfig {
   /**
    * 交易记录器
    */
-  transaction_list?: IList<ITransaction>;
+  transaction_list?: ILogList<ITransaction>;
   /**
    * 快照记录器
    */
-  snapshot_list?: IList<ISnapshot>;
+  snapshot_list?: ILogList<ISnapshot>;
   /**
    * 日志记录器
    */
@@ -113,7 +113,7 @@ implements ISpotExecutor {
     );
   }
 
-  private irregular_data = new JSONList('output/irregular_data.json');
+  private irregular_data = new JSONFileList('output/irregular_data.json');
 
   private async buy(
     in_amount: number,

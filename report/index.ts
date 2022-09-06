@@ -1,7 +1,7 @@
 import { IOHLCV } from '@/common/kline';
 import { ISnapshot } from '@/common/snapshot';
 import { ITransaction } from '@/common/transaction';
-import { IList } from '@/utils/list';
+import { ILogList } from '@/utils/log_list';
 
 export
 interface IReportMeta<Params> {
@@ -16,11 +16,11 @@ export
 class Report<Params, RealData, TestData> {
   public constructor(
     private readonly config?: {
-      meta_data?: IList<IReportMeta<Params>>,
-      real_data?: IList<RealData>,
-      test_data?: IList<TestData>,
-      transactions?: IList<ITransaction>,
-      snapshots?: IList<ISnapshot>,
+      meta_data?: ILogList<IReportMeta<Params>>,
+      real_data?: ILogList<RealData>,
+      test_data?: ILogList<TestData>,
+      transactions?: ILogList<ITransaction>,
+      snapshots?: ILogList<ISnapshot>,
     },
   ) { }
 

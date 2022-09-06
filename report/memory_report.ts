@@ -1,7 +1,7 @@
 import { IOHLCV } from '@/common/kline';
 import { ISnapshot } from '@/common/snapshot';
 import { ITransaction } from '@/common/transaction';
-import { MemoryList } from '@/utils/list/memory_list';
+import { MemoryList } from '@/utils/log_list/memory_list';
 import { IReportMeta, Report } from '.';
 
 export
