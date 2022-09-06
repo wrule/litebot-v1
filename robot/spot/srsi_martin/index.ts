@@ -1,8 +1,6 @@
-import moment from 'moment';
-const tulind = require('tulind');
-import { IOHLCV, KLine } from '../../../common/kline';
+import tulind from 'tulind';
+import { IOHLCV } from '../../../common/kline';
 import { ISpotRobotConfig, SpotRobot } from '..';
-import { ITransaction } from '../../../common/transaction';
 
 export
 interface IParams {
@@ -13,7 +11,7 @@ interface IParams {
 }
 
 export
-interface ITestData
+interface ISignal
 extends IOHLCV {
   buy?: boolean;
   sell?: boolean;
@@ -21,8 +19,8 @@ extends IOHLCV {
 
 export
 class SRSI_Martin
-extends SpotRobot<IParams, IOHLCV, ITestData> {
-  public constructor(config: ISpotRobotConfig<IParams, IOHLCV, ITestData>) {
+extends SpotRobot<IParams, IOHLCV, ISignal> {
+  public constructor(config: ISpotRobotConfig<IParams, IOHLCV, ISignal>) {
     super(config);
   }
 
@@ -72,24 +70,14 @@ extends SpotRobot<IParams, IOHLCV, ITestData> {
     return rsi_start + stoch_start;
   }
 
-  private message(tn: ITransaction, prev_diff: number, last_diff: number) {
-    this.SendMessage(`[${
-      moment(new Date(tn.transaction_time)).format('HH:mm:ss')
-    }  ${
-      { 'BUY': '买', 'SELL': '卖' }[tn.action as string]
-    }  ${
-      `${tn.in_amount}${tn.in_name} =(${tn.price})=> ${tn.out_amount}${tn.out_name}`
-    }]\n前差: ${prev_diff}  现差: ${last_diff}\n走单耗时: ${(tn.transaction_time - tn.request_time) / 1000}秒`);
-  }
-
-  public get KLineReadyLength() {
+  public ready_length() {
     return this.srsi_start(this.config.params) + 2;
   }
 
-  public GenerateTestData(kline: IOHLCV[]): ITestData[] {
-    const close = kline.map((item) => item.close);
+  protected generate_signal_data(historical_data: IOHLCV[]): ISignal[] {
+    const close = historical_data.map((history) => history.close);
     const { diff } = this.srsi(close, this.config.params);
-    return this.fill_signal_data(kline, (signal, index) => {
+    return this.fill_signal_data(historical_data, (signal, index) => {
       const diff_last = diff[index];
       const diff_prev = diff[index - 1];
       if (diff_last > 0 && diff_prev <= 0) signal.buy = true;
@@ -97,32 +85,11 @@ extends SpotRobot<IParams, IOHLCV, ITestData> {
     });
   }
 
-  //#region 实盘运行接口实现
-  protected async checkKLine(confirmed_kline: KLine, last_confirmed: IOHLCV) {
-    try {
-      const data = this.GenerateTestData(confirmed_kline);
-      const last = data[data.length - 1];
-      console.log(last);
-      if (last.sell) {
-        const tn = await this.config.executor.SellAll(last_confirmed.close);
-        this.message(tn, 0, 0);
-      } else if (last.buy) {
-        const tn = await this.config.executor.BuyAll(last_confirmed.close);
-        this.message(tn, 0, 0);
-      }
-    } catch (e) {
-      this.logger.error(e);
+  protected async signal_action(signal: ISignal) {
+    if (signal.sell) {
+      return await this.config.executor.SellAll(signal.close);
+    } else if (signal.buy) {
+      return await this.config.executor.BuyAll(signal.close);
     }
   }
-  //#endregion
-
-  //#region 回测运行接口实现
-  protected async checkTestData(data: ITestData) {
-    if (data.sell) {
-      await this.config.executor.SellAll(data.close, data.time);
-    } else if (data.buy) {
-      await this.config.executor.BuyAll(data.close, data.time);
-    }
-  }
-  //#endregion
 }
