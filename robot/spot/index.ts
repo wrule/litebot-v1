@@ -74,7 +74,7 @@ abstract class SpotRobot<
    * 重置回测状态
    */
   public async Reset(): Promise<SpotRobot<Params, HistoricalData, SignalData>> {
-    this.kline_last_time = -1;
+    this.historical_last_time = -1;
     this.signal_data = [];
     this.current_index = 0;
     await this.config.executor.Reset();
@@ -116,7 +116,7 @@ abstract class SpotRobot<
   /**
    * 记录最后一个实盘历史数据的时间
    */
-  private kline_last_time = -1;
+  private historical_last_time = -1;
 
   /**
    * 检查实盘历史数据
@@ -125,8 +125,8 @@ abstract class SpotRobot<
   public async CheckHistoricalData(historical_data: HistoricalData[]): Promise<void> {
     if (historical_data.length < 1) return;
     const last_history = historical_data[historical_data.length - 1];
-    if (last_history.time > this.kline_last_time) {
-      this.kline_last_time = last_history.time;
+    if (last_history.time > this.historical_last_time) {
+      this.historical_last_time = last_history.time;
       if (historical_data.length >= this.ReadyLength) {
         const signal_data = this.generate_signal_data(historical_data);
         const last_signal = signal_data[signal_data.length - 1];
