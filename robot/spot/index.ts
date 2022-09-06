@@ -78,6 +78,17 @@ abstract class SpotRobot<
     this.SendMessage(`[${icon} ${time} ${seconds}s]\n使用 ${tn.in_amount} 个 ${tn.in_name} ${action}了 ${tn.out_amount} 个 ${tn.out_name}`);
   }
 
+  /**
+   * 重置回测状态
+   */
+  public async Reset(): Promise<SpotRobot<Params, HistoricalData, SignalData>> {
+    this.kline_last_time = -1;
+    this.signal_data = [];
+    this.current_index = 0;
+    await this.config.executor.Reset();
+    return this;
+  }
+
   //#region 实盘运行相关
   /**
    * 记录最后一个实盘历史数据的时间
@@ -105,23 +116,13 @@ abstract class SpotRobot<
 
   //#region 回测运行相关
   /**
-   * 用于回测的历史数据
+   * 用于回测的信号数据
    */
   private signal_data: SignalData[] = [];
   /**
-   * 历史数据当前索引
+   * 信号数据当前索引
    */
   private current_index = 0;
-  /**
-   * 重置回测状态
-   */
-  public async Reset(): Promise<SpotRobot<Params, HistoricalData, SignalData>> {
-    this.kline_last_time = -1;
-    this.current_index = 0;
-    this.signal_data = [];
-    await this.config.executor.Reset();
-    return this;
-  }
   /**
    * 回溯获取测试数据
    * @param offset 偏移量
