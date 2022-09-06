@@ -105,7 +105,7 @@ dist
 
 data/
 
-output/
+/output/
 .secret.json
 .dingtalk.json
 tn_log.json
