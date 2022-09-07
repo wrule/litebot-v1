@@ -41,3 +41,4 @@
   fast >= slow bug排查
 
 ## IDict的泛型问题
+## 开始重新思考报告
