@@ -20,8 +20,7 @@ interface IReportConfig<
   SignalData extends HistoricalData,
   Snapshot extends ISnapshot,
 > {
-  meta_data: IReportMetaData<Params, Snapshot>;
-  params: Params;
+  meta_data: ILogList<IReportMetaData<Params, Snapshot>>;
   historical_data?: ILogList<HistoricalData>;
   signal_data?: ILogList<SignalData>;
   transactions?: ILogList<ITransaction>;
