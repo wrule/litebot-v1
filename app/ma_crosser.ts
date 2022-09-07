@@ -95,7 +95,7 @@ const config = {
   ...(yargs(hideBin(process.argv)).argv),
 };
 
-logger.log('配置:\n', config);
+logger.log('配置:', config);
 
 const app = new Strategy(config);
 
