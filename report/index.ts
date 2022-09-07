@@ -38,6 +38,10 @@ class Report<
     private config: IReportConfig<Params, HistoricalData, SignalData, Snapshot>,
   ) { }
 
+  public async GetMetaData() {
+    return await this.config.meta_data.GetFirst();
+  }
+
   public get HistoricalData() {
     return this.config.historical_data;
   }
