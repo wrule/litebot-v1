@@ -42,7 +42,14 @@ class Report<
     return await this.config.meta_data.GetFirst();
   }
 
-  public async UpdateMetaData(update_data: any) {
+  public async UpdateMetaData(update_data: {
+    name?: string;
+    robot_name?: string;
+    start_time?: number;
+    end_time?: number;
+    params?: Params;
+    last_snapshot?: Snapshot;
+  }) {
     const meta_data = ((await this.GetMetaData()) || { }) as IReportMetaData<Params, Snapshot>;
     return await this.config.meta_data.SetFirst({
       ...meta_data,
