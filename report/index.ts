@@ -6,6 +6,7 @@ import { ILogList } from '@/utils/log_list';
 export
 interface IReportMeta<Params> {
   name?: string;
+  robot_name?: string;
   start_time?: number;
   end_time?: number;
   params?: Params;
