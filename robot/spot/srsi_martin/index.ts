@@ -15,6 +15,9 @@ interface ISignal
 extends IOHLCV {
   buy?: boolean;
   sell?: boolean;
+  k?: number;
+  d?: number;
+  diff?: number;
 }
 
 export
@@ -76,8 +79,11 @@ extends SpotRobot<IParams, IOHLCV, ISignal> {
 
   protected generate_signal_data(historical_data: IOHLCV[]): ISignal[] {
     const close = historical_data.map((history) => history.close);
-    const { diff } = this.srsi(close, this.config.params);
+    const { k, d, diff } = this.srsi(close, this.config.params);
     return this.fill_signal_data(historical_data, (signal, index) => {
+      signal.k = k[index];
+      signal.d = d[index];
+      signal.diff = diff[index];
       const diff_last = diff[index];
       const diff_prev = diff[index - 1];
       if (diff_last > 0 && diff_prev <= 0) signal.buy = true;
