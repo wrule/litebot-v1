@@ -14,8 +14,8 @@ import yargs from 'yargs/yargs';
 import { hideBin }  from 'yargs/helpers';
 import { SRSI_Martin } from '../robot/spot/srsi_martin';
 
-const secret = require('../.secret.json');
-const dingConfig = require('../.dingtalk.json');
+const secret = require('./.secret.json');
+const dingConfig = require('./.dingtalk.json');
 
 export
 interface IConfig {
