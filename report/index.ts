@@ -37,4 +37,20 @@ class Report<
   public constructor(
     private config: IReportConfig<Params, HistoricalData, SignalData, Snapshot>,
   ) { }
+
+  public get HistoricalData() {
+    return this.config.historical_data;
+  }
+
+  public get SignalData() {
+    return this.config.signal_data;
+  }
+
+  public get Transactions() {
+    return this.config.transactions;
+  }
+
+  public get Snapshots() {
+    return this.config.snapshots;
+  }
 }
