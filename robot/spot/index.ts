@@ -202,9 +202,10 @@ abstract class SpotRobot<
    * @param historical_data 历史数据
    */
   public async BackTesting(historical_data: HistoricalData[]) {
-    this.config?.report?.HistoricalData?.Replace(historical_data);
-    const signal_data = this.generate_signal_data(historical_data);
-    await this.BackTestingSignal(signal_data);
+    await Promise.all([
+      this.config?.report?.HistoricalData?.Replace(historical_data),
+      this.BackTestingSignal(this.generate_signal_data(historical_data)),
+    ]);
   }
   //#endregion
 }
