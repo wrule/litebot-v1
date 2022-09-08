@@ -179,6 +179,7 @@ abstract class SpotRobot<
    * @param signal_data 信号数据
    */
   public async BackTestingSignal(signal_data: SignalData[]) {
+    this.config?.report?.SignalData?.Replace(signal_data);
     await this.Reset();
     this.signal_data = signal_data;
     for (let i = 0; i < this.signal_data.length; ++i) {
@@ -186,6 +187,8 @@ abstract class SpotRobot<
       const last_signal = this.look_back();
       const tn = await this.signal_action(last_signal);
       if (tn) this.config.report?.Transactions?.Append(tn);
+      // this.config.report?.Snapshots?.Append();
+      // this.config.executor.Valuation()
     }
   }
   /**
@@ -195,7 +198,6 @@ abstract class SpotRobot<
   public async BackTesting(historical_data: HistoricalData[]) {
     this.config?.report?.HistoricalData?.Replace(historical_data);
     const signal_data = this.generate_signal_data(historical_data);
-    this.config?.report?.SignalData?.Replace(signal_data);
     await this.BackTestingSignal(signal_data);
   }
   //#endregion
