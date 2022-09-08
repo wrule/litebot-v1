@@ -192,11 +192,13 @@ abstract class SpotRobot<
           this.current_index = i;
           const last_signal = this.look_back();
           const tn = await this.signal_action(last_signal);
-          if (tn) this.config.report?.Transactions?.Append(tn);
-          this.config.report?.Snapshots?.Append({
-            time: last_signal.time,
-            valuation: await this.config.executor.Valuation(last_signal.close),
-          } as Snapshot);
+          await Promise.all([
+            tn && this.config.report?.Transactions?.Append(tn),
+            this.config.report?.Snapshots?.Append({
+              time: last_signal.time,
+              valuation: await this.config.executor.Valuation(last_signal.close),
+            } as Snapshot),
+          ]);
         }
       },
     ]);
