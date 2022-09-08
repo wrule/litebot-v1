@@ -5,17 +5,19 @@ import { Logger } from '../../utils/logger';
 import { ISpotExecutor } from '../../executor/spot';
 import { ITransaction } from '@/common/transaction';
 import moment from 'moment';
+import { ISnapshot } from '@/common/snapshot';
 
 export
 interface ISpotRobotConfig<
   Params,
   HistoricalData extends ITimeClose,
   SignalData extends HistoricalData,
+  Snapshot extends ISnapshot,
 > {
   params: Params,
   executor: ISpotExecutor,
   notifier?: INotifier,
-  report?: Report<Params, HistoricalData, SignalData>,
+  report?: Report<Params, HistoricalData, SignalData, Snapshot>,
 }
 
 export
@@ -23,8 +25,9 @@ abstract class SpotRobot<
   Params,
   HistoricalData extends ITimeClose,
   SignalData extends HistoricalData,
+  Snapshot extends ISnapshot,
 > {
-  public constructor(protected config: ISpotRobotConfig<Params, HistoricalData, SignalData>) { }
+  public constructor(protected config: ISpotRobotConfig<Params, HistoricalData, SignalData, Snapshot>) { }
 
   protected logger = new Logger();
 
@@ -73,7 +76,7 @@ abstract class SpotRobot<
   /**
    * 重置回测状态
    */
-  public async Reset(): Promise<SpotRobot<Params, HistoricalData, SignalData>> {
+  public async Reset(): Promise<SpotRobot<Params, HistoricalData, SignalData, Snapshot>> {
     this.historical_last_time = -1;
     this.signal_data = [];
     this.current_index = 0;
