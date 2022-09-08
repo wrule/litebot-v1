@@ -146,6 +146,10 @@ abstract class SpotRobot<
           const tn = await this.signal_action(last_signal);
           if (tn) this.config.report?.Transactions?.Append(tn);
           if (tn) this.transaction_message(tn);
+          this.config.report?.Snapshots?.Append({
+            time: Number(new Date()),
+            valuation: await this.config.executor.Valuation(),
+          } as Snapshot);
         }
       }
     } catch (e) {
