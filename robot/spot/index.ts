@@ -183,19 +183,23 @@ abstract class SpotRobot<
    * @param signal_data 信号数据
    */
   public async BackTestingSignal(signal_data: SignalData[]) {
-    this.config?.report?.SignalData?.Replace(signal_data);
     await this.Reset();
     this.signal_data = signal_data;
-    for (let i = 0; i < this.signal_data.length; ++i) {
-      this.current_index = i;
-      const last_signal = this.look_back();
-      const tn = await this.signal_action(last_signal);
-      if (tn) this.config.report?.Transactions?.Append(tn);
-      this.config.report?.Snapshots?.Append({
-        time: last_signal.time,
-        valuation: await this.config.executor.Valuation(last_signal.close),
-      } as Snapshot);
-    }
+    await Promise.all([
+      this.config?.report?.SignalData?.Replace(signal_data),
+      async () => {
+        for (let i = 0; i < this.signal_data.length; ++i) {
+          this.current_index = i;
+          const last_signal = this.look_back();
+          const tn = await this.signal_action(last_signal);
+          if (tn) this.config.report?.Transactions?.Append(tn);
+          this.config.report?.Snapshots?.Append({
+            time: last_signal.time,
+            valuation: await this.config.executor.Valuation(last_signal.close),
+          } as Snapshot);
+        }
+      },
+    ]);
   }
   /**
    * 历史数据回测
