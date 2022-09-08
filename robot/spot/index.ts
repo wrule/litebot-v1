@@ -130,6 +130,11 @@ abstract class SpotRobot<
       if (historical_data.length < 1) return;
       const last_history = historical_data[historical_data.length - 1];
       if (last_history.time > this.historical_last_time) {
+        const prev_historical_last_time = this.historical_last_time;
+        setImmediate(() => {
+          const append_history = historical_data.filter((history) => history.time > prev_historical_last_time);
+          this.config?.report?.HistoricalData?.Append(...append_history);
+        });
         this.historical_last_time = last_history.time;
         if (historical_data.length >= this.ReadyLength) {
           const signal_data = this.generate_signal_data(historical_data);
