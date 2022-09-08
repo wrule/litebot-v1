@@ -184,8 +184,8 @@ abstract class SpotRobot<
     for (let i = 0; i < this.signal_data.length; ++i) {
       this.current_index = i;
       const last_signal = this.look_back();
-      await this.signal_action(last_signal);
-      await this.config.executor.UpdateSnapshot(last_signal.time, last_signal.close);
+      const tn = await this.signal_action(last_signal);
+      if (tn) this.config.report?.Transactions?.Append(tn);
     }
   }
   /**
