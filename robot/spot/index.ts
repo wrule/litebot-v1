@@ -142,10 +142,10 @@ abstract class SpotRobot<
           setImmediate(() => {
             this.logger.log('新信号:', last_signal);
             this.config.report?.SignalData?.Append(last_signal);
-            if (tn) this.config.report?.Transactions?.Append(tn);
-            if (tn) this.transaction_message(tn);
           });
           const tn = await this.signal_action(last_signal);
+          if (tn) this.config.report?.Transactions?.Append(tn);
+          if (tn) this.transaction_message(tn);
         }
       }
     } catch (e) {
