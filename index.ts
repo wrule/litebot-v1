@@ -11,7 +11,7 @@ console.log('30m', kline.length);
 
 async function back_testing(params: IParams) {
   const executor = new TestSpot({ symbol: 'ETH/USDT', fee: 0.001, init_funds_amount: 100 });
-  const robot = new SRSI_Martin({ params, executor });
+  const robot = new SRSI_Martin({ name: 'test', params, executor });
   await robot.BackTesting(kline);
   return { output: executor.Valuation(1600) }
 }
