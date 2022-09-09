@@ -131,7 +131,7 @@ abstract class SpotRobot<
       const last_history = historical_data[historical_data.length - 1];
       // 发现新的历史数据
       if (last_history.time > this.historical_last_time) {
-        let tn: ITransaction | undefined;
+        let tn: ITransaction | undefined = undefined;
         const prev_historical_last_time = this.historical_last_time;
         setImmediate(() => {
           const append_history = historical_data.filter((history) => history.time > prev_historical_last_time);
