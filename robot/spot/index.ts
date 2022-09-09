@@ -142,10 +142,7 @@ abstract class SpotRobot<
           tn = await this.signal_action(last_signal);
         }
         await Promise.all([
-          (async() => {
-            const append_history = historical_data.filter((history) => history.time > prev_historical_last_time);
-            await this.config?.report?.HistoricalData?.Append(...append_history);
-          })(),
+          (async() => await this.config?.report?.HistoricalData?.Append(...(historical_data.filter((history) => history.time > prev_historical_last_time))))(),
           this.config.report?.SignalData?.Append(last_signal),
           tn && this.config.report?.Transactions?.Append(tn),
           tn && this.transaction_message(tn),
