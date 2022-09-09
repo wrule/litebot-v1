@@ -129,7 +129,9 @@ abstract class SpotRobot<
     try {
       if (historical_data.length < 1) return;
       const last_history = historical_data[historical_data.length - 1];
+      // 发现新的历史数据
       if (last_history.time > this.historical_last_time) {
+        let tn: ITransaction | undefined;
         const prev_historical_last_time = this.historical_last_time;
         setImmediate(() => {
           const append_history = historical_data.filter((history) => history.time > prev_historical_last_time);
@@ -143,14 +145,16 @@ abstract class SpotRobot<
             this.logger.log('新信号:', last_signal);
             this.config.report?.SignalData?.Append(last_signal);
           });
-          const tn = await this.signal_action(last_signal);
-          if (tn) this.config.report?.Transactions?.Append(tn);
-          if (tn) this.transaction_message(tn);
+          tn = await this.signal_action(last_signal);
         }
-        this.config.report?.Snapshots?.Append({
-          time: Number(new Date()),
-          valuation: await this.config.executor.Valuation(),
-        } as Snapshot);
+        await Promise.all([
+          tn && this.config.report?.Transactions?.Append(tn),
+          tn && this.transaction_message(tn),
+          this.config.report?.Snapshots?.Append({
+            time: Number(new Date()),
+            valuation: await this.config.executor.Valuation(),
+          } as Snapshot),
+        ]);
       }
     } catch (e) {
       this.logger.error(e);
