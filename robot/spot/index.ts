@@ -186,7 +186,6 @@ abstract class SpotRobot<
     await this.Reset();
     this.signal_data = signal_data;
     await Promise.all([
-      this.config?.report?.SignalData?.Replace(signal_data),
       (async () => {
         for (let i = 0; i < this.signal_data.length; ++i) {
           this.current_index = i;
@@ -201,6 +200,7 @@ abstract class SpotRobot<
           ]);
         }
       })(),
+      this.config?.report?.SignalData?.Replace(signal_data),
     ]);
   }
   /**
