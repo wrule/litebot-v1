@@ -131,10 +131,10 @@ abstract class SpotRobot<
       const last_history = historical_data[historical_data.length - 1];
       // 发现新的历史数据
       if (last_history.time > this.historical_last_time) {
-        let tn: ITransaction | undefined = undefined;
-        let last_signal: SignalData | null = null;
         const prev_historical_last_time = this.historical_last_time;
         this.historical_last_time = last_history.time;
+        let tn: ITransaction | undefined = undefined;
+        let last_signal: SignalData | null = null;
         if (historical_data.length >= this.ReadyLength) {
           const signal_data = this.generate_signal_data(historical_data);
           last_signal = signal_data[signal_data.length - 1];
