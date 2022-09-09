@@ -133,10 +133,6 @@ abstract class SpotRobot<
       if (last_history.time > this.historical_last_time) {
         let tn: ITransaction | undefined = undefined;
         const prev_historical_last_time = this.historical_last_time;
-        setImmediate(() => {
-          const append_history = historical_data.filter((history) => history.time > prev_historical_last_time);
-          this.config?.report?.HistoricalData?.Append(...append_history);
-        });
         this.historical_last_time = last_history.time;
         if (historical_data.length >= this.ReadyLength) {
           const signal_data = this.generate_signal_data(historical_data);
@@ -148,6 +144,10 @@ abstract class SpotRobot<
           tn = await this.signal_action(last_signal);
         }
         await Promise.all([
+          (async() => {
+            const append_history = historical_data.filter((history) => history.time > prev_historical_last_time);
+            await this.config?.report?.HistoricalData?.Append(...append_history);
+          })(),
           tn && this.config.report?.Transactions?.Append(tn),
           tn && this.transaction_message(tn),
           this.config.report?.Snapshots?.Append({
