@@ -146,7 +146,7 @@ abstract class SpotRobot<
           last_signal && this.config.report?.SignalData?.Append(last_signal),
           tn && this.config.report?.Transactions?.Append(tn),
           this.config.report?.Snapshots?.Append({
-            time: Number(new Date()),
+            time: last_history.time,
             valuation: await this.config.executor.Valuation(),
           } as Snapshot),
           tn && this.transaction_message(tn),
