@@ -133,13 +133,13 @@ abstract class SpotRobot<
       if (last_history.time > this.historical_last_time) {
         const prev_historical_last_time = this.historical_last_time;
         this.historical_last_time = last_history.time;
-        let tn: ITransaction | undefined = undefined;
         let last_signal: SignalData | null = null;
+        let tn: ITransaction | null = null;
         if (historical_data.length >= this.ReadyLength) {
           const signal_data = this.generate_signal_data(historical_data);
           last_signal = signal_data[signal_data.length - 1];
           setImmediate(() => this.logger.log('新信号:', last_signal));
-          tn = await this.signal_action(last_signal);
+          tn = (await this.signal_action(last_signal)) || null;
         }
         await Promise.all([
           this.config?.report?.HistoricalData?.Append(...historical_data.filter((history) => history.time > prev_historical_last_time)),
