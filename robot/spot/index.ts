@@ -142,7 +142,6 @@ abstract class SpotRobot<
           tn = await this.signal_action(last_signal);
         }
         await Promise.all([
-          tn && this.transaction_message(tn),
           this.config?.report?.HistoricalData?.Append(...historical_data.filter((history) => history.time > prev_historical_last_time)),
           last_signal && this.config.report?.SignalData?.Append(last_signal),
           tn && this.config.report?.Transactions?.Append(tn),
@@ -150,6 +149,7 @@ abstract class SpotRobot<
             time: Number(new Date()),
             valuation: await this.config.executor.Valuation(),
           } as Snapshot),
+          tn && this.transaction_message(tn),
         ]);
       }
     } catch (e) {
