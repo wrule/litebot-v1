@@ -132,15 +132,13 @@ abstract class SpotRobot<
       // 发现新的历史数据
       if (last_history.time > this.historical_last_time) {
         let tn: ITransaction | undefined = undefined;
+        let last_signal!: SignalData;
         const prev_historical_last_time = this.historical_last_time;
         this.historical_last_time = last_history.time;
         if (historical_data.length >= this.ReadyLength) {
           const signal_data = this.generate_signal_data(historical_data);
-          const last_signal = signal_data[signal_data.length - 1];
-          setImmediate(() => {
-            this.logger.log('新信号:', last_signal);
-            this.config.report?.SignalData?.Append(last_signal);
-          });
+          last_signal = signal_data[signal_data.length - 1];
+          setImmediate(() => { this.logger.log('新信号:', last_signal) });
           tn = await this.signal_action(last_signal);
         }
         await Promise.all([
@@ -148,6 +146,7 @@ abstract class SpotRobot<
             const append_history = historical_data.filter((history) => history.time > prev_historical_last_time);
             await this.config?.report?.HistoricalData?.Append(...append_history);
           })(),
+          this.config.report?.SignalData?.Append(last_signal),
           tn && this.config.report?.Transactions?.Append(tn),
           tn && this.transaction_message(tn),
           this.config.report?.Snapshots?.Append({
