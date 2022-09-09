@@ -14,6 +14,7 @@ interface ISpotRobotConfig<
   SignalData extends HistoricalData,
   Snapshot extends ISnapshot,
 > {
+  name: string,
   params: Params,
   executor: ISpotExecutor,
   notifier?: INotifier,

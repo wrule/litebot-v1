@@ -53,6 +53,7 @@ extends App {
       logger: new Logger(),
     });
     this.robot = new TwoMaCross({
+      name: '墙头草',
       params: { fast_size: this.config.fast_ma, slow_size: this.config.slow_ma, },
       executor: this.executor,
       notifier: this.notifier,

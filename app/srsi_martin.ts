@@ -56,6 +56,7 @@ extends App {
       logger: new Logger(),
     });
     this.robot = new SRSI_Martin({
+      name: '红眼🐼',
       params: {
         rsi_size: this.config.rsi_size,
         k_size: this.config.k_size,
