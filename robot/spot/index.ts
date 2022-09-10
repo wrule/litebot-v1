@@ -35,13 +35,13 @@ abstract class SpotRobot<
   private used_game_id = -1;
   private current_game_id: number | null = null;
 
-  protected open_game() {
+  protected game_open() {
     this.used_game_id++;
     this.current_game_id = this.used_game_id;
     return this.current_game_id;
   }
 
-  protected change_game(game_id: number) {
+  protected game_change(game_id: number) {
     this.current_game_id = game_id;
   }
 
