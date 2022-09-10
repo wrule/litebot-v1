@@ -95,6 +95,8 @@ abstract class SpotRobot<
    * 重置回测状态
    */
   public async Reset(): Promise<SpotRobot<Params, HistoricalData, SignalData, Snapshot>> {
+    this.used_game_id = -1;
+    this.current_game_id = null;
     this.historical_last_time = -1;
     this.signal_data = [];
     this.current_index = 0;
