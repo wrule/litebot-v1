@@ -68,5 +68,5 @@ interface ITransaction {
   /**
    * 赌局Id(用于标识属于同一场次的交易)
    */
-  game_id?: string;
+  game_id?: number;
 }
