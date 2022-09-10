@@ -78,7 +78,7 @@ class Report<
     const transactions = (await this.Transactions?.All()) || [];
     transactions.forEach((tn) => {
       const index = tn.game_id;
-      if (index) {
+      if (index != null) {
         if (games[index] == null) games[index] = [];
         games[index].push(tn);
       }

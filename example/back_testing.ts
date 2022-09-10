@@ -9,14 +9,15 @@ const kline = ArrayToKLine(ETH_USDT_2h);
 
 async function back_testing(params: IParams) {
   const executor = new TestSpot({ symbol: 'ETH/USDT', fee: 0.001, init_funds_amount: 100, });
+  const report = new MemoryReport();
   const robot = new TwoMaCross({
     name: '回测',
     params: { fast_size: params.fast_size, slow_size: params.slow_size, },
     executor,
-    report: new JSONFileReport('output/kkk'),
-    // report: new MemoryReport(),
+    report: report as any,
   });
   await robot.BackTesting(kline);
+  console.log((await report.Games()).length);
   return executor.Valuation(1600);
 }
 
