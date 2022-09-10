@@ -45,7 +45,7 @@ abstract class SpotRobot<
     this.current_game_id = game_id;
   }
 
-  private fill_game_id(tn?: ITransaction) {
+  private fill_game_id(tn: ITransaction | null) {
     if (tn && this.current_game_id != null) tn.game_id = this.current_game_id;
   }
 
@@ -159,7 +159,7 @@ abstract class SpotRobot<
           last_signal = signal_data[signal_data.length - 1];
           setImmediate(() => this.logger.log('新信号:', last_signal));
           tn = (await this.signal_action(last_signal)) || null;
-          if (tn && this.current_game_id != null) tn.game_id = this.current_game_id;
+          this.fill_game_id(tn);
         }
         await Promise.all([
           this.config?.report?.HistoricalData?.Append(...historical_data.filter((history) => history.time > prev_historical_last_time)),
@@ -210,7 +210,8 @@ abstract class SpotRobot<
         for (let i = 0; i < this.signal_data.length; ++i) {
           this.current_index = i;
           const last_signal = this.look_back();
-          const tn = await this.signal_action(last_signal);
+          const tn = (await this.signal_action(last_signal)) || null;
+          this.fill_game_id(tn);
           await Promise.all([
             tn && this.config.report?.Transactions?.Append(tn),
             this.config.report?.Snapshots?.Append({
