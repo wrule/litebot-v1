@@ -32,6 +32,15 @@ abstract class SpotRobot<
 
   protected logger = new Logger();
 
+  private used_game_id = -1;
+  private current_game_id: number | null = null;
+
+  protected open_game() {
+    this.used_game_id++;
+    this.current_game_id = this.used_game_id;
+    return this.current_game_id;
+  }
+
   //#region 子类需实现部分
   /**
    * 计算可用信号所需要的最小数据长度
