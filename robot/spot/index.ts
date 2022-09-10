@@ -155,6 +155,7 @@ abstract class SpotRobot<
           last_signal = signal_data[signal_data.length - 1];
           setImmediate(() => this.logger.log('新信号:', last_signal));
           tn = (await this.signal_action(last_signal)) || null;
+          if (tn && this.current_game_id != null) tn.game_id = this.current_game_id;
         }
         await Promise.all([
           this.config?.report?.HistoricalData?.Append(...historical_data.filter((history) => history.time > prev_historical_last_time)),
