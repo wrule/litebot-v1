@@ -96,6 +96,7 @@ extends SpotRobot<IParams, IOHLCV, ISignal, ISnapshot> {
     if (signal.sell) {
       return await this.config.executor.SellAll(signal.close, signal.time);
     } else if (signal.buy) {
+      this.game_open();
       return await this.config.executor.BuyAll(signal.close, signal.time);
     }
   }
