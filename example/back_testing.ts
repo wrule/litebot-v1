@@ -1,3 +1,5 @@
+import { JSONFileReport } from '../report/json_file_report';
+import { MemoryReport } from '../report/memory_report';
 import { ArrayToKLine } from '../common/kline';
 import ETH_USDT_2h from '../data/ETH_USDT-2h.json';
 import { TestSpot } from '../executor/spot/test_spot';
@@ -7,13 +9,19 @@ const kline = ArrayToKLine(ETH_USDT_2h);
 
 async function back_testing(params: IParams) {
   const executor = new TestSpot({ symbol: 'ETH/USDT', fee: 0.001, init_funds_amount: 100, });
-  const robot = new TwoMaCross({ params: { fast_ma: params.fast_ma, slow_ma: params.slow_ma, }, executor, });
+  const robot = new TwoMaCross({
+    name: '回测',
+    params: { fast_size: params.fast_size, slow_size: params.slow_size, },
+    executor,
+    // report: new JSONFileReport('output/kkk'),
+    report: new MemoryReport(),
+  });
   await robot.BackTesting(kline);
   return executor.Valuation(1600);
 }
 
 async function main() {
-  console.log(await back_testing({ fast_ma: 9, slow_ma: 44, }));
+  console.log(await back_testing({ fast_size: 9, slow_size: 44, }));
 }
 
 main();
