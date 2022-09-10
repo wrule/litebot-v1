@@ -41,6 +41,10 @@ abstract class SpotRobot<
     return this.current_game_id;
   }
 
+  protected change_game(game_id: number) {
+    this.current_game_id = game_id;
+  }
+
   //#region 子类需实现部分
   /**
    * 计算可用信号所需要的最小数据长度
