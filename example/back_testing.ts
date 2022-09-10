@@ -13,8 +13,8 @@ async function back_testing(params: IParams) {
     name: '回测',
     params: { fast_size: params.fast_size, slow_size: params.slow_size, },
     executor,
-    // report: new JSONFileReport('output/kkk'),
-    report: new MemoryReport(),
+    report: new JSONFileReport('output/kkk'),
+    // report: new MemoryReport(),
   });
   await robot.BackTesting(kline);
   return executor.Valuation(1600);
