@@ -72,4 +72,17 @@ class Report<
   public get Snapshots() {
     return this.config.snapshots;
   }
+
+  public async Games() {
+    const games: ITransaction[][] = [];
+    const transactions = (await this.Transactions?.All()) || [];
+    transactions.forEach((tn) => {
+      const index = tn.game_id;
+      if (index) {
+        if (games[index] == null) games[index] = [];
+        games[index].push(tn);
+      }
+    });
+    return games;
+  }
 }
