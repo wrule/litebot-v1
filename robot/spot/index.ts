@@ -109,10 +109,11 @@ abstract class SpotRobot<
    */
   protected async transaction_message(tn: ITransaction) {
     const time = moment(new Date(tn.transaction_time)).format('HH:mm:ss');
-    const icon = { 'BUY' : '🚀', 'SELL' : '💰' }[tn.action];
-    const action = { 'BUY' : '🤔买了', 'SELL' : '😱卖了' }[tn.action];
+    const action = { 'BUY' : '买了', 'SELL' : '卖了' }[tn.action];
+    const icon_face = { 'BUY' : '🤔', 'SELL' : '😱' }[tn.action];
+    const icon_action = { 'BUY' : '🚀', 'SELL' : '💰' }[tn.action];
     const seconds = Number(((tn.transaction_time - tn.request_time) / 1000).toFixed(3));
-    await this.SendMessage(`[${this.config.name}]\n[${icon} ${time} 耗时: ${seconds}s]\n使用  ${tn.in_amount}个${tn.in_name}   ${action}   ${tn.out_amount}个${tn.out_name}\n期望价: ${tn.expected_price}   成交价: ${tn.price}`);
+    await this.SendMessage(`[${this.config.name}${action}${icon_face}  交易时间: ${time}  走单耗时: ${seconds}s]\n使用 ${tn.in_amount}个${tn.in_name} ${action}${icon_action} ${tn.out_amount}个${tn.out_name}\n期望价: ${tn.expected_price}  成交价: ${tn.price}`);
   }
   //#endregion
 
