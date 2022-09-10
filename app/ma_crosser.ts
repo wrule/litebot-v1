@@ -19,6 +19,7 @@ const dingConfig = require('../.dingtalk.json');
 
 export
 interface IConfig {
+  name: string;
   symbol: string;
   timeframe: string;
   interval?: number;
@@ -53,7 +54,7 @@ extends App {
       logger: new Logger(),
     });
     this.robot = new TwoMaCross({
-      name: '墙头草',
+      name: this.config.name,
       params: { fast_size: this.config.fast_ma, slow_size: this.config.slow_ma, },
       executor: this.executor,
       notifier: this.notifier,
@@ -86,6 +87,7 @@ extends App {
 }
 
 const config = {
+  name: '墙头草',
   symbol: 'ETH/USDT',
   timeframe: '1m',
   interval: 1000,

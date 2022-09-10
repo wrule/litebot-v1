@@ -20,6 +20,7 @@ const dingConfig = require('./.dingtalk.json');
 
 export
 interface IConfig {
+  name: string;
   symbol: string;
   timeframe: string;
   interval?: number;
@@ -56,7 +57,7 @@ extends App {
       logger: new Logger(),
     });
     this.robot = new SRSI_Martin({
-      name: '红眼',
+      name: this.config.name,
       params: {
         rsi_size: this.config.rsi_size,
         k_size: this.config.k_size,
@@ -95,6 +96,7 @@ extends App {
 }
 
 const config = {
+  name: '红眼',
   symbol: 'ETH/USDT',
   timeframe: '1m',
   interval: 1000,
