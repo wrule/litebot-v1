@@ -14,8 +14,8 @@ import yargs from 'yargs/yargs';
 import { hideBin }  from 'yargs/helpers';
 import { JSONFileList } from '../utils/log_list/json_file_list';
 
-const secret = require('../.secret.json');
-const dingConfig = require('../.dingtalk.json');
+const secret = require('./.secret.json');
+const dingConfig = require('./.dingtalk.json');
 
 export
 interface IConfig {
