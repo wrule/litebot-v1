@@ -144,6 +144,7 @@ implements ISpotExecutor {
       out_name: this.assets_name,
       // TODO 查明原因，错误兼容
       out_amount: order.amount - (order.fee?.currency === this.assets_name ? order.fee.cost : 0),
+      valuation: await this.Valuation(price),
     };
     if (!order.fee) {
       await this.irregular_data.Append(order);
@@ -180,6 +181,7 @@ implements ISpotExecutor {
       out_name: this.funds_name,
       // TODO 查明原因，错误兼容
       out_amount: order.cost - (order.fee?.currency === this.funds_name ? order.fee.cost : 0),
+      valuation: await this.Valuation(price),
     };
     if (!order.fee) {
       await this.irregular_data.Append(order);
