@@ -17,7 +17,7 @@ async function back_testing(params: IParams) {
     report: report as any,
   });
   await robot.BackTesting(kline);
-  console.log((await report.Games()).length);
+  console.log('胜率', await report.WinRate());
   return executor.Valuation(1600);
 }
 
