@@ -13,6 +13,7 @@ import { SymbolPathization } from '../common/symbol';
 import yargs from 'yargs/yargs';
 import { hideBin }  from 'yargs/helpers';
 import { JSONFileList } from '../utils/log_list/json_file_list';
+import { JSONFileReport } from '../report/json_file_report';
 
 const secret = require('./.secret.json');
 const dingConfig = require('./.dingtalk.json');
@@ -57,6 +58,7 @@ extends App {
       name: this.config.name,
       params: { fast_size: this.config.fast_ma, slow_size: this.config.slow_ma, },
       executor: this.executor,
+      report: new JSONFileReport(`output/${SymbolPathization(this.config.symbol)}-report-${Number(new Date())}`),
       notifier: this.notifier,
     });
     this.watcher = new KLineWatcher(
