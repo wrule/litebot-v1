@@ -105,6 +105,7 @@ implements ISpotExecutor {
         in_amount: in_amount,
         out_name: this.assets_name,
         out_amount: out_assets,
+        valuation: this.Valuation(price),
       };
       await this.config.transaction_list?.Append(tn);
       return tn;
@@ -137,6 +138,7 @@ implements ISpotExecutor {
         in_amount: in_amount,
         out_name: this.funds_name,
         out_amount: out_funds,
+        valuation: this.Valuation(price),
       };
       await this.config.transaction_list?.Append(tn);
       return tn;
