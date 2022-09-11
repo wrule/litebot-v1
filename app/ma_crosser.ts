@@ -59,7 +59,7 @@ extends App {
       name: this.config.name,
       params: { fast_size: this.config.fast_ma, slow_size: this.config.slow_ma, },
       executor: this.executor,
-      report: new JSONFileReport(`output/${SymbolPathization(this.config.symbol)}-report-${moment(new Date()).format('YYYY-MM-DD HH:mm:ss')}`),
+      report: new JSONFileReport(`output/${SymbolPathization(this.config.symbol)}-report-${moment(new Date()).format('YYYY-MM-DDTHH:mm:ss')}`),
       notifier: this.notifier,
     });
     this.watcher = new KLineWatcher(

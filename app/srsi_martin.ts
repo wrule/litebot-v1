@@ -66,7 +66,7 @@ extends App {
         stoch_size: this.config.stoch_size,
       },
       executor: this.executor,
-      report: new JSONFileReport(`output/${SymbolPathization(this.config.symbol)}-report-${moment(new Date()).format('YYYY-MM-DD HH:mm:ss')}`),
+      report: new JSONFileReport(`output/${SymbolPathization(this.config.symbol)}-report-${moment(new Date()).format('YYYY-MM-DDTHH:mm:ss')}`),
       notifier: this.notifier,
     });
     this.watcher = new KLineWatcher(
