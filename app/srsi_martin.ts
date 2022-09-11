@@ -14,6 +14,7 @@ import yargs from 'yargs/yargs';
 import { hideBin }  from 'yargs/helpers';
 import { SRSI_Martin } from '../robot/spot/srsi_martin';
 import { JSONFileReport } from '../report/json_file_report';
+import moment from 'moment';
 
 const secret = require('./.secret.json');
 const dingConfig = require('./.dingtalk.json');
@@ -65,7 +66,7 @@ extends App {
         stoch_size: this.config.stoch_size,
       },
       executor: this.executor,
-      report: new JSONFileReport(`output/${SymbolPathization(this.config.symbol)}-report-${Number(new Date())}`),
+      report: new JSONFileReport(`output/${SymbolPathization(this.config.symbol)}-report-${moment(new Date()).format('YYYY-MM-DD HH:mm:ss')}`),
       notifier: this.notifier,
     });
     this.watcher = new KLineWatcher(
