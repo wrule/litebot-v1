@@ -85,4 +85,20 @@ class Report<
     });
     return games;
   }
+
+  public async ProfitableGames() {
+    return (await this.Games())
+      .filter((tns) => tns[tns.length - 1].valuation > tns[0].valuation);
+  }
+
+  public async LosingGame() {
+    return (await this.Games())
+      .filter((tns) => tns[tns.length - 1].valuation <= tns[0].valuation);
+  }
+
+  public async WinRate() {
+    const games_length = (await this.Games()).length;
+    if (games_length === 0) return 0;
+    return (await this.ProfitableGames()).length / games_length;
+  }
 }
