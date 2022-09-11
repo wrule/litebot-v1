@@ -1,5 +1,5 @@
 import { IParams, SRSI_Martin } from './robot/spot/srsi_martin';
-import ETH_USDT_1h from './data/ETH_USDT-30m.json';
+const ETH_USDT_1h = require('./data/ETH_USDT-30m.json');
 import { ArrayToKLine } from './common/kline';
 import { TestSpot } from './executor/spot/test_spot';
 import { Optimizer } from './optimizer';
