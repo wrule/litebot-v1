@@ -51,8 +51,8 @@ extends App {
       symbol: this.config.symbol,
       init_funds_amount: this.config.funds,
       init_assets_amount: this.config.assets,
-      transaction_list: new JSONFileList<ITransaction>(`output/${SymbolPathization(this.config.symbol)}-tn.json`),
-      snapshot_list: new JSONFileList<ISnapshot>(`output/${SymbolPathization(this.config.symbol)}-ss.json`),
+      // transaction_list: new JSONFileList<ITransaction>(`output/${SymbolPathization(this.config.symbol)}-tn.json`),
+      // snapshot_list: new JSONFileList<ISnapshot>(`output/${SymbolPathization(this.config.symbol)}-ss.json`),
       logger: new Logger(),
     });
     this.robot = new TwoMaCross({
