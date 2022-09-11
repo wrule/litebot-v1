@@ -208,9 +208,10 @@ implements ISpotExecutor {
     return this.available_assets_amount;
   }
 
-  public async Valuation() {
-    const ticker = await this.config.client.fetchTicker(this.config.symbol);
-    return this.AssetBalance * (ticker.close as number) + this.FundBalance;
+  public async Valuation(price?: number) {
+    if (price == null)
+      price = (await this.config.client.fetchTicker(this.config.symbol)).close as number;
+    return this.AssetBalance * price + this.FundBalance;
   }
 
   public async Transactions() {
