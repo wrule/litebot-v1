@@ -1,3 +1,4 @@
+import { MemoryReport } from '../report/memory_report';
 import { ArrayToKLine } from '../common/kline';
 import { TestSpot } from '../executor/spot/test_spot';
 import { IFunctionOutput, Optimizer } from '../optimizer';
@@ -9,12 +10,16 @@ const kline = ArrayToKLine(ohlcv_data);
 
 async function back_testing(params: IParams): Promise<IFunctionOutput<any>> {
   const executor = new TestSpot({ symbol: 'LINK/USDT', fee: 0.001, init_funds_amount: 100 });
-  const robot = new SRSI_Martin({ name: '', params, executor });
+  const report = new MemoryReport();
+  const robot = new SRSI_Martin({ name: '', params, executor, report: report as any });
   await robot.BackTesting(kline);
+  console.log((await report.WinRate()));
   return { output: executor.Valuation(7.9), };
 }
 
 async function main() {
+  console.log(await back_testing({ rsi_size: 19, k_size: 18, d_size: 15, stoch_size: 56 }));
+  return;
   const opt = new Optimizer({
     space: [
       { name: 'rsi_size', range: [18, 20], },
