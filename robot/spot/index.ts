@@ -166,11 +166,10 @@ abstract class SpotRobot<
         historical_signal = signal_data[signal_data.length - 2];
       }
 
-      const last_history = kline[kline.length - 1];
       // 发现新的历史数据
-      if (last_history.time > this.historical_last_time) {
+      if (last_historical_candle.time > this.historical_last_time) {
         const prev_historical_last_time = this.historical_last_time;
-        this.historical_last_time = last_history.time;
+        this.historical_last_time = last_historical_candle.time;
         let last_signal: SignalData | null = null;
         let tn: ITransaction | null = null;
         if (kline.length >= this.ReadyLength) {
@@ -185,7 +184,7 @@ abstract class SpotRobot<
           last_signal && this.config.report?.SignalData?.Append(last_signal),
           tn && this.config.report?.Transactions?.Append(tn),
           this.config.report?.Snapshots?.Append({
-            time: last_history.time,
+            time: last_historical_candle.time,
             valuation: await this.config.executor.Valuation(),
           } as Snapshot),
           tn && this.transaction_message(tn),
