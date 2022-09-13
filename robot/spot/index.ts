@@ -173,6 +173,12 @@ abstract class SpotRobot<
         active_signal = signal_data[signal_data.length - 1] || active_signal;
       }
 
+      if (last_historical_candle?.time > this.historical_last_time) {
+        // 发出历史信号
+      } else {
+        // 发出活跃信号
+      }
+
       // 发现新的历史数据
       if (last_historical_candle?.time > this.historical_last_time) {
         const prev_historical_last_time = this.historical_last_time;
