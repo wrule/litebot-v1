@@ -149,8 +149,24 @@ abstract class SpotRobot<
   public async CheckKLine(kline: HistoricalData[]): Promise<void> {
     try {
       if (kline.length < 1) return;
-      const last_history = kline[kline.length - 1];
+      // 活跃蜡烛
+      const active_candle = kline[kline.length - 1];
+      // 历史蜡烛列表
+      const historical_candles = kline.slice(0, kline.length - 1);
+      // 最后一个历史蜡烛
+      const last_historical_candle: HistoricalData | null = historical_candles[historical_candles.length - 1] || null;
+      // 活跃信号
+      let active_signal: SignalData = active_candle as SignalData;
+      // 历史信号
+      let historical_signal: SignalData | null = null;
+      // 计算信号
+      if (kline.length >= this.ReadyLength) {
+        const signal_data = this.generate_signal_data(kline);
+        active_signal = signal_data[signal_data.length - 1];
+        historical_signal = signal_data[signal_data.length - 2];
+      }
 
+      const last_history = kline[kline.length - 1];
       // 发现新的历史数据
       if (last_history.time > this.historical_last_time) {
         const prev_historical_last_time = this.historical_last_time;
