@@ -172,18 +172,15 @@ abstract class SpotRobot<
       if (last_historical_candle?.time > this.historical_last_time) {
         const prev_historical_last_time = this.historical_last_time;
         this.historical_last_time = last_historical_candle.time;
-        let last_signal: SignalData | null = null;
         let tn: ITransaction | null = null;
-        if (kline.length >= this.ReadyLength) {
-          const signal_data = this.generate_signal_data(kline);
-          last_signal = signal_data[signal_data.length - 1];
-          setImmediate(() => this.logger.log('新信号:', last_signal));
-          tn = (await this.signal_action(last_signal)) || null;
-          this.fill_game_id(tn);
-        }
+
+        setImmediate(() => this.logger.log('新历史信号:', last_historical_signal));
+        tn = (await this.signal_action(last_historical_signal as SignalData)) || null;
+        this.fill_game_id(tn);
+
         await Promise.all([
           this.config?.report?.HistoricalData?.Append(...kline.filter((history) => history.time > prev_historical_last_time)),
-          last_signal && this.config.report?.SignalData?.Append(last_signal),
+          last_historical_signal && this.config.report?.SignalData?.Append(last_historical_signal),
           tn && this.config.report?.Transactions?.Append(tn),
           this.config.report?.Snapshots?.Append({
             time: last_historical_candle.time,
