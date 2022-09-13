@@ -61,10 +61,15 @@ abstract class SpotRobot<
    */
   protected abstract generate_signal_data(historical_data: HistoricalData[]): SignalData[];
   /**
-   * 信号行为
-   * @param signal 最新的信号
+   * 历史信号行为
+   * @param signal 最新的历史信号
    */
   protected abstract signal_action(signal: SignalData): Promise<ITransaction | undefined>;
+  /**
+   * 活跃信号行为
+   * @param signal 最新的活跃信号
+   */
+  protected abstract active_signal_action(signal: SignalData): Promise<ITransaction | undefined>;
   //#endregion
 
   //#region 对外暴露的方法
