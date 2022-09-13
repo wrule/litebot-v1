@@ -156,10 +156,10 @@ abstract class SpotRobot<
       // 活跃蜡烛
       const active_candle = kline[kline.length - 1];
 
-      // 活跃信号
-      let active_signal: SignalData = active_candle as SignalData;
       // 历史信号
       let historical_signal: SignalData | null = null;
+      // 活跃信号
+      let active_signal: SignalData = active_candle as SignalData;
       // 计算信号
       if (kline.length >= this.ReadyLength) {
         const signal_data = this.generate_signal_data(kline);
