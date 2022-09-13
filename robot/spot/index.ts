@@ -169,7 +169,7 @@ abstract class SpotRobot<
       }
 
       // 发现新的历史数据
-      if (last_historical_candle.time > this.historical_last_time) {
+      if (last_historical_candle?.time > this.historical_last_time) {
         const prev_historical_last_time = this.historical_last_time;
         this.historical_last_time = last_historical_candle.time;
         let last_signal: SignalData | null = null;
