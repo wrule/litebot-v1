@@ -146,10 +146,10 @@ abstract class SpotRobot<
    * 检查实盘历史数据
    * @param historical_data 实盘历史数据
    */
-  public async CheckHistoricalData(historical_data: HistoricalData[]): Promise<void> {
+  public async CheckKLine(kline: HistoricalData[]): Promise<void> {
     try {
-      if (historical_data.length < 1) return;
-      const last_history = historical_data[historical_data.length - 1];
+      if (kline.length < 1) return;
+      const last_history = kline[kline.length - 1];
 
       // 发现新的历史数据
       if (last_history.time > this.historical_last_time) {
@@ -157,15 +157,15 @@ abstract class SpotRobot<
         this.historical_last_time = last_history.time;
         let last_signal: SignalData | null = null;
         let tn: ITransaction | null = null;
-        if (historical_data.length >= this.ReadyLength) {
-          const signal_data = this.generate_signal_data(historical_data);
+        if (kline.length >= this.ReadyLength) {
+          const signal_data = this.generate_signal_data(kline);
           last_signal = signal_data[signal_data.length - 1];
           setImmediate(() => this.logger.log('新信号:', last_signal));
           tn = (await this.signal_action(last_signal)) || null;
           this.fill_game_id(tn);
         }
         await Promise.all([
-          this.config?.report?.HistoricalData?.Append(...historical_data.filter((history) => history.time > prev_historical_last_time)),
+          this.config?.report?.HistoricalData?.Append(...kline.filter((history) => history.time > prev_historical_last_time)),
           last_signal && this.config.report?.SignalData?.Append(last_signal),
           tn && this.config.report?.Transactions?.Append(tn),
           this.config.report?.Snapshots?.Append({
