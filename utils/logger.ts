@@ -20,12 +20,12 @@ class Logger {
 
   public error(...data: any[]) {
     this.meta('ERROR');
-    console.error(...data);
+    console.log(...data);
   }
 
   public warn(...data: any[]) {
     this.meta('WARN');
-    console.warn(...data);
+    console.log(...data);
   }
 }
 
