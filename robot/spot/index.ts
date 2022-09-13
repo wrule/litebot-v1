@@ -173,33 +173,30 @@ abstract class SpotRobot<
         active_signal = signal_data[signal_data.length - 1] || active_signal;
       }
 
+      let tn: ITransaction | null = null;
       if (last_historical_candle?.time > this.historical_last_time) {
         // 发出历史信号
-      } else {
-        // 发出活跃信号
-      }
-
-      // 发现新的历史数据
-      if (last_historical_candle?.time > this.historical_last_time) {
         const prev_historical_last_time = this.historical_last_time;
         this.historical_last_time = last_historical_candle.time;
-        let tn: ITransaction | null = null;
-
-        setImmediate(() => this.logger.log('新历史信号:', last_historical_signal));
+        setImmediate(() => this.logger.log('历史信号:', last_historical_signal));
         tn = (await this.signal_action(last_historical_signal as SignalData)) || null;
-        this.fill_game_id(tn);
-
-        await Promise.all([
-          this.config?.report?.HistoricalData?.Append(...kline.filter((history) => history.time > prev_historical_last_time)),
-          last_historical_signal && this.config.report?.SignalData?.Append(last_historical_signal),
-          tn && this.config.report?.Transactions?.Append(tn),
-          this.config.report?.Snapshots?.Append({
-            time: last_historical_candle.time,
-            valuation: await this.config.executor.Valuation(),
-          } as Snapshot),
-          tn && this.transaction_message(tn),
-        ]);
+      } else {
+        // 发出活跃信号
+        setImmediate(() => this.logger.log('活跃信号:', active_signal));
+        tn = (await this.active_signal_action(active_signal)) || null;
       }
+      this.fill_game_id(tn);
+
+      await Promise.all([
+        this.config?.report?.HistoricalData?.Append(...kline.filter((history) => history.time > prev_historical_last_time)),
+        last_historical_signal && this.config.report?.SignalData?.Append(last_historical_signal),
+        tn && this.config.report?.Transactions?.Append(tn),
+        this.config.report?.Snapshots?.Append({
+          time: last_historical_candle.time,
+          valuation: await this.config.executor.Valuation(),
+        } as Snapshot),
+        tn && this.transaction_message(tn),
+      ]);
 
     } catch (e) {
       this.logger.error(e);
