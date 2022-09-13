@@ -174,9 +174,9 @@ abstract class SpotRobot<
       }
 
       let tn: ITransaction | null = null;
+      const prev_historical_last_time = this.historical_last_time;
       if (last_historical_candle?.time > this.historical_last_time) {
         // 发出历史信号
-        const prev_historical_last_time = this.historical_last_time;
         this.historical_last_time = last_historical_candle.time;
         setImmediate(() => this.logger.log('历史信号:', last_historical_signal));
         tn = (await this.signal_action(last_historical_signal as SignalData)) || null;
@@ -188,7 +188,7 @@ abstract class SpotRobot<
       this.fill_game_id(tn);
 
       await Promise.all([
-        this.config?.report?.HistoricalData?.Append(...kline.filter((history) => history.time > prev_historical_last_time)),
+        this.config?.report?.HistoricalData?.Append(...historical_candles.filter((history) => history.time > prev_historical_last_time)),
         last_historical_signal && this.config.report?.SignalData?.Append(last_historical_signal),
         tn && this.config.report?.Transactions?.Append(tn),
         this.config.report?.Snapshots?.Append({
