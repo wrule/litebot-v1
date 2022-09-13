@@ -160,11 +160,12 @@ abstract class SpotRobot<
       let historical_signal: SignalData | null = null;
       // 活跃信号
       let active_signal: SignalData = active_candle as SignalData;
+
       // 计算信号
       if (kline.length >= this.ReadyLength) {
         const signal_data = this.generate_signal_data(kline);
-        active_signal = signal_data[signal_data.length - 1];
-        historical_signal = signal_data[signal_data.length - 2];
+        historical_signal = signal_data[signal_data.length - 2] || last_historical_candle;
+        active_signal = signal_data[signal_data.length - 1] || active_signal;
       }
 
       // 发现新的历史数据
