@@ -69,7 +69,7 @@ abstract class SpotRobot<
    * 活跃信号行为
    * @param signal 最新的活跃信号
    */
-  protected abstract active_signal_action(signal: SignalData): Promise<ITransaction | undefined>;
+  protected async active_signal_action(signal: SignalData): Promise<ITransaction | undefined> { return undefined; }
   //#endregion
 
   //#region 对外暴露的方法
