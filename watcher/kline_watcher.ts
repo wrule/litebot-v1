@@ -1,10 +1,10 @@
 import { binance } from 'ccxt';
-import { ArrayToKLineSnapshot, IKLineSnapshot } from '../common/kline';
+import { ArrayToKLine, KLine } from '../common/kline';
 import { Watcher } from '.';
 
 export
 class KLineWatcher
-extends Watcher<IKLineSnapshot> {
+extends Watcher<KLine> {
   public constructor(
     private client: binance,
     private interval = 1000,
@@ -22,8 +22,8 @@ extends Watcher<IKLineSnapshot> {
     this.timer = setTimeout(async () => {
       try {
         const list = await this.client.fetchOHLCV(this.symbol, this.timeframe, undefined, this.length);
-        const kline_snapshot = ArrayToKLineSnapshot(list);
-        this.update(kline_snapshot);
+        const kline = ArrayToKLine(list);
+        this.update(kline);
       } catch (e) {
         this.logger.error(e);
       } finally {
