@@ -15,7 +15,9 @@ async function main() {
   console.log('加载完成');
   const watcher = new KLineWatcher(client, 1000, 'ETH/USDT', '30m', 100);
   watcher.Subscribe((kline) => {
-    console.log(kline.length);
+    const last = kline[kline.length - 1];
+    const prev = kline[kline.length - 2];
+    console.log(kline.length, prev.close, last.close);
   });
   watcher.Start();
 }
