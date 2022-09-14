@@ -167,7 +167,6 @@ abstract class SpotRobot<
       const prev_historical_last_time = this.historical_last_time;
       // 准备交易
       let tn: ITransaction | null = null;
-      let active = true;
       if (last_historical_candle && last_historical_candle.time > this.historical_last_time) {
         this.historical_last_time = last_historical_candle.time;
         // 发出历史信号
