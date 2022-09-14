@@ -184,14 +184,15 @@ abstract class SpotRobot<
       }
       // 尝试填充赌局信息
       this.fill_game_id(tn);
-
+      // 是否产生了新的历史数据
       const new_history = this.historical_last_time > prev_historical_last_time;
+      // 数据后置记录
       await Promise.all([
         new_history && this.config.report?.HistoricalData?.Append(...historical_candles.filter((history) => history.time > prev_historical_last_time)),
         new_history && this.config.report?.SignalData?.Append(last_historical_signal),
         new_history && this.config.report?.Snapshots?.Append({
           time: last_historical_candle?.time,
-          valuation: await this.config.executor.Valuation(),
+          valuation: await this.config.executor.Valuation(last_historical_candle?.close),
         } as Snapshot),
         tn && this.config.report?.Transactions?.Append(tn),
         tn && this.transaction_message(tn),
