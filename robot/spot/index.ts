@@ -188,11 +188,11 @@ abstract class SpotRobot<
       await Promise.all([
         this.config?.report?.HistoricalData?.Append(...historical_candles.filter((history) => history.time > prev_historical_last_time)),
         last_historical_signal && this.config.report?.SignalData?.Append(last_historical_signal),
-        tn && this.config.report?.Transactions?.Append(tn),
         this.config.report?.Snapshots?.Append({
           time: last_historical_candle.time,
           valuation: await this.config.executor.Valuation(),
         } as Snapshot),
+        tn && this.config.report?.Transactions?.Append(tn),
         tn && this.transaction_message(tn),
       ]);
 
