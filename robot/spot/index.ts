@@ -171,11 +171,11 @@ abstract class SpotRobot<
 
       let tn: ITransaction | null = null;
       const prev_historical_last_time = this.historical_last_time;
-      if (last_historical_candle?.time > this.historical_last_time) {
-        // 发出历史信号
+      if (last_historical_candle && last_historical_candle.time > this.historical_last_time) {
         this.historical_last_time = last_historical_candle.time;
+        // 发出历史信号
         setImmediate(() => this.logger.log('历史信号:', last_historical_signal));
-        tn = (await this.signal_action(last_historical_signal as SignalData)) || null;
+        tn = (await this.signal_action(last_historical_signal)) || null;
       } else {
         // 发出活跃信号
         setImmediate(() => this.logger.log('活跃信号:', active_signal));
