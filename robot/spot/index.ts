@@ -164,11 +164,10 @@ abstract class SpotRobot<
       let active_signal = active_candle as SignalData;
       // 历史信号
       let last_historical_signal = last_historical_candle as SignalData | null;
-
       // 计算信号
       const signal_data = this.generate_signal_data(kline);
-      last_historical_signal = signal_data[signal_data.length - 2] || last_historical_signal;
       active_signal = signal_data[signal_data.length - 1] || active_signal;
+      last_historical_signal = signal_data[signal_data.length - 2] || last_historical_signal;
 
       let tn: ITransaction | null = null;
       const prev_historical_last_time = this.historical_last_time;
