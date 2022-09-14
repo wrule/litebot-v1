@@ -1,4 +1,6 @@
 import { binance } from 'ccxt';
+import { TestSpot } from './executor/spot/test_spot';
+import { TwoMaCross } from './robot/spot/two_ma_cross';
 import { KLineWatcher } from './watcher/kline_watcher';
 
 const secret = require('../.secret.json');
@@ -14,10 +16,24 @@ async function main() {
   await client.loadMarkets();
   console.log('加载完成');
   const watcher = new KLineWatcher(client, 1000, 'ETH/USDT', '30m', 100);
+  const executor = new TestSpot({
+    symbol: 'ETH/USDT',
+    fee: 0.001,
+    init_funds_amount: 100,
+  });
+  const robot = new TwoMaCross({
+    name: '测试',
+    params: {
+      fast_size: 9,
+      slow_size: 44,
+    },
+    executor,
+  });
   watcher.Subscribe((kline) => {
     const last = kline[kline.length - 1];
     const prev = kline[kline.length - 2];
-    console.log(kline.length, prev.close, last.close);
+    // console.log(kline.length, prev.close, last.close);
+    robot.CheckKLine(kline);
   });
   watcher.Start();
 }
