@@ -168,9 +168,10 @@ abstract class SpotRobot<
       const signal_data = this.generate_signal_data(kline);
       active_signal = signal_data[signal_data.length - 1] || active_signal;
       last_historical_signal = signal_data[signal_data.length - 2] || last_historical_signal;
-
-      let tn: ITransaction | null = null;
+      // 备份历史时间
       const prev_historical_last_time = this.historical_last_time;
+      // 准备交易
+      let tn: ITransaction | null = null;
       if (last_historical_candle && last_historical_candle.time > this.historical_last_time) {
         this.historical_last_time = last_historical_candle.time;
         // 发出历史信号
@@ -181,6 +182,7 @@ abstract class SpotRobot<
         setImmediate(() => this.logger.log('活跃信号:', active_signal));
         tn = (await this.active_signal_action(active_signal)) || null;
       }
+      // 尝试填充赌局信息
       this.fill_game_id(tn);
 
       await Promise.all([
