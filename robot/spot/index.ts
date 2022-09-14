@@ -156,14 +156,15 @@ abstract class SpotRobot<
       if (kline.length < 1) return;
       // 历史蜡烛列表
       const historical_candles = kline.slice(0, kline.length - 1);
-      // 最后一个历史蜡烛
-      const last_historical_candle: HistoricalData | null = kline[kline.length - 2] || null;
       // 活跃蜡烛
       const active_candle = kline[kline.length - 1];
-      // 历史信号
-      let last_historical_signal: SignalData | null = last_historical_candle as SignalData | null;
+      // 最后一个历史蜡烛
+      const last_historical_candle = (kline[kline.length - 2] || null) as HistoricalData | null;
       // 活跃信号
-      let active_signal: SignalData = active_candle as SignalData;
+      let active_signal = active_candle as SignalData;
+      // 历史信号
+      let last_historical_signal = last_historical_candle as SignalData | null;
+
       // 计算信号
       const signal_data = this.generate_signal_data(kline);
       last_historical_signal = signal_data[signal_data.length - 2] || last_historical_signal;
