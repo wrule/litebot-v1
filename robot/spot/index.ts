@@ -64,12 +64,7 @@ abstract class SpotRobot<
    * 历史信号行为
    * @param signal 最新的历史信号
    */
-  protected abstract signal_action(signal: SignalData): Promise<ITransaction | undefined>;
-  /**
-   * 活跃信号行为
-   * @param signal 最新的活跃信号
-   */
-  protected async active_signal_action(signal: SignalData): Promise<ITransaction | undefined> { return undefined; }
+  protected abstract signal_action(signal: SignalData, active: boolean): Promise<ITransaction | undefined>;
   //#endregion
 
   //#region 对外暴露的方法
@@ -172,15 +167,16 @@ abstract class SpotRobot<
       const prev_historical_last_time = this.historical_last_time;
       // 准备交易
       let tn: ITransaction | null = null;
+      let active = true;
       if (last_historical_candle && last_historical_candle.time > this.historical_last_time) {
         this.historical_last_time = last_historical_candle.time;
         // 发出历史信号
         setImmediate(() => this.logger.log('历史信号:', last_historical_signal));
-        tn = (await this.signal_action(last_historical_signal)) || null;
+        tn = (await this.signal_action(last_historical_signal, false)) || null;
       } else {
         // 发出活跃信号
         setImmediate(() => this.logger.log('活跃信号:', active_signal));
-        tn = (await this.active_signal_action(active_signal)) || null;
+        tn = (await this.signal_action(active_signal, true)) || null;
       }
       // 尝试填充赌局信息
       this.fill_game_id(tn);
