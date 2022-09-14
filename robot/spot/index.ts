@@ -159,11 +159,11 @@ abstract class SpotRobot<
       // 活跃蜡烛
       const active_candle = kline[kline.length - 1];
       // 最后一个历史蜡烛
-      const last_historical_candle = (kline[kline.length - 2] || null) as HistoricalData | null;
+      const last_historical_candle = kline[kline.length - 2];
       // 活跃信号
       let active_signal = active_candle as SignalData;
       // 历史信号
-      let last_historical_signal = last_historical_candle as SignalData | null;
+      let last_historical_signal = last_historical_candle as SignalData;
 
       // 计算信号
       const signal_data = this.generate_signal_data(kline);
