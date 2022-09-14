@@ -197,7 +197,6 @@ abstract class SpotRobot<
         tn && this.config.report?.Transactions?.Append(tn),
         tn && this.transaction_message(tn),
       ]);
-
     } catch (e) {
       this.logger.error(e);
     }
