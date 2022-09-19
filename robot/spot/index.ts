@@ -145,8 +145,8 @@ abstract class SpotRobot<
   private historical_last_time = -1;
 
   /**
-   * 检查实盘历史数据
-   * @param historical_data 实盘历史数据
+   * 实盘K线检查
+   * @param historical_data 实盘K线
    */
   public async CheckKLine(kline: HistoricalData[]): Promise<void> {
     try {
