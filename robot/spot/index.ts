@@ -186,7 +186,7 @@ abstract class SpotRobot<
       // 数据后置记录
       await Promise.all([
         new_history && this.config.report?.HistoricalData?.Append(...historical_candles.filter((history) => history.time > prev_historical_last_time)),
-        new_history && this.config.report?.SignalData?.Append(last_historical_signal),
+        new_history && this.config.report?.SignalData?.Append(last_historical_signal as SignalData),
         new_history && this.config.report?.Snapshots?.Append({
           time: last_historical_candle?.time,
           valuation: await this.config.executor.Valuation(last_historical_candle?.close),
