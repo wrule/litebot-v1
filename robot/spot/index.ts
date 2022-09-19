@@ -185,7 +185,7 @@ abstract class SpotRobot<
       const new_history = this.historical_last_time > prev_historical_last_time;
       // 数据后置记录
       await Promise.all([
-        new_history && this.config.report?.InputData?.Append(...historical_candles.filter((history) => history.time > prev_historical_last_time)),
+        new_history && this.config.report?.HistoricalData?.Append(...historical_candles.filter((history) => history.time > prev_historical_last_time)),
         new_history && this.config.report?.SignalData?.Append(last_historical_signal as SignalData),
         new_history && this.config.report?.Snapshots?.Append({
           time: last_historical_candle?.time,
@@ -255,7 +255,7 @@ abstract class SpotRobot<
   public async BackTesting(historical_data: InputData[]) {
     await Promise.all([
       this.BackTestingSignal(this.generate_signal_data(historical_data)),
-      this.config?.report?.InputData?.Replace(historical_data),
+      this.config?.report?.HistoricalData?.Replace(historical_data),
     ]);
   }
   //#endregion
