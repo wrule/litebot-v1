@@ -175,11 +175,11 @@ abstract class SpotRobot<
         this.historical_last_time = last_historical_candle.time;
         // 发出历史信号
         setImmediate(() => this.logger.log('历史信号:', last_historical_signal));
-        tn = (await this.signal_action(last_historical_signal, false)) || null;
+        tn = (await this.signal_action(last_historical_signal)) || null;
       } else {
         // 发出活跃信号
         setImmediate(() => this.logger.log('活跃信号:', active_signal));
-        tn = (await this.signal_action(active_signal, true)) || null;
+        tn = (await this.signal_action(active_signal)) || null;
       }
       // 尝试填充赌局信息
       this.fill_game_id(tn);
