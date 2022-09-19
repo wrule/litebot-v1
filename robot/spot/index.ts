@@ -64,7 +64,11 @@ abstract class SpotRobot<
    * 历史信号行为
    * @param signal 最新的历史信号
    */
-  protected abstract signal_action(signal: SignalData, active: boolean): Promise<ITransaction | undefined>;
+  protected abstract signal_action(signal: SignalData): Promise<ITransaction | undefined>;
+
+  protected abstract stop_loss(signal: ITimeClose): Promise<ITransaction | undefined>;
+
+  protected abstract take_profit(signal: SignalData): Promise<ITransaction | undefined>;
   //#endregion
 
   //#region 对外暴露的方法
