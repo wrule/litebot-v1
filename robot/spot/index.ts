@@ -1,10 +1,10 @@
-import { IOHLCV, ITimeClose, KLine } from '../../common/kline';
-import { INotifier } from '../../notifier';
-import { Report } from '../../report';
-import { Logger } from '../../utils/logger';
-import { ISpotExecutor } from '../../executor/spot';
-import { ITransaction } from '../../common/transaction';
-import { ISnapshot } from '../../common/snapshot';
+import { IOHLCV, ITimeClose, KLine } from '@/common/kline';
+import { INotifier } from '@/notifier';
+import { Report } from '@/report';
+import { Logger } from '@/utils/logger';
+import { ISpotExecutor } from '@/executor/spot';
+import { ITransaction } from '@/common/transaction';
+import { ISnapshot } from '@/common/snapshot';
 import moment from 'moment';
 
 export
