@@ -10,7 +10,7 @@ import moment from 'moment';
 export
 interface ISpotRobotConfig<
   Params,
-  HistoricalData extends ITimeClose,
+  HistoricalData extends IOHLCV,
   SignalData extends HistoricalData,
   Snapshot extends ISnapshot,
 > {
