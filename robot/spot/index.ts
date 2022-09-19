@@ -66,7 +66,7 @@ abstract class SpotRobot<
    */
   protected abstract signal_action(signal: SignalData): Promise<ITransaction | undefined>;
 
-  protected abstract stop_loss(signal: ITimeClose, forced_price?: number): Promise<ITransaction | undefined>;
+  protected abstract active_signal_action(signal: ITimeClose, lagging?: boolean): Promise<ITransaction | undefined>;
   //#endregion
 
   //#region 对外暴露的方法
