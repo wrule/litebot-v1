@@ -232,7 +232,7 @@ abstract class SpotRobot<
         for (let i = 0; i < this.signal_data.length; ++i) {
           this.current_index = i;
           const last_signal = this.look_back();
-          const tn = (await this.signal_action(last_signal, false)) || null;
+          const tn = (await this.signal_action(last_signal)) || null;
           this.fill_game_id(tn);
           await Promise.all([
             tn && this.config.report?.Transactions?.Append(tn),
