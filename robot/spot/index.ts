@@ -24,7 +24,7 @@ interface ISpotRobotConfig<
 export
 abstract class SpotRobot<
   Params,
-  HistoricalData extends ITimeClose,
+  HistoricalData extends IOHLCV,
   SignalData extends HistoricalData,
   Snapshot extends ISnapshot,
 > {
