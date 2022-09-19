@@ -150,6 +150,7 @@ abstract class SpotRobot<
    */
   public async CheckKLine(kline: HistoricalData[]): Promise<void> {
     try {
+      // 为空则弃用
       if (kline.length < 1) return;
       // 历史蜡烛列表
       const historical_candles = kline.slice(0, kline.length - 1);
