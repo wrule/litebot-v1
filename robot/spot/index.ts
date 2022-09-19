@@ -10,25 +10,25 @@ import moment from 'moment';
 export
 interface ISpotRobotConfig<
   Params,
-  HistoricalData extends IOHLCV,
-  SignalData extends HistoricalData,
+  InputData extends IOHLCV,
+  SignalData extends InputData,
   Snapshot extends ISnapshot,
 > {
   name: string,
   params: Params,
   executor: ISpotExecutor,
   notifier?: INotifier,
-  report?: Report<Params, HistoricalData, SignalData, Snapshot>,
+  report?: Report<Params, InputData, SignalData, Snapshot>,
 }
 
 export
 abstract class SpotRobot<
   Params,
-  HistoricalData extends IOHLCV,
-  SignalData extends HistoricalData,
+  InputData extends IOHLCV,
+  SignalData extends InputData,
   Snapshot extends ISnapshot,
 > {
-  public constructor(protected config: ISpotRobotConfig<Params, HistoricalData, SignalData, Snapshot>) { }
+  public constructor(protected config: ISpotRobotConfig<Params, InputData, SignalData, Snapshot>) { }
 
   protected logger = new Logger();
 
@@ -59,7 +59,7 @@ abstract class SpotRobot<
    * @param historical_data 历史数据
    * @returns 信号数据
    */
-  protected abstract generate_signal_data(historical_data: HistoricalData[]): SignalData[];
+  protected abstract generate_signal_data(historical_data: InputData[]): SignalData[];
   /**
    * 历史信号行为
    * @param signal 最新的历史信号
@@ -90,13 +90,13 @@ abstract class SpotRobot<
    * @param historical_data 历史数据
    * @returns 信号数据
    */
-  public GenerateSignalData(historical_data: HistoricalData[]) {
+  public GenerateSignalData(historical_data: InputData[]) {
     return this.generate_signal_data(historical_data);
   }
   /**
    * 重置回测状态
    */
-  public async Reset(): Promise<SpotRobot<Params, HistoricalData, SignalData, Snapshot>> {
+  public async Reset(): Promise<SpotRobot<Params, InputData, SignalData, Snapshot>> {
     this.used_game_id = -1;
     this.current_game_id = null;
     this.historical_last_time = -1;
@@ -115,7 +115,7 @@ abstract class SpotRobot<
    * @returns 信号数据
    */
   protected fill_signal_data(
-    historical_data: HistoricalData[],
+    historical_data: InputData[],
     filler: (data: SignalData, index: number) => void,
   ): SignalData[] {
     return historical_data.map((history, index) => {
@@ -148,7 +148,7 @@ abstract class SpotRobot<
    * 实盘K线检查
    * @param historical_data 实盘K线
    */
-  public async CheckKLine(kline: HistoricalData[]): Promise<void> {
+  public async CheckKLine(kline: InputData[]): Promise<void> {
     try {
       // 为空则弃用
       if (kline.length < 1) return;
@@ -157,7 +157,7 @@ abstract class SpotRobot<
       // 活跃蜡烛
       const active_candle = kline[kline.length - 1];
       // 最后一个历史蜡烛
-      const last_historical_candle = (kline[kline.length - 2] || null) as HistoricalData | null;
+      const last_historical_candle = (kline[kline.length - 2] || null) as InputData | null;
       // 活跃信号
       const active_signal = { time: active_candle.time, close: active_candle.close } as ITimeClose;
       // 历史信号
@@ -185,7 +185,7 @@ abstract class SpotRobot<
       const new_history = this.historical_last_time > prev_historical_last_time;
       // 数据后置记录
       await Promise.all([
-        new_history && this.config.report?.HistoricalData?.Append(...historical_candles.filter((history) => history.time > prev_historical_last_time)),
+        new_history && this.config.report?.InputData?.Append(...historical_candles.filter((history) => history.time > prev_historical_last_time)),
         new_history && this.config.report?.SignalData?.Append(last_historical_signal as SignalData),
         new_history && this.config.report?.Snapshots?.Append({
           time: last_historical_candle?.time,
@@ -252,10 +252,10 @@ abstract class SpotRobot<
    * 历史数据回测
    * @param historical_data 历史数据
    */
-  public async BackTesting(historical_data: HistoricalData[]) {
+  public async BackTesting(historical_data: InputData[]) {
     await Promise.all([
       this.BackTestingSignal(this.generate_signal_data(historical_data)),
-      this.config?.report?.HistoricalData?.Replace(historical_data),
+      this.config?.report?.InputData?.Replace(historical_data),
     ]);
   }
   //#endregion
