@@ -66,7 +66,7 @@ abstract class SpotRobot<
    */
   protected abstract signal_action(signal: SignalData): Promise<ITransaction | undefined>;
 
-  protected abstract stop_loss(signal: ITimeClose): Promise<ITransaction | undefined>;
+  protected abstract stop_loss(signal: ITimeClose, forced_price?: number): Promise<ITransaction | undefined>;
   //#endregion
 
   //#region 对外暴露的方法
@@ -232,6 +232,8 @@ abstract class SpotRobot<
         for (let i = 0; i < this.signal_data.length; ++i) {
           this.current_index = i;
           const last_signal = this.look_back();
+          this.stop_loss({ time: last_signal.time, close: last_signal.close });
+          this.stop_loss({ time: last_signal.time, close: last_signal.close });
           const tn = (await this.signal_action(last_signal)) || null;
           this.fill_game_id(tn);
           await Promise.all([
