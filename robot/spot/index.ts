@@ -177,7 +177,7 @@ abstract class SpotRobot<
       } else {
         // 发出活跃信号
         setImmediate(() => this.logger.log('活跃信号:', active_signal));
-        tn = (await this.stop_loss(active_signal)) || null;
+        tn = (await this.active_signal_action(active_signal)) || null;
       }
       // 尝试填充赌局信息
       this.fill_game_id(tn);
@@ -233,8 +233,9 @@ abstract class SpotRobot<
           this.current_index = i;
           const last_signal = this.look_back();
           let tns: (ITransaction | null)[] = [];
-          tns.push((await this.stop_loss({ time: last_signal.time, close: last_signal.open }, last_signal.open)) || null);
-          tns.push((await this.stop_loss({ time: last_signal.time, close: last_signal.low })) || null);
+          tns.push((await this.active_signal_action({ time: last_signal.time, close: last_signal.open })) || null);
+          tns.push((await this.active_signal_action({ time: last_signal.time, close: last_signal.high }, true)) || null);
+          tns.push((await this.active_signal_action({ time: last_signal.time, close: last_signal.low }, true)) || null);
           tns.push((await this.signal_action(last_signal)) || null);
           tns = tns.filter((tn) => tn);
           tns.forEach((tn) => this.fill_game_id(tn));
