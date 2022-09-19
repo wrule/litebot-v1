@@ -232,12 +232,14 @@ abstract class SpotRobot<
         for (let i = 0; i < this.signal_data.length; ++i) {
           this.current_index = i;
           const last_signal = this.look_back();
-          this.stop_loss({ time: last_signal.time, close: last_signal.close });
-          this.stop_loss({ time: last_signal.time, close: last_signal.close });
-          const tn = (await this.signal_action(last_signal)) || null;
-          this.fill_game_id(tn);
+          let tns: (ITransaction | null)[] = [];
+          tns.push((await this.stop_loss({ time: last_signal.time, close: last_signal.open }, last_signal.open)) || null);
+          tns.push((await this.stop_loss({ time: last_signal.time, close: last_signal.low })) || null);
+          tns.push((await this.signal_action(last_signal)) || null);
+          tns = tns.filter((tn) => tn);
+          tns.forEach((tn) => this.fill_game_id(tn));
           await Promise.all([
-            tn && this.config.report?.Transactions?.Append(tn),
+            tns.length > 0 && this.config.report?.Transactions?.Append(...(tns as ITransaction[])),
             this.config.report?.Snapshots?.Append({
               time: last_signal.time,
               valuation: await this.config.executor.Valuation(last_signal.close),
