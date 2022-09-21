@@ -52,3 +52,5 @@
 4. CLOSE为完全数据
 
 ## 还是活跃信号的方式比较合适
+
+## 实盘CheckKLine Review完毕
