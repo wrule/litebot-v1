@@ -7,6 +7,9 @@ import { ITransaction } from '@/common/transaction';
 import { ISnapshot } from '@/common/snapshot';
 import moment from 'moment';
 
+/**
+ * 现货机器人配置
+ */
 export
 interface ISpotRobotConfig<
   Params,
@@ -14,7 +17,7 @@ interface ISpotRobotConfig<
   SignalData extends InputData,
   Snapshot extends ISnapshot,
 > {
-  name: string,
+  name?: string,
   params: Params,
   executor: ISpotExecutor,
   notifier?: INotifier,
