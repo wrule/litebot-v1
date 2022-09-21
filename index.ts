@@ -15,7 +15,6 @@ async function main() {
   console.log('加载市场');
   await client.loadMarkets();
   console.log('加载完成');
-  const watcher = new KLineWatcher(client, 1000, 'ETH/USDT', '1m', 100);
   const executor = new TestSpot({
     symbol: 'ETH/USDT',
     fee: 0.001,
@@ -29,6 +28,7 @@ async function main() {
     },
     executor,
   });
+  const watcher = new KLineWatcher(client, 1000, 'ETH/USDT', '1m', 100);
   watcher.Subscribe((kline) => {
     robot.CheckKLine(kline);
   });
