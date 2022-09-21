@@ -30,9 +30,6 @@ async function main() {
     executor,
   });
   watcher.Subscribe((kline) => {
-    const last = kline[kline.length - 1];
-    const prev = kline[kline.length - 2];
-    // console.log(kline.length, prev.close, last.close);
     robot.CheckKLine(kline);
   });
   watcher.Start();
