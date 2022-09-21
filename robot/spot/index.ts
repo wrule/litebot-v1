@@ -38,6 +38,7 @@ abstract class SpotRobot<
 
   protected logger = new Logger();
 
+  //#region 赌局控制相关
   private used_game_id = -1;
   private current_game_id: number | null = null;
 
@@ -54,6 +55,7 @@ abstract class SpotRobot<
   private fill_game_id(tn: ITransaction | null) {
     if (tn && this.current_game_id != null) tn.game_id = this.current_game_id;
   }
+  //#endregion
 
   //#region 子类需实现部分
   /**
