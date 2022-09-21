@@ -148,7 +148,7 @@ abstract class SpotRobot<
 
   /**
    * 实盘K线检查
-   * @param historical_data 实盘K线
+   * @param kline 实盘K线
    */
   public async CheckKLine(kline: InputData[]): Promise<void> {
     try {
