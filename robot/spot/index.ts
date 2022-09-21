@@ -72,6 +72,10 @@ abstract class SpotRobot<
    */
   protected abstract ready_length(): number;
   /**
+   * 提供给watcher的监控数据长度(可覆盖)
+   */
+  protected watch_length() { return this.ready_length() + 1; }
+  /**
    * 生成信号数据
    * @param historical_data 历史数据
    * @returns 信号数据
