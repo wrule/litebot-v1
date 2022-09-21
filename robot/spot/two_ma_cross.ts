@@ -74,6 +74,5 @@ extends SpotRobot<IParams, IOHLCV, ISignal, ISnapshot> {
 
   protected override async stop_signal_action(signal: ITimeClose, lagging?: boolean) {
     console.log('aaa:', signal.close);
-    return undefined;
   }
 }
