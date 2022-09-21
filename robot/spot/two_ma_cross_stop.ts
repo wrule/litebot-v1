@@ -82,7 +82,7 @@ extends SpotRobot<IParams, IOHLCV, ISignal, ISnapshot> {
     if (this.buy_tn) {
       const diff = signal.close - this.buy_tn.price;
       const diff_rate = diff / this.buy_tn.price;
-      if (diff_rate < -0.08) {
+      if (diff_rate < -0.1) {
         const sell_tn = await this.config.executor.SellAll(signal.close, signal.time);
         this.buy_tn = null;
         return sell_tn;
