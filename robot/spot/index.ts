@@ -82,6 +82,10 @@ abstract class SpotRobot<
   //#endregion
 
   //#region 对外暴露的方法
+  /**
+   * 发送消息
+   * @param message 消息
+   */
   public async SendMessage(message: string) {
     await this.config.notifier?.SendMessage(message);
   }
