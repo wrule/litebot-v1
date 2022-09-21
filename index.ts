@@ -26,7 +26,7 @@ async function main() {
     params: {
       fast_size: 9,
       slow_size: 44,
-      stop_rate: 0.035,
+      stop_rate: 0.028,
     },
     executor,
   });
