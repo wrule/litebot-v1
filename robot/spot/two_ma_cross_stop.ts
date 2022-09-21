@@ -82,7 +82,10 @@ extends SpotRobot<IParams, IOHLCV, ISignal, ISnapshot> {
     if (this.buy_tn) {
       const rate = signal.close / this.buy_tn.price;
       if (rate < 0.9) {
-        const sell_tn = await this.config.executor.SellAll(signal.close, signal.time);
+        const sell_tn = await this.config.executor.SellAll(
+          signal.close,
+          signal.time,
+        );
         this.buy_tn = null;
         return sell_tn;
       }
