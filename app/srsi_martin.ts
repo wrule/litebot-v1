@@ -89,8 +89,8 @@ extends App {
     this.logger.log('加载市场');
     await this.client.loadMarkets();
     this.logger.log('加载完成');
-    this.watcher.Subscribe((kline_snapshot) => {
-      this.robot.CheckHistoricalData(kline_snapshot.confirmed_kline);
+    this.watcher.Subscribe((kline) => {
+      this.robot.CheckKLine(kline);
     });
     this.watcher.Start();
   }
