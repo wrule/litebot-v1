@@ -8,6 +8,7 @@ export
 interface IParams {
   fast_size: number;
   slow_size: number;
+  stop_rate: number;
 }
 
 export
@@ -80,10 +81,11 @@ extends SpotRobot<IParams, IOHLCV, ISignal, ISnapshot> {
 
   protected override async stop_signal_action(signal: ITimeClose, lagging?: boolean) {
     if (this.buy_tn) {
-      const rate = signal.close / this.buy_tn.price;
-      if (rate < 0.6) {
+      const target_rate = 1 - this.config.params.stop_rate;
+      const current_rate = signal.close / this.buy_tn.price;
+      if (current_rate < target_rate) {
         const sell_tn = await this.config.executor.SellAll(
-          lagging ? this.buy_tn.price * 0.6 : signal.close,
+          lagging ? this.buy_tn.price * target_rate : signal.close,
           signal.time,
         );
         this.buy_tn = null;
