@@ -41,17 +41,26 @@ abstract class SpotRobot<
   //#region 赌局控制相关
   private used_game_id = -1;
   private current_game_id: number | null = null;
-
+  /**
+   * 开启一场新的赌局
+   * @returns 赌局id
+   */
   protected game_open() {
     this.used_game_id++;
     this.current_game_id = this.used_game_id;
     return this.current_game_id;
   }
-
+  /**
+   * 修改当前赌局
+   * @param game_id 赌局id
+   */
   protected game_change(game_id: number) {
     this.current_game_id = game_id;
   }
-
+  /**
+   * 尝试把当前赌局信息填充进入交易信息
+   * @param tn 交易信息
+   */
   private fill_game_id(tn: ITransaction | null) {
     if (tn && this.current_game_id != null) tn.game_id = this.current_game_id;
   }
