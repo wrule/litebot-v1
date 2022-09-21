@@ -1,6 +1,6 @@
 import { binance } from 'ccxt';
 import { TestSpot } from './executor/spot/test_spot';
-import { TwoMaCross } from './robot/spot/two_ma_cross';
+import { TwoMaCrossStop } from './robot/spot/two_ma_cross_stop';
 import { KLineWatcher } from './watcher/kline_watcher';
 import HistData from './data/ETH_USDT-2h.json';
 import { ArrayToKLine } from './common/kline';
@@ -22,7 +22,7 @@ async function main() {
     fee: 0.001,
     init_funds_amount: 100,
   });
-  const robot = new TwoMaCross({
+  const robot = new TwoMaCrossStop({
     params: {
       fast_size: 9,
       slow_size: 44,
