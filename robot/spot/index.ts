@@ -24,6 +24,9 @@ interface ISpotRobotConfig<
   report?: Report<Params, InputData, SignalData, Snapshot>,
 }
 
+/**
+ * 现货机器人抽象类
+ */
 export
 abstract class SpotRobot<
   Params,
