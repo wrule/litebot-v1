@@ -71,7 +71,11 @@ abstract class SpotRobot<
    * @param signal 最新的历史信号
    */
   protected abstract signal_action(signal: SignalData): Promise<ITransaction | undefined>;
-
+  /**
+   * 活跃信号行为
+   * @param signal 活跃信号
+   * @param lagging 是否为延后信号(回测用)
+   */
   protected async stop_signal_action(signal: ITimeClose, lagging?: boolean): Promise<ITransaction | undefined> {
     return undefined;
   };
