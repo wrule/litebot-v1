@@ -109,6 +109,12 @@ abstract class SpotRobot<
     return this.ready_length();
   }
   /**
+   * 提供给watcher的监控数据长度
+   */
+  public get WatchLength() {
+    return this.watch_length();
+  }
+  /**
    * 第一个可用信号的数据索引
    */
   public get ReadyIndex() {
