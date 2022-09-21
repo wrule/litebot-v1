@@ -28,7 +28,7 @@ async function main() {
     },
     executor,
   });
-  const watcher = new KLineWatcher(client, 1000, 'ETH/USDT', '1m', 100);
+  const watcher = new KLineWatcher(client, 1000, 'ETH/USDT', '1m', robot.WatchLength);
   watcher.Subscribe((kline) => {
     robot.CheckKLine(kline);
   });
