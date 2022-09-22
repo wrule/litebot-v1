@@ -4,7 +4,7 @@ import { KLineWatcher } from '../watcher/kline_watcher';
 import { binance } from 'ccxt';
 import { DingTalk } from '../notifier/ding_talk';
 import { BinanceSpot } from '../executor/spot/binance_spot';
-import { TwoMaCross } from '../robot/spot/two_ma_cross';
+import { TwoMaCross } from '../robot/spot/two_ma_cross_stop';
 import { INotifier } from '../notifier';
 import { ITransaction } from '../common/transaction';
 import { ISnapshot } from '../common/snapshot';
@@ -27,6 +27,7 @@ interface IConfig {
   interval?: number;
   fast_ma: number;
   slow_ma: number;
+  stop_rate: number;
   funds: number;
   assets?: number;
 }
@@ -57,7 +58,7 @@ extends App {
     });
     this.robot = new TwoMaCross({
       name: this.config.name,
-      params: { fast_size: this.config.fast_ma, slow_size: this.config.slow_ma, },
+      params: { fast_size: this.config.fast_ma, slow_size: this.config.slow_ma, stop_rate: this.config.stop_rate, },
       executor: this.executor,
       report: new JSONFileReport(`output/${SymbolPathization(this.config.symbol)}-report-${moment(new Date()).format('YYYY-MM-DDTHH:mm:ss')}`),
       notifier: this.notifier,
@@ -98,6 +99,7 @@ const config = {
   slow_ma: 44,
   funds: 11,
   assets: 0,
+  stop_rate: 0.03,
   ...(yargs(hideBin(process.argv)).argv),
 };
 
