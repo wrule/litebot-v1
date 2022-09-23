@@ -2,6 +2,7 @@ import tulind from 'tulind';
 import { IOHLCV } from '../../../common/kline';
 import { ISpotRobotConfig, SpotRobot } from '..';
 import { ISnapshot } from '../../../common/snapshot';
+import { ITransaction } from '../../../common/transaction';
 
 export
 interface IParams {
@@ -93,12 +94,17 @@ extends SpotRobot<IParams, IOHLCV, ISignal, ISnapshot> {
     });
   }
 
+  private buy_tn: ITransaction | null = null;
+
   protected async signal_action(signal: ISignal) {
-    if (signal.sell) {
-      return await this.config.executor.SellAll(signal.close, signal.time);
-    } else if (signal.buy) {
+    if (signal.sell && this.buy_tn) {
+      const sell_tn = await this.config.executor.SellAll(signal.close, signal.time);
+      this.buy_tn = null;
+      return sell_tn;
+    } else if (signal.buy && !this.buy_tn) {
       this.game_open();
-      return await this.config.executor.BuyAll(signal.close, signal.time);
+      this.buy_tn = await this.config.executor.BuyAll(signal.close, signal.time);
+      return this.buy_tn;
     }
   }
 }
