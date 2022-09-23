@@ -1,5 +1,5 @@
 import tulind from 'tulind';
-import { IOHLCV } from '../../../common/kline';
+import { IOHLCV, ITimeClose } from '../../../common/kline';
 import { ISpotRobotConfig, SpotRobot } from '..';
 import { ISnapshot } from '../../../common/snapshot';
 import { ITransaction } from '../../../common/transaction';
@@ -10,7 +10,7 @@ interface IParams {
   k_size: number,
   d_size: number,
   stoch_size: number,
-  stop_loss: number,
+  stop_rate: number;
 }
 
 export
@@ -105,6 +105,20 @@ extends SpotRobot<IParams, IOHLCV, ISignal, ISnapshot> {
       this.game_open();
       this.buy_tn = await this.config.executor.BuyAll(signal.close, signal.time);
       return this.buy_tn;
+    }
+  }
+
+  protected override async stop_signal_action(signal: ITimeClose, lagging?: boolean) {
+    if (this.buy_tn) {
+      const target_price = this.buy_tn.price * (1 - this.config.params.stop_rate);
+      if (signal.close < target_price) {
+        const sell_tn = await this.config.executor.SellAll(
+          lagging ? target_price : signal.close,
+          signal.time,
+        );
+        this.buy_tn = null;
+        return sell_tn;
+      }
     }
   }
 }
