@@ -2,9 +2,10 @@ import { binance } from 'ccxt';
 import { TestSpot } from './executor/spot/test_spot';
 import { TwoMaCross } from './robot/spot/two_ma_cross_stop';
 import { KLineWatcher } from './watcher/kline_watcher';
-import HistData from './data/ETH_USDT-2h.json';
 import { ArrayToKLine } from './common/kline';
+import { SRSI_Martin } from './robot/spot/srsi_martin';
 
+const HistData = require('./data/ETH_USDT-30m.json');
 const secret = require('../.secret.json');
 
 async function main() {
@@ -22,11 +23,13 @@ async function main() {
     fee: 0.001,
     init_funds_amount: 100,
   });
-  const robot = new TwoMaCross({
+  const robot = new SRSI_Martin({
     params: {
-      fast_size: 9,
-      slow_size: 44,
-      stop_rate: 0.05,
+      rsi_size: 13,
+      k_size: 32,
+      d_size: 45,
+      stoch_size: 45,
+      stop_rate: 0.08,
     },
     executor,
   });
