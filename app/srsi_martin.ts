@@ -64,6 +64,7 @@ extends App {
         k_size: this.config.k_size,
         d_size: this.config.d_size,
         stoch_size: this.config.stoch_size,
+        stop_rate: 0.03,
       },
       executor: this.executor,
       report: new JSONFileReport(`output/${SymbolPathization(this.config.symbol)}-report-${moment(new Date()).format('YYYY-MM-DDTHH:mm:ss')}`),

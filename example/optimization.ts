@@ -18,7 +18,7 @@ async function back_testing(params: IParams): Promise<IFunctionOutput<any>> {
 }
 
 async function main() {
-  console.log(await back_testing({ rsi_size: 19, k_size: 18, d_size: 15, stoch_size: 56 }));
+  console.log(await back_testing({ rsi_size: 19, k_size: 18, d_size: 15, stoch_size: 56, stop_rate: 0.03, }));
   return;
   const opt = new Optimizer({
     space: [
