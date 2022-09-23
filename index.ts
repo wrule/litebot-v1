@@ -5,7 +5,7 @@ import { KLineWatcher } from './watcher/kline_watcher';
 import { ArrayToKLine } from './common/kline';
 import { SRSI_Martin } from './robot/spot/srsi_martin';
 
-const HistData = require('./data/ETH_USDT-30m.json');
+const HistData = require('../data/ETH_USDT-1m.json');
 const secret = require('../.secret.json');
 
 async function main() {
@@ -29,7 +29,7 @@ async function main() {
       k_size: 32,
       d_size: 45,
       stoch_size: 45,
-      stop_rate: 0.08,
+      stop_rate: 0.01,
     },
     executor,
   });
