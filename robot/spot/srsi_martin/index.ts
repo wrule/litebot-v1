@@ -1,7 +1,7 @@
 import tulind from 'tulind';
 import { IOHLCV } from '../../../common/kline';
 import { ISpotRobotConfig, SpotRobot } from '..';
-import { ISnapshot } from '@/common/snapshot';
+import { ISnapshot } from '../../../common/snapshot';
 
 export
 interface IParams {
@@ -9,6 +9,7 @@ interface IParams {
   k_size: number,
   d_size: number,
   stoch_size: number,
+  stop_loss: number,
 }
 
 export
@@ -28,7 +29,7 @@ extends SpotRobot<IParams, IOHLCV, ISignal, ISnapshot> {
     super(config);
   }
 
-  private srsi(data: number[], options: {
+  private srsi(close: number[], options: {
     rsi_size: number,
     k_size: number,
     d_size: number,
@@ -36,7 +37,7 @@ extends SpotRobot<IParams, IOHLCV, ISignal, ISnapshot> {
   }) {
     let rsi: number[] = [];
     tulind.indicators.rsi.indicator(
-      [data],
+      [close],
       [options.rsi_size],
       (error: any, data: any) => {
         if (error) throw error;
@@ -55,7 +56,7 @@ extends SpotRobot<IParams, IOHLCV, ISignal, ISnapshot> {
       },
     );
     const diff = k.map((num, index) => num - d[index]);
-    const fill_num = data.length - k.length;
+    const fill_num = close.length - k.length;
     return {
       k: Array(fill_num).fill(null).concat(k),
       d: Array(fill_num).fill(null).concat(d),
