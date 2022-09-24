@@ -5,34 +5,29 @@ import { IFunctionOutput, Optimizer } from '../optimizer';
 import { IParams, SRSI_Martin } from '../robot/spot/srsi_martin';
 import { Logger } from '../utils/logger';
 
-const ohlcv_data = require('../../data/LINK_USDT-1h.json');
+const ohlcv_data = require('../../data/BTC_USDT-1h.json');
 const kline = ArrayToKLine(ohlcv_data);
 
 async function back_testing(params: IParams): Promise<IFunctionOutput<any>> {
-  const executor = new TestSpot({ symbol: 'LINK/USDT', fee: 0.001, init_funds_amount: 100 });
-  const report = new MemoryReport();
-  const robot = new SRSI_Martin({ name: '', params, executor, report: report as any });
+  const executor = new TestSpot({ symbol: 'BTC/USDT', fee: 0.001, init_funds_amount: 100 });
+  const robot = new SRSI_Martin({ params, executor });
   await robot.BackTesting(kline);
-  console.log((await report.WinRate()));
-  return { output: executor.Valuation(7.9), };
+  return { output: executor.Valuation(19347.9701) };
 }
 
 async function main() {
-  console.log(await back_testing({ rsi_size: 19, k_size: 18, d_size: 15, stoch_size: 56, stop_rate: 0.03, }));
-  return;
+  // console.log(await back_testing({ rsi_size: 19, k_size: 18, d_size: 15, stoch_size: 56, stop_rate: 0.03, }));
+  // return;
   const opt = new Optimizer({
     space: [
-      { name: 'rsi_size', range: [18, 20], },
-      { name: 'k_size', range: [17, 19], },
-      { name: 'd_size', range: [14, 16], },
-      { name: 'stoch_size', range: [53, 59], },
+      { name: 'rsi_size', range: [2, 100], },
+      { name: 'k_size', range: [2, 100], },
+      { name: 'd_size', range: [2, 100], },
+      { name: 'stoch_size', range: [2, 100], },
     ],
     objective_function: back_testing,
     loss_function: (output) => 1 / output.output,
-    // input_mapper: (input) => ({
-    //   fast_size: input.fast_size < input.slow_size ? input.fast_size : input.slow_size,
-    //   slow_size: input.fast_size < input.slow_size ? input.slow_size : input.fast_size,
-    // }),
+    input_mapper: (input) => ({ ...input, stop_rate: 1 }),
     logger: new Logger(),
   });
   opt.Search();
