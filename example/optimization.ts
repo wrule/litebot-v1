@@ -8,10 +8,13 @@ import { Logger } from '../utils/logger';
 const ohlcv_data = require('../../data/BTC_USDT-1h.json');
 const kline = ArrayToKLine(ohlcv_data);
 
+let count = 0;
+
 async function back_testing(params: IParams): Promise<IFunctionOutput<any>> {
   const executor = new TestSpot({ symbol: 'BTC/USDT', fee: 0.001, init_funds_amount: 100 });
   const robot = new SRSI_Martin({ params, executor });
   await robot.BackTesting(kline);
+  console.log(count++);
   return { output: executor.Valuation(19347.9701) };
 }
 
