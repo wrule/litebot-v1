@@ -5,7 +5,7 @@ import { IFunctionOutput, Optimizer } from '../optimizer';
 import { IParams, SRSI_Martin } from '../robot/spot/srsi_martin';
 import { Logger } from '../utils/logger';
 
-const ohlcv_data = require('../../data/BTC_USDT-1h.json');
+const ohlcv_data = require('../../data/BTC_USDT-30m.json');
 const kline = ArrayToKLine(ohlcv_data);
 
 let count = 0;
@@ -15,7 +15,7 @@ async function back_testing(params: IParams): Promise<IFunctionOutput<any>> {
   const robot = new SRSI_Martin({ params, executor });
   await robot.BackTesting(kline);
   console.log(count++);
-  return { output: executor.Valuation(19347.9701) };
+  return { output: executor.Valuation(21722) };
 }
 
 async function main() {
@@ -26,7 +26,7 @@ async function main() {
       { name: 'rsi_size', range: [2, 100], },
       { name: 'k_size', range: [2, 100], },
       { name: 'd_size', range: [2, 100], },
-      { name: 'stoch_size', range: [2, 100], },
+      { name: 'stoch_size', range: [2, 120], },
     ],
     objective_function: back_testing,
     loss_function: (output) => 1 / output.output,
