@@ -96,7 +96,21 @@ extends SpotRobot<IParams, IOHLCV, ISignal, ISnapshot> {
 
   private buy_tn: ITransaction | null = null;
 
+  private queue: number[] = [];
+
+  private queue_append(close: number) {
+    this.queue.push(close);
+    const diff = this.queue.length - 8;
+    if (diff > 0) this.queue.splice(0, diff);
+  }
+
+  private queue_low() {
+    if (this.queue.length !== 8) return -Infinity;
+    return Math.min(...this.queue);
+  }
+
   protected async signal_action(signal: ISignal) {
+    this.queue_append(signal.close);
     if (signal.sell && this.buy_tn) {
       const sell_tn = await this.config.executor.SellAll(signal.close, signal.time);
       this.buy_tn = null;
