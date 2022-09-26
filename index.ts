@@ -25,17 +25,17 @@ async function main() {
   });
   const robot = new SRSI_Martin({
     params: {
-      rsi_size: 13,
-      k_size: 32,
-      d_size: 45,
-      stoch_size: 45,
-      stop_rate: 0.99,
+      rsi_size: 5,
+      k_size: 19,
+      d_size: 55,
+      stoch_size: 15,
+      stop_rate: 0.08,
     },
     executor,
   });
   const kline = ArrayToKLine(HistData);
   await robot.BackTesting(kline);
-  const valuation = await executor.Valuation(19347.9701);
+  const valuation = await executor.Valuation(21656.87);
   console.log(valuation);
   // const watcher = new KLineWatcher(client, 1000, 'ETH/USDT', '1m', robot.WatchLength);
   // watcher.Subscribe((kline) => {
