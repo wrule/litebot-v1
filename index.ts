@@ -29,7 +29,7 @@ async function main() {
       k_size: 19,
       d_size: 55,
       stoch_size: 15,
-      stop_rate: 0.08,
+      stop_rate: 1,
     },
     executor,
   });

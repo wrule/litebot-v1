@@ -100,17 +100,17 @@ extends SpotRobot<IParams, IOHLCV, ISignal, ISnapshot> {
 
   private queue_append(close: number) {
     this.queue.push(close);
-    const diff = this.queue.length - 8;
+    const diff = this.queue.length - 24;
     if (diff > 0) this.queue.splice(0, diff);
   }
 
   private queue_low() {
-    if (this.queue.length !== 8) return -Infinity;
+    if (this.queue.length !== 24) return -Infinity;
     return Math.min(...this.queue);
   }
 
   protected async signal_action(signal: ISignal) {
-    this.queue_append(signal.close);
+    this.queue_append(signal.low);
     if (signal.sell && this.buy_tn) {
       const sell_tn = await this.config.executor.SellAll(signal.close, signal.time);
       this.buy_tn = null;
@@ -124,6 +124,16 @@ extends SpotRobot<IParams, IOHLCV, ISignal, ISnapshot> {
 
   protected override async stop_signal_action(signal: ITimeClose, lagging?: boolean) {
     if (this.buy_tn) {
+      const queue_low = this.queue_low();
+      if (signal.close < queue_low) {
+        const sell_tn = await this.config.executor.SellAll(
+          lagging ? queue_low : signal.close,
+          signal.time,
+        );
+        this.buy_tn = null;
+        return sell_tn;
+      }
+
       const target_price = this.buy_tn.price * (1 - this.config.params.stop_rate);
       if (signal.close < target_price) {
         const sell_tn = await this.config.executor.SellAll(
