@@ -23,10 +23,10 @@ async function main() {
   // return;
   const opt = new Optimizer({
     space: [
-      { name: 'rsi_size', range: [2, 45], },
-      { name: 'k_size', range: [2, 45], },
-      { name: 'd_size', range: [10, 100], },
-      { name: 'stoch_size', range: [2, 100], },
+      { name: 'rsi_size', range: [2, 15], },
+      { name: 'k_size', range: [10, 30], },
+      { name: 'd_size', range: [45, 65], },
+      { name: 'stoch_size', range: [2, 50], },
     ],
     objective_function: back_testing,
     loss_function: (output) => 1 / output.output,
