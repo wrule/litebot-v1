@@ -3,7 +3,6 @@ import { IOHLCV, ITimeClose } from '../../common/kline';
 import { ISpotRobotConfig, SpotRobot } from '.';
 import { ISnapshot } from '@/common/snapshot';
 import { ITransaction } from '@/common/transaction';
-import moment from 'moment';
 
 export
 interface IParams {
