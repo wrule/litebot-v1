@@ -85,7 +85,6 @@ extends SpotRobot<IParams, IOHLCV, ISignal, ISnapshot> {
       const target_rate = 1 - this.config.params.stop_rate;
       const current_rate = signal.close / this.buy_tn.price;
       if (current_rate < target_rate) {
-        console.log(moment(new Date(signal.time)).format('YYYY-MM-DD'), '止损');
         const sell_tn = await this.config.executor.SellAll(
           lagging ? this.buy_tn.price * target_rate : signal.close,
           signal.time,
