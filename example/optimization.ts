@@ -5,7 +5,7 @@ import { IFunctionOutput, Optimizer } from '../optimizer';
 import { IParams, TwoMaCross } from '../robot/spot/two_ma_cross';
 import { Logger } from '../utils/logger';
 
-const ohlcv_data = require('../../data/BTC_USDT-2h.json');
+const ohlcv_data = require('../../data/BTC_USDT-1h.json');
 const kline = ArrayToKLine(ohlcv_data);
 
 let count = 0;
