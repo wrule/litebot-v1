@@ -5,7 +5,7 @@ import { IFunctionOutput, Optimizer } from '../optimizer';
 import { IParams, TwoMaCross } from '../robot/spot/two_ma_cross';
 import { Logger } from '../utils/logger';
 
-const ohlcv_data = require('../../data/BTC_USDT-1h.json');
+const ohlcv_data = require('../../data/BTC_USDT-2h.json');
 const kline = ArrayToKLine(ohlcv_data);
 
 let count = 0;
@@ -23,11 +23,12 @@ async function main() {
   // return;
   const opt = new Optimizer({
     space: [
-      { name: 'fast_size', range: [2, 200], },
-      { name: 'slow_size', range: [2, 200], },
+      { name: 'fast_size', range: [2, 100], },
+      { name: 'slow_size', range: [2, 100], },
     ],
     objective_function: back_testing,
     loss_function: (output) => 1 / output.output,
+    input_filter: (input) => Math.abs(input.slow_size - input.fast_size) > 9,
     input_mapper: (input) => ({
       fast_size: input.fast_size < input.slow_size ? input.fast_size : input.slow_size,
       slow_size: input.fast_size < input.slow_size ? input.slow_size : input.fast_size,
