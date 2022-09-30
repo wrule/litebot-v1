@@ -9,5 +9,6 @@ export NVM_DIR="$HOME/.nvm"
 nvm install 14
 npm install --global yarn
 npm install --global typescript
+npm install
 echo 🚀 安装ohmyzsh中，完成后建议重新启动终端...
 sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
