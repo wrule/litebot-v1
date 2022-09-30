@@ -4,7 +4,7 @@ echo 1. 部署node,curl,screen,zsh等环境或工具
 echo 2. 安装项目所需要的npm依赖
 echo 3. 编译项目
 echo 😄 如果遇到询问确认，请选择[y/yes]
-sleep 3
+sleep 5
 apt update
 apt install curl screen zsh
 curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.1/install.sh | bash
