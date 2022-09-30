@@ -1,8 +1,9 @@
 #!/bin/bash
 echo 🚀 此脚本将帮助你:
-echo 1. 部署node,git,curl,screen,zsh等环境或工具
-echo 2. 安装项目所需要的npm依赖
-echo 3. 编译项目
+echo 1. 下载项目源代码
+echo 2. 安装node,git,curl,screen,zsh等环境或工具
+echo 3. 安装项目所需要的npm依赖
+echo 4. 编译项目
 echo 😄 如果遇到询问确认，请选择[y/yes]
 sleep 5
 apt update
