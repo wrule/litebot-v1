@@ -1,6 +1,7 @@
 #!/bin/sh
 # 一键部署命令
 # sh -c "$(curl -fsSL https://raw.githubusercontent.com/wrule/litebot/220829-core/ecs_ubuntu_configure.sh)"
+BRANCH=220829-core
 echo 🚀 此脚本将帮助你:
 echo 1. 下载项目源代码
 echo 2. 安装node,git,curl,screen,zsh等环境或工具
@@ -13,7 +14,7 @@ apt install git curl screen zsh
 [ ! -e package.json ] \
 && git clone https://github.com/wrule/litebot.git \
 && cd litebot \
-&& git checkout 220829-core \
+&& git checkout $BRANCH \
 && git pull
 curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.1/install.sh | bash
 export NVM_DIR="$HOME/.nvm"
