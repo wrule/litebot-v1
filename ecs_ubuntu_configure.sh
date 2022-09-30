@@ -1,4 +1,6 @@
-#!/bin/bash
+#!/bin/sh
+# 一键部署命令
+# sh -c "$(curl -fsSL https://raw.githubusercontent.com/wrule/litebot/220829-core/ecs_ubuntu_configure.sh)"
 echo 🚀 此脚本将帮助你:
 echo 1. 下载项目源代码
 echo 2. 安装node,git,curl,screen,zsh等环境或工具
