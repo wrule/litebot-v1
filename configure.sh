@@ -1,5 +1,10 @@
 #!/bin/bash
-echo 🚀 此脚本将帮助你部署好环境和依赖
+echo 🚀 此脚本将帮助你:
+echo 1. 部署node,curl,screen,zsh等环境或工具
+echo 2. 安装项目所需要的npm依赖
+echo 3. 编译构建项目
+echo 😄 如果遇到询问确认，请选择[y/yes]
+sleep 3
 apt update
 apt install curl screen zsh
 curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.1/install.sh | bash
