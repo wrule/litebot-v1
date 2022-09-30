@@ -7,6 +7,10 @@ echo 😄 如果遇到询问确认，请选择[y/yes]
 sleep 5
 apt update
 apt install git curl screen zsh
+[ ! -e package.json ] \
+&& https://github.com/wrule/litebot.git \
+&& cd litebot \
+&& git checkout 220829-core
 curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.1/install.sh | bash
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
