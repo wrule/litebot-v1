@@ -9,4 +9,3 @@ nvm install 14
 npm install --global yarn
 npm install --global typescript
 sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
-echo 环境已经初始化完毕，请重启终端
