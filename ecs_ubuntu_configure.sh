@@ -9,7 +9,7 @@ sleep 5
 apt update
 apt install git curl screen zsh
 [ ! -e package.json ] \
-&& https://github.com/wrule/litebot.git \
+&& git clone https://github.com/wrule/litebot.git \
 && cd litebot \
 && git checkout 220829-core \
 && git pull
