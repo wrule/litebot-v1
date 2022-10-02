@@ -19,8 +19,8 @@ export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
 nvm install 14
-npm install --global yarn
 npm install --global typescript
 npm install
 npm run build
 echo ✨ 项目编译成功
+echo 📢 请重新启动终端，或手动运行命令[source ~/.bashrc]
