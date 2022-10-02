@@ -1,6 +1,6 @@
 #!/bin/sh
 # 一键部署命令
-# sh -c "$(curl -fsSL https://raw.githubusercontent.com/wrule/litebot/220829-core/configure.sh)"
+# sh -c "$(curl -fsSL https://raw.githubusercontent.com/wrule/litebot/220829-core/shell/configure.sh)"
 BRANCH=220829-core
 echo 🚀 此脚本将帮助你:
 echo 1. 安装nodejs环境
