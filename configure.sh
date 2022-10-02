@@ -21,4 +21,4 @@ git checkout $BRANCH && git pull
 npm install
 npm run build
 echo ✨ 项目编译成功
-echo 📢 请重新启动终端，或手动运行命令[source ~/.bashrc]
+echo 📢 请重新启动终端，或手动运行命令: source ~/.bashrc
