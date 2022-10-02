@@ -3,6 +3,7 @@
 # sh -c "$(curl -fsSL https://raw.githubusercontent.com/wrule/litebot/220829-core/shell/redhat_zsh_init.sh)"
 yum update
 yum install git curl screen zsh
+#
 BRANCH=220829-core
 echo 🚀 此脚本将帮助你:
 echo 1. 安装nodejs环境
@@ -23,5 +24,6 @@ git checkout $BRANCH && git pull
 npm install
 npm run build
 echo ✨ 项目编译成功
+#
 echo 🚀 安装ohmyzsh中...
 sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
