@@ -68,11 +68,11 @@ extends SpotRobot<IParams, IOHLCV, ISignal, ISnapshot> {
   private buy_tn: ITransaction | null = null;
 
   protected async signal_action(signal: ISignal) {
-    if (signal.sell && this.buy_tn) {
+    if (signal.sell) {
       const sell_tn = await this.config.executor.SellAll(signal.close, signal.time);
       this.buy_tn = null;
       return sell_tn;
-    } else if (signal.buy && !this.buy_tn) {
+    } else if (signal.buy) {
       this.game_open();
       this.buy_tn = await this.config.executor.BuyAll(signal.close, signal.time);
       return this.buy_tn;
