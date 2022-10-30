@@ -33,6 +33,7 @@ extends SpotRobot<IParams, IOHLCV, ISignal, ISnapshot> {
     close: number[],
     params: { atr_period: number },
   ) {
+    let result: number[] = [];
     const start = this.atr_start(params);
     const options = [params.atr_period];
     tulind.indicators.atr.indicator(
@@ -40,10 +41,10 @@ extends SpotRobot<IParams, IOHLCV, ISignal, ISnapshot> {
       options,
       (error: any, data: any) => {
         if (error) throw error;
-        return Array(start).fill(null).concat(data[0]);
+        result = Array(start).fill(null).concat(data[0]);
       },
     );
-    throw 'atr指标没有被计算';
+    return result;
   }
 
   private double_sma(close: number[], options: { fast_size: number; slow_size: number; }) {
@@ -72,7 +73,14 @@ extends SpotRobot<IParams, IOHLCV, ISignal, ISnapshot> {
 
   protected generate_signal_data(historical_data: IOHLCV[]): ISignal[] {
     const hl2 = historical_data.map((history) => (history.high + history.low) / 2);
-    console.log(hl2.slice(hl2.length - 10));
+    const atr = this.atr(
+      historical_data.map((history) => history.high),
+      historical_data.map((history) => history.low),
+      historical_data.map((history) => history.close),
+      this.config.params,
+    );
+    console.log(atr.slice(atr.length - 10));
+    // console.log(hl2.slice(hl2.length - 10));
     return [];
     // const close = historical_data.map((history) => history.close);
     // const { fast_line, slow_line, diff } = this.double_sma(close, this.config.params);
