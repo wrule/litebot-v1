@@ -79,7 +79,11 @@ extends SpotRobot<IParams, IOHLCV, ISignal, ISnapshot> {
       historical_data.map((history) => history.close),
       this.config.params,
     );
-    console.log(atr.slice(atr.length - 10));
+    const a = hl2.map(
+      (item, index) =>
+        atr[index] != null ? item - atr[index] * this.config.params.atr_multiplier : null
+    );
+    console.log(a.slice(a.length - 10));
     // console.log(hl2.slice(hl2.length - 10));
     return [];
     // const close = historical_data.map((history) => history.close);
