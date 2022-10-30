@@ -23,6 +23,29 @@ extends SpotRobot<IParams, IOHLCV, ISignal, ISnapshot> {
     super(config);
   }
 
+  private atr_start(params: { atr_period: number }): number {
+    return tulind.indicators.atr.start([params.atr_period]);
+  }
+
+  private atr(
+    high: number[],
+    low: number[],
+    close: number[],
+    params: { atr_period: number },
+  ) {
+    const start = this.atr_start(params);
+    const options = [params.atr_period];
+    tulind.indicators.atr.indicator(
+      [high, low, close],
+      options,
+      (error: any, data: any) => {
+        if (error) throw error;
+        return Array(start).fill(null).concat(data[0]);
+      },
+    );
+    throw 'atr指标没有被计算';
+  }
+
   private double_sma(close: number[], options: { fast_size: number; slow_size: number; }) {
     let fast_line: number[] = [];
     tulind.indicators.sma.indicator([close], [options.fast_size], (error: any, data: any) => {
@@ -43,21 +66,25 @@ extends SpotRobot<IParams, IOHLCV, ISignal, ISnapshot> {
   }
 
   protected ready_length() {
-    return this.double_sma_start(this.config.params) + 2;
+    return 0;
+    // return this.double_sma_start(this.config.params) + 2;
   }
 
   protected generate_signal_data(historical_data: IOHLCV[]): ISignal[] {
-    const close = historical_data.map((history) => history.close);
-    const { fast_line, slow_line, diff } = this.double_sma(close, this.config.params);
-    return this.fill_signal_data(historical_data, (signal, index) => {
-      const diff_last = diff[index];
-      const diff_prev = diff[index - 1];
-      signal.fast_ma = fast_line[index];
-      signal.slow_ma = slow_line[index];
-      signal.diff = diff[index];
-      if (diff_last > 0 && diff_prev <= 0) signal.buy = true;
-      if (diff_last < 0 && diff_prev >= 0) signal.sell = true;
-    });
+    const hl2 = historical_data.map((history) => (history.high + history.low) / 2);
+    console.log(hl2.slice(hl2.length - 10));
+    return [];
+    // const close = historical_data.map((history) => history.close);
+    // const { fast_line, slow_line, diff } = this.double_sma(close, this.config.params);
+    // return this.fill_signal_data(historical_data, (signal, index) => {
+    //   const diff_last = diff[index];
+    //   const diff_prev = diff[index - 1];
+    //   signal.fast_ma = fast_line[index];
+    //   signal.slow_ma = slow_line[index];
+    //   signal.diff = diff[index];
+    //   if (diff_last > 0 && diff_prev <= 0) signal.buy = true;
+    //   if (diff_last < 0 && diff_prev >= 0) signal.sell = true;
+    // });
   }
 
   protected async signal_action(signal: ISignal) {
