@@ -32,7 +32,9 @@ async function main() {
     executor,
   });
   const kline = ArrayToKLine(HistData);
-  await robot.BackTesting(kline);
+  robot.GenerateSignalData(kline);
+  // await robot.BackTesting(kline);
+  return;
   const valuation = await executor.Valuation(1591.85);
   console.log(valuation);
   // const watcher = new KLineWatcher(client, 1000, 'ETH/USDT', '1m', robot.WatchLength);
