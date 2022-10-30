@@ -5,8 +5,8 @@ import { ISnapshot } from '@/common/snapshot';
 
 export
 interface IParams {
-  fast_size: number;
-  slow_size: number;
+  atr_period: number;
+  atr_multiplier: number;
 }
 
 export
@@ -14,13 +14,10 @@ interface ISignal
 extends IOHLCV {
   buy?: boolean;
   sell?: boolean;
-  fast_ma?: number;
-  slow_ma?: number;
-  diff?: number;
 }
 
 export
-class TwoMaCross
+class SuperTrend
 extends SpotRobot<IParams, IOHLCV, ISignal, ISnapshot> {
   public constructor(config: ISpotRobotConfig<IParams, IOHLCV, ISignal, ISnapshot>) {
     super(config);
