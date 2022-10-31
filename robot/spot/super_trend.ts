@@ -93,7 +93,10 @@ extends SpotRobot<IParams, IOHLCV, ISignal, ISnapshot> {
       if (close == null || up_num == null || up_r1_num == null) return null;
       return close > up_r1_num ? Math.max(up_num, up_r1_num) : up_num;
     });
-    console.log(up_border.slice(up_border.length - 10));
+    console.log(up.slice(up.length - 3));
+    console.log(up_r1.slice(up_r1.length - 3));
+    console.log(close_r1.slice(up_r1.length - 3));
+    console.log(up_border.slice(up_border.length - 3));
     return [];
     // const close = historical_data.map((history) => history.close);
     // const { fast_line, slow_line, diff } = this.double_sma(close, this.config.params);
