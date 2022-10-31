@@ -79,12 +79,21 @@ extends SpotRobot<IParams, IOHLCV, ISignal, ISnapshot> {
       historical_data.map((history) => history.close),
       this.config.params,
     );
-    const a = hl2.map(
+    const up = hl2.map(
       (item, index) =>
         atr[index] != null ? item - atr[index] * this.config.params.atr_multiplier : null
     );
-    console.log(a.slice(a.length - 10));
-    // console.log(hl2.slice(hl2.length - 10));
+    const up_r1 = up.slice();
+    up_r1.pop() && up_r1.unshift(null);
+    const close_r1: (number | null)[] = historical_data.map((history) => history.close);
+    close_r1.pop() && close_r1.unshift(null);
+    const up_border = close_r1.map((close, index) => {
+      const up_num = up[index];
+      const up_r1_num = up_r1[index];
+      if (close == null || up_num == null || up_r1_num == null) return null;
+      return close > up_r1_num ? Math.max(up_num, up_r1_num) : up_num;
+    });
+    console.log(up_border.slice(up_border.length - 10));
     return [];
     // const close = historical_data.map((history) => history.close);
     // const { fast_line, slow_line, diff } = this.double_sma(close, this.config.params);
