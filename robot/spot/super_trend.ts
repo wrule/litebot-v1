@@ -24,10 +24,23 @@ extends SpotRobot<IParams, IOHLCV, ISignal, ISnapshot> {
     super(config);
   }
 
+  /**
+   * ATR起始索引计算
+   * @param params
+   * @returns ATR起始索引
+   */
   private atr_start(params: { atr_period: number }): number {
     return tulind.indicators.atr.start([params.atr_period]);
   }
 
+  /**
+   * ATR指标包装
+   * @param high
+   * @param low
+   * @param close
+   * @param params
+   * @returns 左补全的ATR
+   */
   private atr(
     high: number[],
     low: number[],
