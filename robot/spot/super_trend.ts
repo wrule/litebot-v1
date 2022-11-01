@@ -108,7 +108,7 @@ extends SpotRobot<IParams, IOHLCV, ISignal, ISnapshot> {
       return new_item;
     });
 
-    return { up: up_border, down: down_border };
+    return { up_border, down_border };
   }
 
   protected generate_signal_data(historical_data: IOHLCV[]): ISignal[] {
@@ -117,30 +117,25 @@ extends SpotRobot<IParams, IOHLCV, ISignal, ISnapshot> {
     const low = historical_data.map((history) => history.low);
     const close = historical_data.map((history) => history.close);
 
-    const { up, down } = this.super_trend_channel(hl2, high, low, close);
+    const { up_border, down_border } = this.super_trend_channel(hl2, high, low, close);
 
-    const show = Array(10).fill(0).map((_, index) => {
-      const current_index = historical_data.length - 1 - index;
-      const close = historical_data[current_index].close;
-      const time = moment(new Date(historical_data[current_index].time)).format('YYYY-MM-DD HH:mm:ss');
-      const up_n = up[current_index];
-      const down_n = down[current_index];
-      return [time, up_n, close, down_n];
-    }).reverse();
-    console.log(show);
+    // const show = Array(10).fill(0).map((_, index) => {
+    //   const current_index = historical_data.length - 1 - index;
+    //   const close = historical_data[current_index].close;
+    //   const time = moment(new Date(historical_data[current_index].time)).format('YYYY-MM-DD HH:mm:ss');
+    //   const up_n = up[current_index];
+    //   const down_n = down[current_index];
+    //   return [time, up_n, close, down_n];
+    // }).reverse();
+    // console.log(show);
 
-    return [];
-    // const close = historical_data.map((history) => history.close);
-    // const { fast_line, slow_line, diff } = this.double_sma(close, this.config.params);
-    // return this.fill_signal_data(historical_data, (signal, index) => {
-    //   const diff_last = diff[index];
-    //   const diff_prev = diff[index - 1];
-    //   signal.fast_ma = fast_line[index];
-    //   signal.slow_ma = slow_line[index];
-    //   signal.diff = diff[index];
-    //   if (diff_last > 0 && diff_prev <= 0) signal.buy = true;
-    //   if (diff_last < 0 && diff_prev >= 0) signal.sell = true;
-    // });
+    let holding: boolean | null = null;
+    return this.fill_signal_data(historical_data, (signal, index) => {
+      const up = up_border[index] as number;
+      const down = down_border[index] as number;
+      if (signal.close > up) signal.buy = true;
+      if (signal.close < down) signal.sell = true;
+    });
   }
 
   protected async signal_action(signal: ISignal) {
