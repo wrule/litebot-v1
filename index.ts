@@ -6,6 +6,7 @@ import { ArrayToKLine } from './common/kline';
 import { SRSI_Martin } from './robot/spot/srsi_martin';
 import { SuperTrend } from './robot/spot/super_trend';
 import moment from 'moment';
+import { JSONFileReport } from './report/json_file_report';
 
 const HistData = require('../data/ETH_USDT-30m.json');
 const secret = require('../.secret.json');
@@ -31,6 +32,7 @@ async function main() {
       atr_multiplier: 3,
     },
     executor,
+    report: new JSONFileReport('output/st'),
   });
   const kline = ArrayToKLine(HistData);
   await robot.BackTesting(kline);
