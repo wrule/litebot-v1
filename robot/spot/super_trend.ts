@@ -72,8 +72,6 @@ extends SpotRobot<IParams, IOHLCV, ISignal, ISnapshot> {
   }
 
   protected generate_signal_data(historical_data: IOHLCV[]): ISignal[] {
-    const close_r1: (number | null)[] = historical_data.map((history) => history.close);
-    close_r1.pop() && close_r1.unshift(null);
     const hl2 = historical_data.map((history) => (history.high + history.low) / 2);
     const atr = this.atr(
       historical_data.map((history) => history.high),
@@ -81,6 +79,8 @@ extends SpotRobot<IParams, IOHLCV, ISignal, ISnapshot> {
       historical_data.map((history) => history.close),
       this.config.params,
     );
+    const close_r1: (number | null)[] = historical_data.map((history) => history.close);
+    close_r1.pop() && close_r1.unshift(null);
 
     const atr_down_r1 = hl2.map((item, index) => atr[index] != null ? item - atr[index] * this.config.params.atr_multiplier : null);
     atr_down_r1.pop() && atr_down_r1.unshift(null);
