@@ -117,15 +117,15 @@ extends SpotRobot<IParams, IOHLCV, ISignal, ISnapshot> {
     const low = historical_data.map((history) => history.low);
     const close = historical_data.map((history) => history.close);
 
-    const channel = this.super_trend_channel(hl2, high, low, close);
+    const { up, down } = this.super_trend_channel(hl2, high, low, close);
 
     const show = Array(10).fill(0).map((_, index) => {
       const current_index = historical_data.length - 1 - index;
       const close = historical_data[current_index].close;
       const time = moment(new Date(historical_data[current_index].time)).format('YYYY-MM-DD HH:mm:ss');
-      const up = channel.up[current_index];
-      const down = channel.down[current_index];
-      return [time, up, close, down];
+      const up_n = up[current_index];
+      const down_n = down[current_index];
+      return [time, up_n, close, down_n];
     }).reverse();
     console.log(show);
 
