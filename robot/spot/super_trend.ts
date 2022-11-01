@@ -111,45 +111,18 @@ extends SpotRobot<IParams, IOHLCV, ISignal, ISnapshot> {
 
   protected generate_signal_data(historical_data: IOHLCV[]): ISignal[] {
     const hl2 = historical_data.map((history) => (history.high + history.low) / 2);
-    const atr = this.atr(
-      historical_data.map((history) => history.high),
-      historical_data.map((history) => history.low),
-      historical_data.map((history) => history.close),
-      this.config.params,
-    );
-    const close_r1: (number | null)[] = historical_data.map((history) => history.close);
-    close_r1.pop() && close_r1.unshift(null);
+    const high = historical_data.map((history) => history.high);
+    const low = historical_data.map((history) => history.low);
+    const close = historical_data.map((history) => history.close);
 
-    const atr_down_r1 = hl2.map((item, index) => atr[index] != null ? item - atr[index] * this.config.params.atr_multiplier : null);
-    atr_down_r1.pop() && atr_down_r1.unshift(null);
-    let atr_down_max = -Infinity;
-    const down_border = atr_down_r1.map((item, index) => {
-      const close = close_r1[index];
-      if (item == null || close == null) return null;
-      let new_item = atr_down_max;
-      if (item > atr_down_max) atr_down_max = new_item = item;
-      if (close < new_item) atr_down_max = -Infinity;
-      return new_item;
-    });
-
-    const atr_up_r1 = hl2.map((item, index) => atr[index] != null ? item + atr[index] * this.config.params.atr_multiplier : null);
-    atr_up_r1.pop() && atr_up_r1.unshift(null);
-    let atr_up_min = Infinity;
-    const up_border = atr_up_r1.map((item, index) => {
-      const close = close_r1[index];
-      if (item == null || close == null) return null;
-      let new_item = atr_up_min;
-      if (item < atr_up_min) atr_up_min = new_item = item;
-      if (close > new_item) atr_up_min = Infinity;
-      return new_item;
-    });
+    const channel = this.super_trend_channel(hl2, high, low, close);
 
     const show = Array(10).fill(0).map((_, index) => {
       const current_index = historical_data.length - 1 - index;
       const close = historical_data[current_index].close;
       const time = moment(new Date(historical_data[current_index].time)).format('YYYY-MM-DD HH:mm:ss');
-      const up = up_border[current_index];
-      const down = down_border[current_index];
+      const up = channel.up[current_index];
+      const down = channel.down[current_index];
       return [time, up, close, down];
     }).reverse();
     console.log(show);
