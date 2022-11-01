@@ -102,7 +102,7 @@ extends SpotRobot<IParams, IOHLCV, ISignal, ISnapshot> {
         } else {
           up_border.push(up_max);
         }
-        if (close < item) {
+        if (close < (up_border[up_border.length - 1] as number)) {
           up_max = -Infinity;
         }
       }
