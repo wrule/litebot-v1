@@ -119,29 +119,30 @@ extends SpotRobot<IParams, IOHLCV, ISignal, ISnapshot> {
 
     const { up_border, down_border } = this.super_trend_channel(hl2, high, low, close);
 
-    // const show = Array(10).fill(0).map((_, index) => {
-    //   const current_index = historical_data.length - 1 - index;
-    //   const close = historical_data[current_index].close;
-    //   const time = moment(new Date(historical_data[current_index].time)).format('YYYY-MM-DD HH:mm:ss');
-    //   const up_n = up[current_index];
-    //   const down_n = down[current_index];
-    //   return [time, up_n, close, down_n];
-    // }).reverse();
-    // console.log(show);
-
-    let holding: boolean | null = null;
-    return this.fill_signal_data(historical_data, (signal, index) => {
-      const up = up_border[index] as number;
-      const down = down_border[index] as number;
-      if (signal.close > up && (holding === false || holding == null)) {
-        signal.buy = true;
-        holding = true;
-      }
-      if (signal.close < down && (holding === true || holding == null)) {
-        signal.sell = true;
-        holding = false;
-      }
+    const show = Array(20).fill(0).map((_, index) => {
+      const current_index = index;
+      const close = historical_data[current_index].close;
+      const time = moment(new Date(historical_data[current_index].time)).format('YYYY-MM-DD HH:mm:ss');
+      const up_n = up_border[current_index];
+      const down_n = down_border[current_index];
+      return [time, up_n, close, down_n];
     });
+    console.log(show);
+    return [];
+
+    // let holding: boolean | null = null;
+    // return this.fill_signal_data(historical_data, (signal, index) => {
+    //   const up = up_border[index] as number;
+    //   const down = down_border[index] as number;
+    //   if (signal.close > up && (holding === false || holding == null)) {
+    //     signal.buy = true;
+    //     holding = true;
+    //   }
+    //   if (signal.close < down && (holding === true || holding == null)) {
+    //     signal.sell = true;
+    //     holding = false;
+    //   }
+    // });
   }
 
   protected async signal_action(signal: ISignal) {
