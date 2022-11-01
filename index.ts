@@ -34,13 +34,13 @@ async function main() {
   });
   const kline = ArrayToKLine(HistData.slice(HistData.length - 1000));
   let list = robot.GenerateSignalData(kline).filter((item) => item.buy || item.sell);
-  // list = list.map((item) => ({
-  //   ...item,
-  //   time_str: moment(new Date(item.time)).format('YYYY-MM-DD HH:mm:ss'),
-  // }));
-  // console.log(list.slice(list.length - 10));
-  // console.log('信号正确');
-  // await robot.BackTesting(kline);
+  list = list.map((item) => ({
+    ...item,
+    time_str: moment(new Date(item.time)).format('YYYY-MM-DD HH:mm:ss'),
+  }));
+  console.log(list.slice(list.length - 10));
+  console.log('信号正确');
+  await robot.BackTesting(kline);
   return;
   const valuation = await executor.Valuation(1591.85);
   console.log(valuation);
