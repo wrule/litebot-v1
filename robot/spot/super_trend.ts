@@ -66,6 +66,14 @@ extends SpotRobot<IParams, IOHLCV, ISignal, ISnapshot> {
     // return this.double_sma_start(this.config.params) + 2;
   }
 
+  /**
+   * 超级趋势通道
+   * @param source 数据源
+   * @param high
+   * @param low
+   * @param close
+   * @returns 通道数据
+   */
   private super_trend_channel(
     source: number[],
     high: number[],
