@@ -62,6 +62,7 @@ abstract class SpotRobot<
    * @param tn 交易信息
    */
   private fill_game_id(tn: ITransaction | null) {
+    // if (tn) (tn as any).time_view = moment(new Date(tn.transaction_time)).format('YYYY-MM-DD HH:mm:ss');
     if (tn && this.current_game_id != null) tn.game_id = this.current_game_id;
   }
   //#endregion
