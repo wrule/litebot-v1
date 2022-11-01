@@ -2,7 +2,6 @@ import tulind from 'tulind';
 import { IOHLCV, ITimeClose } from '../../common/kline';
 import { ISpotRobotConfig, SpotRobot } from '.';
 import { ISnapshot } from '@/common/snapshot';
-import moment from 'moment';
 
 export
 interface IParams {
@@ -15,6 +14,8 @@ interface ISignal
 extends IOHLCV {
   buy?: boolean;
   sell?: boolean;
+  up?: number;
+  down?: number;
 }
 
 export
@@ -133,6 +134,8 @@ extends SpotRobot<IParams, IOHLCV, ISignal, ISnapshot> {
     return this.fill_signal_data(historical_data, (signal, index) => {
       const up = up_border[index] as number;
       const down = down_border[index] as number;
+      signal.up = up;
+      signal.down = down;
       if (signal.close > up && (holding === false || holding == null)) {
         signal.buy = true;
         holding = true;
