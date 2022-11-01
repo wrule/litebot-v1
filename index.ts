@@ -26,13 +26,14 @@ async function main() {
     fee: 0.001,
     init_funds_amount: 100,
   });
+  const report = new JSONFileReport('output/st');
   const robot = new SuperTrend({
     params: {
       atr_period: 10,
       atr_multiplier: 3,
     },
     executor,
-    report: new JSONFileReport('output/st'),
+    report: report as any,
   });
   const kline = ArrayToKLine(HistData);
   await robot.BackTesting(kline);
