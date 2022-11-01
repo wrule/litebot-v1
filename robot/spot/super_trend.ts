@@ -89,23 +89,14 @@ extends SpotRobot<IParams, IOHLCV, ISignal, ISnapshot> {
     close_r1.pop() && close_r1.unshift(null);
     console.log(up_r1.slice(up_r1.length - 5));
 
-    const up_border: (number | null)[] = [];
     let up_max = -Infinity;
-    up_r1.forEach((item, index) => {
+    const up_border = up_r1.map((item, index) => {
       const close = close_r1[index];
-      if (item == null || close == null) {
-        up_border.push(null);
-      } else {
-        let new_item = up_max;
-        if (item > up_max) {
-          new_item = item;
-          up_max = item;
-        }
-        up_border.push(new_item);
-        if (close < new_item) {
-          up_max = -Infinity;
-        }
-      }
+      if (item == null || close == null) return null;
+      let new_item = up_max;
+      if (item > up_max) up_max = new_item = item;
+      if (close < new_item) up_max = -Infinity;
+      return new_item;
     });
     console.log(up_border.slice(up_border.length - 40));
     return [];
