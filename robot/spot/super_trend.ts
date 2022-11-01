@@ -133,8 +133,14 @@ extends SpotRobot<IParams, IOHLCV, ISignal, ISnapshot> {
     return this.fill_signal_data(historical_data, (signal, index) => {
       const up = up_border[index] as number;
       const down = down_border[index] as number;
-      if (signal.close > up) signal.buy = true;
-      if (signal.close < down) signal.sell = true;
+      if (signal.close > up && (holding === false || holding == null)) {
+        signal.buy = true;
+        holding = true;
+      }
+      if (signal.close < down && (holding === true || holding == null)) {
+        signal.sell = true;
+        holding = false;
+      }
     });
   }
 
