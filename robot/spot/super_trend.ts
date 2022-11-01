@@ -2,6 +2,7 @@ import tulind from 'tulind';
 import { IOHLCV, ITimeClose } from '../../common/kline';
 import { ISpotRobotConfig, SpotRobot } from '.';
 import { ISnapshot } from '@/common/snapshot';
+import moment from 'moment';
 
 export
 interface IParams {
@@ -93,7 +94,6 @@ extends SpotRobot<IParams, IOHLCV, ISignal, ISnapshot> {
       if (close < new_item) atr_down_max = -Infinity;
       return new_item;
     });
-    console.log(down_border.slice(down_border.length - 40));
 
     const atr_up_r1 = hl2.map((item, index) => atr[index] != null ? item + atr[index] * this.config.params.atr_multiplier : null);
     atr_up_r1.pop() && atr_up_r1.unshift(null);
@@ -106,7 +106,16 @@ extends SpotRobot<IParams, IOHLCV, ISignal, ISnapshot> {
       if (close > new_item) atr_up_min = Infinity;
       return new_item;
     });
-    console.log(up_border.slice(up_border.length - 40));
+
+    const show = Array(10).fill(0).map((_, index) => {
+      const current_index = historical_data.length - 1 - index;
+      const close = historical_data[current_index].close;
+      const time = moment(new Date(historical_data[current_index].time)).format('YYYY-MM-DD HH:mm:ss');
+      const up = up_border[current_index];
+      const down = down_border[current_index];
+      return [time, up, close, down];
+    }).reverse();
+    console.log(show);
 
     return [];
     // const close = historical_data.map((history) => history.close);
