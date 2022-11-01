@@ -5,6 +5,7 @@ import { KLineWatcher } from './watcher/kline_watcher';
 import { ArrayToKLine } from './common/kline';
 import { SRSI_Martin } from './robot/spot/srsi_martin';
 import { SuperTrend } from './robot/spot/super_trend';
+import moment from 'moment';
 
 const HistData = require('../data/ETH_USDT-30m.json');
 const secret = require('../.secret.json');
@@ -32,7 +33,12 @@ async function main() {
     executor,
   });
   const kline = ArrayToKLine(HistData);
-  robot.GenerateSignalData(kline);
+  let list = robot.GenerateSignalData(kline).filter((item) => item.buy || item.sell);
+  list = list.map((item) => ({
+    ...item,
+    time_str: moment(new Date(item.time)).format('YYYY-MM-DD HH:mm:ss'),
+  }));
+  console.log(list.slice(list.length - 10));
   // await robot.BackTesting(kline);
   return;
   const valuation = await executor.Valuation(1591.85);
