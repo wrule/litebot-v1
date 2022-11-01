@@ -61,11 +61,6 @@ extends SpotRobot<IParams, IOHLCV, ISignal, ISnapshot> {
     return result;
   }
 
-  protected ready_length() {
-    return 0;
-    // return this.double_sma_start(this.config.params) + 2;
-  }
-
   /**
    * 超级趋势通道
    * @param source 数据源
@@ -109,6 +104,10 @@ extends SpotRobot<IParams, IOHLCV, ISignal, ISnapshot> {
     });
 
     return { up_border, down_border };
+  }
+
+  protected ready_length() {
+    return this.atr_start(this.config.params) + 2;
   }
 
   protected generate_signal_data(historical_data: IOHLCV[]): ISignal[] {
