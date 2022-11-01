@@ -87,6 +87,28 @@ extends SpotRobot<IParams, IOHLCV, ISignal, ISnapshot> {
     up_r1.pop() && up_r1.unshift(null);
     const close_r1: (number | null)[] = historical_data.map((history) => history.close);
     close_r1.pop() && close_r1.unshift(null);
+    console.log(up_r1.slice(up_r1.length - 5));
+
+    const up_border: (number | null)[] = [];
+    let up_max = -Infinity;
+    up_r1.forEach((item, index) => {
+      const close = close_r1[index];
+      if (item == null || close == null) {
+        up_border.push(null);
+      } else {
+        if (item > up_max) {
+          up_border.push(item);
+          up_max = item;
+        } else {
+          up_border.push(up_max);
+        }
+        if (close < item) {
+          up_max = -Infinity;
+        }
+      }
+    });
+    console.log(up_border.slice(up_border.length - 5));
+
     return [];
     // const close = historical_data.map((history) => history.close);
     // const { fast_line, slow_line, diff } = this.double_sma(close, this.config.params);
