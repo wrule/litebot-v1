@@ -39,6 +39,7 @@ async function main() {
     time_str: moment(new Date(item.time)).format('YYYY-MM-DD HH:mm:ss'),
   }));
   console.log(list.slice(list.length - 10));
+  console.log('信号正确');
   // await robot.BackTesting(kline);
   return;
   const valuation = await executor.Valuation(1591.85);
