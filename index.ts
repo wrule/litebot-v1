@@ -32,14 +32,14 @@ async function main() {
     },
     executor,
   });
-  const kline = ArrayToKLine(HistData);
+  const kline = ArrayToKLine(HistData.slice(HistData.length - 50));
   let list = robot.GenerateSignalData(kline).filter((item) => item.buy || item.sell);
-  list = list.map((item) => ({
-    ...item,
-    time_str: moment(new Date(item.time)).format('YYYY-MM-DD HH:mm:ss'),
-  }));
-  console.log(list.slice(list.length - 10));
-  console.log('信号正确');
+  // list = list.map((item) => ({
+  //   ...item,
+  //   time_str: moment(new Date(item.time)).format('YYYY-MM-DD HH:mm:ss'),
+  // }));
+  // console.log(list.slice(list.length - 10));
+  // console.log('信号正确');
   // await robot.BackTesting(kline);
   return;
   const valuation = await executor.Valuation(1591.85);
