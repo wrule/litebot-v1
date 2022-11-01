@@ -32,7 +32,7 @@ async function main() {
     },
     executor,
   });
-  const kline = ArrayToKLine(HistData.slice(HistData.length - 50));
+  const kline = ArrayToKLine(HistData.slice(HistData.length - 1000));
   let list = robot.GenerateSignalData(kline).filter((item) => item.buy || item.sell);
   // list = list.map((item) => ({
   //   ...item,
