@@ -94,6 +94,20 @@ extends SpotRobot<IParams, IOHLCV, ISignal, ISnapshot> {
       return new_item;
     });
     console.log(down_border.slice(down_border.length - 40));
+
+    const atr_up_r1 = hl2.map((item, index) => atr[index] != null ? item + atr[index] * this.config.params.atr_multiplier : null);
+    atr_up_r1.pop() && atr_up_r1.unshift(null);
+    let atr_up_min = Infinity;
+    const up_border = atr_up_r1.map((item, index) => {
+      const close = close_r1[index];
+      if (item == null || close == null) return null;
+      let new_item = atr_up_min;
+      if (item < atr_up_min) atr_up_min = new_item = item;
+      if (close > new_item) atr_up_min = Infinity;
+      return new_item;
+    });
+    console.log(up_border.slice(up_border.length - 40));
+
     return [];
     // const close = historical_data.map((history) => history.close);
     // const { fast_line, slow_line, diff } = this.double_sma(close, this.config.params);
