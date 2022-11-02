@@ -34,28 +34,28 @@ async function main() {
       atr_multiplier: 3,
     },
     executor,
-    report: report as any,
+    // report: report as any,
   });
   const kline = ArrayToKLine(HistData);
   await robot.BackTesting(kline);
   const valuation = await executor.Valuation(kline[kline.length - 1].close);
   console.log(valuation);
 
-  const tns = await report.Transactions?.All();
-  if (tns) {
-    let ntns = tns.slice(1, tns.length - 1);
-    let n = 100;
-    for (let i = 0; i < ntns.length; i += 2) {
-      const buy_price = ntns[i].price;
-      const sell_price = ntns[i + 1].price;
-      const rate = 1 + (sell_price - buy_price) / buy_price;
-      // console.log(buy_price, sell_price, rate);
-      fs.appendFileSync('st.log', `${buy_price} ${sell_price} ${rate}\n`);
-      n *= rate;
-      n *= (0.999 * 0.999);
-    }
-    console.log(n);
-  }
+  // const tns = await report.Transactions?.All();
+  // if (tns) {
+  //   let ntns = tns.slice(1, tns.length - 1);
+  //   let n = 100;
+  //   for (let i = 0; i < ntns.length; i += 2) {
+  //     const buy_price = ntns[i].price;
+  //     const sell_price = ntns[i + 1].price;
+  //     const rate = 1 + (sell_price - buy_price) / buy_price;
+  //     // console.log(buy_price, sell_price, rate);
+  //     fs.appendFileSync('st.log', `${buy_price} ${sell_price} ${rate}\n`);
+  //     n *= rate;
+  //     n *= (0.999 * 0.999);
+  //   }
+  //   console.log(n);
+  // }
 
   // const watcher = new KLineWatcher(client, 1000, 'ETH/USDT', '1m', robot.WatchLength);
   // watcher.Subscribe((kline) => {

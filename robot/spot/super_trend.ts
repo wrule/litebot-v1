@@ -13,7 +13,9 @@ export
 interface ISignal
 extends IOHLCV {
   buy?: boolean;
+  buy_price?: number;
   sell?: boolean;
+  sell_price?: number;
   up?: number;
   down?: number;
 }
@@ -136,12 +138,14 @@ extends SpotRobot<IParams, IOHLCV, ISignal, ISnapshot> {
       const down = down_border[index] as number;
       signal.up = up;
       signal.down = down;
-      if (signal.close > up && (holding === false || holding == null)) {
+      if (signal.high > up && (holding === false || holding == null)) {
         signal.buy = true;
+        signal.buy_price = up;
         holding = true;
       }
-      if (signal.close < down && (holding === true || holding == null)) {
+      if (signal.low < down && (holding === true || holding == null)) {
         signal.sell = true;
+        signal.sell_price = down;
         holding = false;
       }
     });
@@ -149,10 +153,10 @@ extends SpotRobot<IParams, IOHLCV, ISignal, ISnapshot> {
 
   protected async signal_action(signal: ISignal) {
     if (signal.sell) {
-      return await this.config.executor.SellAll(signal.close, signal.time);
+      return await this.config.executor.SellAll(signal.sell_price, signal.time);
     } else if (signal.buy) {
       this.game_open();
-      return await this.config.executor.BuyAll(signal.close, signal.time);
+      return await this.config.executor.BuyAll(signal.buy_price, signal.time);
     }
   }
 
