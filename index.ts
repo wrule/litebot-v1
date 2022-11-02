@@ -9,7 +9,7 @@ import moment from 'moment';
 import { JSONFileReport } from './report/json_file_report';
 import fs from 'fs';
 
-const HistData = require('../data/ETH_USDT-30m.json');
+const HistData = require('../data/LINK_USDT-1h.json');
 const secret = require('../.secret.json');
 
 async function main() {
@@ -28,10 +28,13 @@ async function main() {
     init_funds_amount: 100,
   });
   const report = new JSONFileReport('output/st');
-  const robot = new SuperTrend({
+  const robot = new SRSI_Martin({
     params: {
-      atr_period: 10,
-      atr_multiplier: 3,
+      rsi_size: 19,
+      k_size: 18,
+      d_size: 15,
+      stoch_size: 56,
+      stop_rate: 1,
     },
     executor,
     // report: report as any,
