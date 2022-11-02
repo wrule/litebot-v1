@@ -138,14 +138,14 @@ extends SpotRobot<IParams, IOHLCV, ISignal, ISnapshot> {
       const down = down_border[index] as number;
       signal.up = up;
       signal.down = down;
-      if (signal.high > up && (holding === false || holding == null)) {
+      if (signal.close > up && (holding === false || holding == null)) {
         signal.buy = true;
-        signal.buy_price = up;
+        signal.buy_price = signal.close;
         holding = true;
       }
-      if (signal.low < down && (holding === true || holding == null)) {
+      if (signal.close < down && (holding === true || holding == null)) {
         signal.sell = true;
-        signal.sell_price = down;
+        signal.sell_price = signal.close;
         holding = false;
       }
     });
