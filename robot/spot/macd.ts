@@ -34,7 +34,6 @@ extends SpotRobot<IParams, IOHLCV, ISignal, ISnapshot> {
       smooth: number;
     },
   ) {
-    console.log(tulind.indicators.macd);
     let result: number[][] = [];
     tulind.indicators.macd.indicator(
       [source],
@@ -44,15 +43,26 @@ extends SpotRobot<IParams, IOHLCV, ISignal, ISnapshot> {
         result = data;
       },
     );
-    return { dif: result[0], dea: result[1], macd: result[2] };
+    const left_fill = Array(this.macd_start(params)).fill(null);
+    return {
+      dif: left_fill.concat(result[0]),
+      dea: left_fill.concat(result[1]),
+      macd: left_fill.concat(result[2]),
+    };
   }
 
-  private macd_start() {
-
+  private macd_start(
+    params: {
+      fast: number;
+      slow: number;
+      smooth: number;
+    },
+  ): number {
+    return tulind.indicators.macd.start([params.fast, params.slow, params.smooth]);
   }
 
   protected ready_length() {
-    return 0;
+    return this.macd_start(this.config.params) + 2;
   }
 
   protected generate_signal_data(historical_data: IOHLCV[]): ISignal[] {
