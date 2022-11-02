@@ -2,11 +2,13 @@ import tulind from 'tulind';
 import { IOHLCV, ITimeClose } from '../../common/kline';
 import { ISpotRobotConfig, SpotRobot } from '.';
 import { ISnapshot } from '@/common/snapshot';
+import moment from 'moment';
 
 export
 interface IParams {
-  fast_size: number;
-  slow_size: number;
+  fast: number;
+  slow: number;
+  smooth: number;
 }
 
 export
@@ -14,50 +16,52 @@ interface ISignal
 extends IOHLCV {
   buy?: boolean;
   sell?: boolean;
-  fast_ma?: number;
-  slow_ma?: number;
   diff?: number;
 }
 
 export
-class TwoMaCross
+class MACD
 extends SpotRobot<IParams, IOHLCV, ISignal, ISnapshot> {
   public constructor(config: ISpotRobotConfig<IParams, IOHLCV, ISignal, ISnapshot>) {
     super(config);
   }
 
-  private double_sma(close: number[], options: { fast_size: number; slow_size: number; }) {
-    let fast_line: number[] = [];
-    tulind.indicators.sma.indicator([close], [options.fast_size], (error: any, data: any) => {
-      if (error) throw error;
-      fast_line = Array(tulind.indicators.sma.start([options.fast_size])).fill(null).concat(data[0]);
-    });
-    let slow_line: number[] = [];
-    tulind.indicators.sma.indicator([close], [options.slow_size], (error: any, data: any) => {
-      if (error) throw error;
-      slow_line = Array(tulind.indicators.sma.start([options.slow_size])).fill(null).concat(data[0]);
-    });
-    const diff = fast_line.map((fast, index) => fast - slow_line[index]);
-    return { fast_line, slow_line, diff };
+  private macd(
+    source: number[],
+    params: {
+      fast: number;
+      slow: number;
+      smooth: number;
+    },
+  ) {
+    console.log(tulind.indicators.macd);
+    let result: number[][] = [];
+    tulind.indicators.macd.indicator(
+      [source],
+      [params.fast, params.slow, params.smooth],
+      (error: any, data: any) => {
+        if (error) throw error;
+        result = data;
+      },
+    );
+    return { dif: result[0], dea: result[1], macd: result[2] };
   }
 
-  private double_sma_start(options: { fast_size: number; slow_size: number; }) {
-    return tulind.indicators.sma.start([options.slow_size]);
+  private macd_start() {
+
   }
 
   protected ready_length() {
-    return this.double_sma_start(this.config.params) + 2;
+    return 0;
   }
 
   protected generate_signal_data(historical_data: IOHLCV[]): ISignal[] {
-    const close = historical_data.map((history) => history.close);
-    const { fast_line, slow_line, diff } = this.double_sma(close, this.config.params);
+    const close = historical_data.map((item) => item.close);
+    const { macd } = this.macd(close, this.config.params);
     return this.fill_signal_data(historical_data, (signal, index) => {
-      const diff_last = diff[index];
-      const diff_prev = diff[index - 1];
-      signal.fast_ma = fast_line[index];
-      signal.slow_ma = slow_line[index];
-      signal.diff = diff[index];
+      const diff_last = macd[index];
+      const diff_prev = macd[index - 1];
+      signal.diff = macd[index];
       if (diff_last > 0 && diff_prev <= 0) signal.buy = true;
       if (diff_last < 0 && diff_prev >= 0) signal.sell = true;
     });

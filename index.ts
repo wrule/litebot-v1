@@ -8,8 +8,9 @@ import { SuperTrend } from './robot/spot/super_trend';
 import moment from 'moment';
 import { JSONFileReport } from './report/json_file_report';
 import fs from 'fs';
+import { MACD } from './robot/spot/macd';
 
-const HistData = require('../data/LINK_USDT-1h.json');
+const HistData = require('../data/ETH_USDT-30m.json');
 const secret = require('../.secret.json');
 
 async function main() {
@@ -27,22 +28,12 @@ async function main() {
     fee: 0.001,
     init_funds_amount: 100,
   });
-  const report = new JSONFileReport('output/st');
-  const robot = new SRSI_Martin({
-    params: {
-      rsi_size: 19,
-      k_size: 18,
-      d_size: 15,
-      stoch_size: 56,
-      stop_rate: 1,
-    },
-    executor,
-    // report: report as any,
-  });
+  const robot = new MACD({ params: { fast: 13, slow: 27, smooth: 9 }, executor });
   const kline = ArrayToKLine(HistData);
-  await robot.BackTesting(kline);
-  const valuation = await executor.Valuation(kline[kline.length - 1].close);
-  console.log(valuation);
+  robot.GenerateSignalData(kline);
+  // await robot.BackTesting(kline);
+  // const valuation = await executor.Valuation(kline[kline.length - 1].close);
+  // console.log(valuation);
 
   // const tns = await report.Transactions?.All();
   // if (tns) {
