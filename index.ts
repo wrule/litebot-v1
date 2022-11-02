@@ -10,7 +10,7 @@ import { JSONFileReport } from './report/json_file_report';
 import fs from 'fs';
 import { MACD } from './robot/spot/macd';
 
-const HistData = require('../data/ETH_USDT-30m.json');
+const HistData = require('../data/ETH_USDT-2h.json');
 const secret = require('../.secret.json');
 
 async function main() {
@@ -28,12 +28,12 @@ async function main() {
     fee: 0.001,
     init_funds_amount: 100,
   });
-  const robot = new MACD({ params: { fast: 13, slow: 27, smooth: 9 }, executor });
+  const robot = new MACD({ params: { fast: 9, slow: 44, smooth: 21 }, executor });
   const kline = ArrayToKLine(HistData);
-  robot.GenerateSignalData(kline);
-  // await robot.BackTesting(kline);
-  // const valuation = await executor.Valuation(kline[kline.length - 1].close);
-  // console.log(valuation);
+  // robot.GenerateSignalData(kline);
+  await robot.BackTesting(kline);
+  const valuation = await executor.Valuation(kline[kline.length - 1].close);
+  console.log(valuation);
 
   // const tns = await report.Transactions?.All();
   // if (tns) {
