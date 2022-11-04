@@ -20,7 +20,7 @@ extends IOHLCV {
 }
 
 export
-class TwoMaCross
+class Karma
 extends SpotRobot<IParams, IOHLCV, ISignal, ISnapshot> {
   public constructor(config: ISpotRobotConfig<IParams, IOHLCV, ISignal, ISnapshot>) {
     super(config);
