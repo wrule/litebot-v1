@@ -42,7 +42,9 @@ extends SpotRobot<IParams, IOHLCV, ISignal, ISnapshot> {
   }
 
   private double_kama_start(options: { fast_size: number; slow_size: number; }) {
-    return tulind.indicators.sma.start([options.slow_size]);
+    const fast_start = tulind.indicators.kama.start([options.fast_size]);
+    const slow_start = tulind.indicators.kama.start([options.slow_size]);
+    return Math.max(fast_start, slow_start);
   }
 
   protected ready_length() {
@@ -51,18 +53,16 @@ extends SpotRobot<IParams, IOHLCV, ISignal, ISnapshot> {
 
   protected generate_signal_data(historical_data: IOHLCV[]): ISignal[] {
     const close = historical_data.map((history) => history.close);
-    console.log(tulind.indicators.kama);
-    // const { fast_line, slow_line, diff } = this.double_kama(close, this.config.params);
-    return [];
-    // return this.fill_signal_data(historical_data, (signal, index) => {
-    //   const diff_last = diff[index];
-    //   const diff_prev = diff[index - 1];
-    //   signal.fast_ma = fast_line[index];
-    //   signal.slow_ma = slow_line[index];
-    //   signal.diff = diff[index];
-    //   if (diff_last > 0 && diff_prev <= 0) signal.buy = true;
-    //   if (diff_last < 0 && diff_prev >= 0) signal.sell = true;
-    // });
+    const { fast_line, slow_line, diff } = this.double_kama(close, this.config.params);
+    return this.fill_signal_data(historical_data, (signal, index) => {
+      const diff_last = diff[index];
+      const diff_prev = diff[index - 1];
+      signal.fast_ma = fast_line[index];
+      signal.slow_ma = slow_line[index];
+      signal.diff = diff[index];
+      if (diff_last > 0 && diff_prev <= 0) signal.buy = true;
+      if (diff_last < 0 && diff_prev >= 0) signal.sell = true;
+    });
   }
 
   protected async signal_action(signal: ISignal) {

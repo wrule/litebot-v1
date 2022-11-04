@@ -31,10 +31,10 @@ async function main() {
   });
   const robot = new Karma({ params: { fast_size: 9, slow_size: 44 }, executor });
   const kline = ArrayToKLine(HistData);
-  robot.GenerateSignalData(kline);
-  // await robot.BackTesting(kline);
-  // const valuation = await executor.Valuation(kline[kline.length - 1].close);
-  // console.log(valuation);
+  // robot.GenerateSignalData(kline);
+  await robot.BackTesting(kline);
+  const valuation = await executor.Valuation(kline[kline.length - 1].close);
+  console.log(valuation);
 
   // const tns = await report.Transactions?.All();
   // if (tns) {
