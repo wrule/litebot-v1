@@ -51,7 +51,7 @@ extends SpotRobot<IParams, IOHLCV, ISignal, ISnapshot> {
 
   protected generate_signal_data(historical_data: IOHLCV[]): ISignal[] {
     const close = historical_data.map((history) => history.close);
-    const { fast_line, slow_line, diff } = this.double_sma(close, this.config.params);
+    const { fast_line, slow_line, diff } = this.double_kama(close, this.config.params);
     return this.fill_signal_data(historical_data, (signal, index) => {
       const diff_last = diff[index];
       const diff_prev = diff[index - 1];
