@@ -9,8 +9,9 @@ import moment from 'moment';
 import { JSONFileReport } from './report/json_file_report';
 import fs from 'fs';
 import { MACD } from './robot/spot/macd';
+import { Karma } from './robot/spot/karma';
 
-const HistData = require('../data/ETH_USDT-2h.json');
+const HistData = require('../data/ETH_USDT-1h.json');
 const secret = require('../.secret.json');
 
 async function main() {
@@ -28,12 +29,12 @@ async function main() {
     fee: 0.001,
     init_funds_amount: 100,
   });
-  const robot = new MACD({ params: { fast: 9, slow: 44, smooth: 21 }, executor });
+  const robot = new Karma({ params: { fast_size: 9, slow_size: 44 }, executor });
   const kline = ArrayToKLine(HistData);
-  // robot.GenerateSignalData(kline);
-  await robot.BackTesting(kline);
-  const valuation = await executor.Valuation(kline[kline.length - 1].close);
-  console.log(valuation);
+  robot.GenerateSignalData(kline);
+  // await robot.BackTesting(kline);
+  // const valuation = await executor.Valuation(kline[kline.length - 1].close);
+  // console.log(valuation);
 
   // const tns = await report.Transactions?.All();
   // if (tns) {
