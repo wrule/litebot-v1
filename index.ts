@@ -9,13 +9,20 @@ import moment from 'moment';
 import { JSONFileReport } from './report/json_file_report';
 import fs from 'fs';
 import { MACD } from './robot/spot/macd';
-import { Karma } from './robot/spot/karma';
+import { Kama } from './robot/spot/karma';
+import { Nums } from './utils/nums';
 
-const HistData = require('../data/ETH_USDT-1h.json');
+const HistData = require('../data/ETH_USDT-2h.json');
 const secret = require('../.secret.json');
 
 async function main() {
   console.log('你好，世界');
+  const _kline = ArrayToKLine(HistData);
+  const close = _kline.map((item) => item.close);
+  const a = new Nums(close).MA(9).Nums;
+  console.log(a.slice(a.length - 10));
+  console.log(moment(new Date(_kline[_kline.length - 1].time)).format('YYYY-MM-DD HH:mm:ss'));
+  return;
   // const client = new binance({
   //   apiKey: secret.API_KEY,
   //   secret: secret.SECRET_KEY,
