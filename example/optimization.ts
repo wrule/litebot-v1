@@ -4,7 +4,7 @@ import { IFunctionOutput, Optimizer } from '../optimizer';
 import { IParams, SRSI_Martin } from '../robot/spot/srsi_martin';
 import { Logger } from '../utils/logger';
 
-const ohlcv_data = require('../../data/BTC_USDT-30m.json');
+const ohlcv_data = require('../../data/KP3R_BUSD-1h.json');
 const kline = ArrayToKLine(ohlcv_data);
 
 async function back_testing(params: IParams): Promise<IFunctionOutput<any>> {
@@ -18,10 +18,10 @@ async function main() {
   const opt = new Optimizer({
     space: [
       // { name: 'kama_period', range: [2, 100], },
-      { name: 'rsi_size', range: [2, 100], },
-      { name: 'k_size', range: [2, 100], },
-      { name: 'd_size', range: [2, 100], },
-      { name: 'stoch_size', range: [2, 100], },
+      { name: 'rsi_size', range: [105, 111], },
+      { name: 'k_size', range: [12, 12], },
+      { name: 'd_size', range: [113, 119], },
+      { name: 'stoch_size', range: [21, 21], },
       // { name: 'fast_size', range: [2, 100], },
       // { name: 'slow_size', range: [2, 100], },
       // { name: 'atr_period', range: [2, 30], },
