@@ -38,7 +38,7 @@ async function main() {
     fee: 0.001,
     init_funds_amount: 100,
   });
-  const robot = new Karma({ params: { fast_size: 9, slow_size: 44 }, executor });
+  const robot = new Kama({ params: { fast_size: 9, slow_size: 44 }, executor });
   const kline = ArrayToKLine(HistData);
   // robot.GenerateSignalData(kline);
   await robot.BackTesting(kline);
