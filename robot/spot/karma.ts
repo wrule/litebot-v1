@@ -20,38 +20,41 @@ extends IOHLCV {
 }
 
 export
-class TwoMaCross
+class Kama
 extends SpotRobot<IParams, IOHLCV, ISignal, ISnapshot> {
   public constructor(config: ISpotRobotConfig<IParams, IOHLCV, ISignal, ISnapshot>) {
     super(config);
   }
 
-  private double_sma(close: number[], options: { fast_size: number; slow_size: number; }) {
+  private double_ma(close: number[], options: { fast_size: number; slow_size: number; }) {
     let fast_line: number[] = [];
-    tulind.indicators.sma.indicator([close], [options.fast_size], (error: any, data: any) => {
+    tulind.indicators.kama.indicator([close], [options.fast_size], (error: any, data: any) => {
       if (error) throw error;
-      fast_line = Array(tulind.indicators.sma.start([options.fast_size])).fill(null).concat(data[0]);
+      fast_line = Array(tulind.indicators.kama.start([options.fast_size])).fill(null).concat(data[0]);
     });
     let slow_line: number[] = [];
-    tulind.indicators.sma.indicator([close], [options.slow_size], (error: any, data: any) => {
+    tulind.indicators.kama.indicator([close], [options.slow_size], (error: any, data: any) => {
       if (error) throw error;
-      slow_line = Array(tulind.indicators.sma.start([options.slow_size])).fill(null).concat(data[0]);
+      slow_line = Array(tulind.indicators.kama.start([options.slow_size])).fill(null).concat(data[0]);
     });
     const diff = fast_line.map((fast, index) => fast - slow_line[index]);
     return { fast_line, slow_line, diff };
   }
 
-  private double_sma_start(options: { fast_size: number; slow_size: number; }) {
-    return tulind.indicators.sma.start([options.slow_size]);
+  private double_ma_start(options: { fast_size: number; slow_size: number; }) {
+    return Math.max(
+      tulind.indicators.kama.start([options.fast_size]),
+      tulind.indicators.kama.start([options.slow_size]),
+    );
   }
 
   protected ready_length() {
-    return this.double_sma_start(this.config.params) + 2;
+    return this.double_ma_start(this.config.params) + 2;
   }
 
   protected generate_signal_data(historical_data: IOHLCV[]): ISignal[] {
     const close = historical_data.map((history) => history.close);
-    const { fast_line, slow_line, diff } = this.double_sma(close, this.config.params);
+    const { fast_line, slow_line, diff } = this.double_ma(close, this.config.params);
     return this.fill_signal_data(historical_data, (signal, index) => {
       const diff_last = diff[index];
       const diff_prev = diff[index - 1];
