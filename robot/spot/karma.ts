@@ -1,5 +1,5 @@
 import tulind from 'tulind';
-import { IOHLCV, ITimeClose } from '../../common/kline';
+import { IOHLCV } from '../../common/kline';
 import { ISpotRobotConfig, SpotRobot } from '.';
 import { ISnapshot } from '@/common/snapshot';
 
@@ -70,9 +70,5 @@ extends SpotRobot<IParams, IOHLCV, ISignal, ISnapshot> {
       this.game_open();
       return await this.config.executor.BuyAll(signal.close, signal.time);
     }
-  }
-
-  protected override async stop_signal_action(signal: ITimeClose, lagging?: boolean) {
-    // console.log('信号:', signal.close);
   }
 }
