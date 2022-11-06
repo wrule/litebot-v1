@@ -29,6 +29,7 @@ interface IConfig {
   k_size: number;
   d_size: number;
   stoch_size: number;
+  stop_rate: number;
   funds: number;
   assets?: number;
 }
@@ -64,7 +65,7 @@ extends App {
         k_size: this.config.k_size,
         d_size: this.config.d_size,
         stoch_size: this.config.stoch_size,
-        stop_rate: 0.03,
+        stop_rate: this.config.stop_rate,
       },
       executor: this.executor,
       report: new JSONFileReport(`output/${SymbolPathization(this.config.symbol)}-report-${moment(new Date()).format('YYYY-MM-DDTHH:mm:ss')}`),
@@ -106,6 +107,7 @@ const config = {
   k_size: 32,
   d_size: 45,
   stoch_size: 45,
+  stop_rate: 1,
   funds: 11,
   assets: 0,
   ...(yargs(hideBin(process.argv)).argv),
