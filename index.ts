@@ -11,20 +11,13 @@ import fs from 'fs';
 import { MACD } from './robot/spot/macd';
 import { Kama } from './robot/spot/karma';
 import { Nums, nums } from './utils/nums';
+import { MemoryReport } from './report/memory_report';
 
-const HistData = require('../data/ETH_USDT-2h.json');
+const HistData = require('../data/KP3R_BUSD-1h.json');
 const secret = require('../.secret.json');
 
 async function main() {
   console.log('你好，世界');
-  const _kline = ArrayToKLine(HistData);
-  const high = nums(_kline.map((item) => item.high));
-  const low = nums(_kline.map((item) => item.low));
-  const close = _kline.map((item) => item.close);
-  const { K, D, J } = new Nums(close).SKDJ(low, high, 10, 9, 14, 18);
-  console.log(fs.writeFileSync('1.log', JSON.stringify(J.Nums, null, 2)));
-  console.log(moment(new Date(_kline[_kline.length - 1].time)).format('YYYY-MM-DD HH:mm:ss'));
-  return;
   // const client = new binance({
   //   apiKey: secret.API_KEY,
   //   secret: secret.SECRET_KEY,
@@ -38,12 +31,21 @@ async function main() {
     fee: 0.001,
     init_funds_amount: 100,
   });
-  const robot = new Kama({ params: { fast_size: 9, slow_size: 44 }, executor });
+  const report = new MemoryReport();
+  const robot = new SRSI_Martin({ params: {
+    rsi_size: 108,
+    k_size: 12,
+    d_size: 116,
+    stoch_size: 21,
+    stop_rate: 1,
+  }, executor, report: report as any });
   const kline = ArrayToKLine(HistData);
   // robot.GenerateSignalData(kline);
   await robot.BackTesting(kline);
   const valuation = await executor.Valuation(kline[kline.length - 1].close);
   console.log(valuation);
+  const rate = await report.WinRate();
+  console.log(rate);
 
   // const tns = await report.Transactions?.All();
   // if (tns) {
