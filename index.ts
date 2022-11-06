@@ -37,7 +37,7 @@ async function main() {
     k_size: 12,
     d_size: 116,
     stoch_size: 21,
-    stop_rate: 1,
+    stop_rate: 0.3,
   }, executor, report: report as any });
   const kline = ArrayToKLine(HistData);
   // robot.GenerateSignalData(kline);

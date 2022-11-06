@@ -122,27 +122,18 @@ extends SpotRobot<IParams, IOHLCV, ISignal, ISnapshot> {
     }
   }
 
-  // protected override async stop_signal_action(signal: ITimeClose, lagging?: boolean) {
-  //   if (this.buy_tn) {
-  //     const queue_low = this.queue_low();
-  //     if (signal.close < queue_low) {
-  //       const sell_tn = await this.config.executor.SellAll(
-  //         lagging ? queue_low : signal.close,
-  //         signal.time,
-  //       );
-  //       this.buy_tn = null;
-  //       return sell_tn;
-  //     }
-
-  //     const target_price = this.buy_tn.price * (1 - this.config.params.stop_rate);
-  //     if (signal.close < target_price) {
-  //       const sell_tn = await this.config.executor.SellAll(
-  //         lagging ? target_price : signal.close,
-  //         signal.time,
-  //       );
-  //       this.buy_tn = null;
-  //       return sell_tn;
-  //     }
-  //   }
-  // }
+  protected override async stop_signal_action(signal: ITimeClose, lagging?: boolean) {
+    if (this.buy_tn) {
+      const target_rate = 1 - this.config.params.stop_rate;
+      const current_rate = signal.close / this.buy_tn.price;
+      if (current_rate < target_rate) {
+        const sell_tn = await this.config.executor.SellAll(
+          lagging ? this.buy_tn.price * target_rate : signal.close,
+          signal.time,
+        );
+        this.buy_tn = null;
+        return sell_tn;
+      }
+    }
+  }
 }
