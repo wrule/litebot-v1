@@ -76,7 +76,7 @@ extends App {
       this.config.interval,
       this.config.symbol,
       this.config.timeframe,
-      (this.robot.ReadyLength + 1) * 2,
+      (this.robot.ReadyLength + 1) * 5,
     );
   }
 
@@ -100,14 +100,14 @@ extends App {
 
 const config = {
   name: '红眼',
-  symbol: 'ETH/USDT',
-  timeframe: '1m',
+  symbol: 'KP3R/BUSD',
+  timeframe: '1h',
   interval: 1000,
-  rsi_size: 13,
-  k_size: 32,
-  d_size: 45,
-  stoch_size: 45,
-  stop_rate: 1,
+  rsi_size: 108,
+  k_size: 12,
+  d_size: 116,
+  stoch_size: 21,
+  stop_rate: 0.3,
   funds: 11,
   assets: 0,
   ...(yargs(hideBin(process.argv)).argv),
