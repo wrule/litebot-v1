@@ -12,8 +12,9 @@ import { MACD } from './robot/spot/macd';
 import { Kama } from './robot/spot/karma';
 import { Nums, nums } from './utils/nums';
 import { MemoryReport } from './report/memory_report';
+import { KDRSI } from './robot/spot/kdrsi';
 
-const HistData = require('../data/KP3R_BUSD-1h.json');
+const HistData = require('../data/ETH_USDT-30m.json');
 const secret = require('../.secret.json');
 
 async function main() {
@@ -32,15 +33,15 @@ async function main() {
     init_funds_amount: 100,
   });
   const report = new MemoryReport();
-  const robot = new SRSI_Martin({ params: {
-    rsi_size: 108,
-    k_size: 12,
-    d_size: 116,
-    stoch_size: 21,
-    stop_rate: 0.3,
+  const robot = new KDRSI({ params: {
+    rsi_size: 6,
+    k_size: 41,
+    d_size: 30,
   }, executor, report: report as any });
   const kline = ArrayToKLine(HistData);
-  // robot.GenerateSignalData(kline);
+  const a = robot.GenerateSignalData(kline);
+  console.log(a[a.length - 1]);
+  return;
   await robot.BackTesting(kline);
   const valuation = await executor.Valuation(kline[kline.length - 1].close);
   console.log(valuation);
