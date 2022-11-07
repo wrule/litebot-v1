@@ -85,38 +85,34 @@ extends SpotRobot<IParams, IOHLCV, ISignal, ISnapshot> {
       },
     );
 
-    rsi = Array(rsi_start).fill(null).concat(rsi);
-    k = Array(rsi_start + k_start).fill(null).concat(k);
-    d = Array(rsi_start + k_start + d_start).fill(null).concat(d);
+    k = Array(slow_start + k_start).fill(null).concat(k);
+    d = Array(slow_start + k_start + d_start).fill(null).concat(d);
     const diff = k.map((item, index) => item - d[index]);
-    return { rsi, k, d, diff };
+    return { fast_line, slow_line, sma_diff, k, d, diff };
   }
 
-  private kdrsi_start(options: {
+  private kd_sma_diff_start(options: {
     fast_size: number;
     slow_size: number;
     k_size: number;
     d_size: number;
   }) {
-    const rsi_start = tulind.indicators.rsi.start([options.rsi_size]);
+    const slow_start = tulind.indicators.sma.start([options.slow_size]);
     const k_start = tulind.indicators.sma.start([options.k_size]);
     const d_start = tulind.indicators.sma.start([options.d_size]);
-    return rsi_start + k_start + d_start;
+    return slow_start + k_start + d_start;
   }
 
   protected ready_length() {
-    return this.kdrsi_start(this.config.params) + 2;
+    return this.kd_sma_diff_start(this.config.params) + 2;
   }
 
   protected generate_signal_data(historical_data: IOHLCV[]): ISignal[] {
     const close = historical_data.map((history) => history.close);
-    const { rsi, k, d, diff } = this.kdrsi(close, this.config.params);
+    const { diff } = this.kd_sma_diff(close, this.config.params);
     return this.fill_signal_data(historical_data, (signal, index) => {
       const diff_last = diff[index];
       const diff_prev = diff[index - 1];
-      signal.rsi = rsi[index];
-      signal.k = k[index];
-      signal.d = d[index];
       signal.diff = diff[index];
       if (diff_last > 0 && diff_prev <= 0) signal.buy = true;
       if (diff_last < 0 && diff_prev >= 0) signal.sell = true;
