@@ -1,15 +1,15 @@
 import { ArrayToKLine } from '../common/kline';
 import { TestSpot } from '../executor/spot/test_spot';
 import { IFunctionOutput, Optimizer } from '../optimizer';
-import { IParams, SRSI_Martin } from '../robot/spot/srsi_martin';
+import { IParams, KDRSI } from '../robot/spot/kdrsi';
 import { Logger } from '../utils/logger';
 
-const ohlcv_data = require('../../data/KP3R_BUSD-1h.json');
+const ohlcv_data = require('../../data/ETH_USDT-30m.json');
 const kline = ArrayToKLine(ohlcv_data);
 
 async function back_testing(params: IParams): Promise<IFunctionOutput<any>> {
   const executor = new TestSpot({ symbol: 'ETH/USDT', fee: 0.001, init_funds_amount: 100 });
-  const robot = new SRSI_Martin({ params, executor });
+  const robot = new KDRSI({ params, executor });
   await robot.BackTesting(kline);
   return { output: executor.Valuation(kline[kline.length - 1].close) };
 }
@@ -18,10 +18,10 @@ async function main() {
   const opt = new Optimizer({
     space: [
       // { name: 'kama_period', range: [2, 100], },
-      { name: 'rsi_size', range: [105, 111], },
-      { name: 'k_size', range: [12, 12], },
-      { name: 'd_size', range: [113, 119], },
-      { name: 'stoch_size', range: [21, 21], },
+      { name: 'rsi_size', range: [2, 100], },
+      { name: 'k_size', range: [2, 100], },
+      { name: 'd_size', range: [2, 100], },
+      // { name: 'stoch_size', range: [21, 21], },
       // { name: 'fast_size', range: [2, 100], },
       // { name: 'slow_size', range: [2, 100], },
       // { name: 'atr_period', range: [2, 30], },
