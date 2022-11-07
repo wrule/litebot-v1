@@ -60,6 +60,11 @@ extends SpotRobot<IParams, IOHLCV, ISignal, ISnapshot> {
         d = data[0];
       },
     );
+    rsi = Array(rsi_start).fill(null).concat(rsi);
+    k = Array(rsi_start + k_start).fill(null).concat(k);
+    d = Array(rsi_start + k_start + d_start).fill(null).concat(d);
+    const diff = k.map((item, index) => item - d[index]);
+    return { rsi, k, d, diff };
   }
 
   protected ready_length() {
