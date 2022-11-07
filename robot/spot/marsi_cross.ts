@@ -25,25 +25,6 @@ extends SpotRobot<IParams, IOHLCV, ISignal, ISnapshot> {
     super(config);
   }
 
-  private double_sma(close: number[], options: { fast_size: number; slow_size: number; }) {
-    let fast_line: number[] = [];
-    tulind.indicators.sma.indicator([close], [options.fast_size], (error: any, data: any) => {
-      if (error) throw error;
-      fast_line = Array(tulind.indicators.sma.start([options.fast_size])).fill(null).concat(data[0]);
-    });
-    let slow_line: number[] = [];
-    tulind.indicators.sma.indicator([close], [options.slow_size], (error: any, data: any) => {
-      if (error) throw error;
-      slow_line = Array(tulind.indicators.sma.start([options.slow_size])).fill(null).concat(data[0]);
-    });
-    const diff = fast_line.map((fast, index) => fast - slow_line[index]);
-    return { fast_line, slow_line, diff };
-  }
-
-  private double_sma_start(options: { fast_size: number; slow_size: number; }) {
-    return tulind.indicators.sma.start([options.slow_size]);
-  }
-
   protected ready_length() {
     return this.double_sma_start(this.config.params) + 2;
   }
