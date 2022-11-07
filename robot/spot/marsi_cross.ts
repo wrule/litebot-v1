@@ -25,6 +25,40 @@ extends SpotRobot<IParams, IOHLCV, ISignal, ISnapshot> {
     super(config);
   }
 
+  private kdrsi(close: number[], options: {
+    rsi_size: number,
+    k_size: number,
+    d_size: number,
+  }) {
+    let rsi: number[] = [];
+    tulind.indicators.rsi.indicator(
+      [close],
+      [options.rsi_size],
+      (error: any, data: any) => {
+        if (error) throw error;
+        rsi = data[0];
+      },
+    );
+    let k: number[] = [];
+    let d: number[] = [];
+    tulind.indicators.stoch.indicator(
+      [rsi, rsi, rsi],
+      [options.stoch_size, options.k_size, options.d_size],
+      (error: any, data: any) => {
+        if (error) throw error;
+        k = data[0];
+        d = data[1];
+      },
+    );
+    const diff = k.map((num, index) => num - d[index]);
+    const fill_num = close.length - k.length;
+    return {
+      k: Array(fill_num).fill(null).concat(k),
+      d: Array(fill_num).fill(null).concat(d),
+      diff: Array(fill_num).fill(null).concat(diff),
+    };
+  }
+
   protected ready_length() {
     return this.double_sma_start(this.config.params) + 2;
   }
