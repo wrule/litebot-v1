@@ -4,7 +4,7 @@ import { IFunctionOutput, Optimizer } from '../optimizer';
 import { IParams, KD_SMA_DIFF } from '../robot/spot/kd_sma_diff';
 import { Logger } from '../utils/logger';
 
-const ohlcv_data = require('../../data/ETH_USDT-30m.json');
+const ohlcv_data = require('../../data/BTC_USDT-30m.json');
 const kline = ArrayToKLine(ohlcv_data);
 
 async function back_testing(params: IParams): Promise<IFunctionOutput<any>> {
@@ -19,11 +19,11 @@ async function main() {
     space: [
       // { name: 'kama_period', range: [2, 100], },
       // { name: 'rsi_size', range: [2, 30], },
-      { name: 'k_size', range: [35, 35], },
-      { name: 'd_size', range: [27, 27], },
+      { name: 'k_size', range: [2, 100], },
+      { name: 'd_size', range: [2, 100], },
       // { name: 'stoch_size', range: [21, 21], },
-      { name: 'fast_size', range: [10, 10], },
-      { name: 'slow_size', range: [25, 25], },
+      { name: 'fast_size', range: [2, 100], },
+      { name: 'slow_size', range: [2, 100], },
       // { name: 'atr_period', range: [2, 30], },
       // { name: 'atr_multiplier', range: [2, 5], },
       // { name: 'fast', range: [2, 100], },
