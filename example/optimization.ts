@@ -18,9 +18,9 @@ async function main() {
   const opt = new Optimizer({
     space: [
       // { name: 'kama_period', range: [2, 100], },
-      { name: 'rsi_size', range: [2, 100], },
-      { name: 'k_size', range: [2, 100], },
-      { name: 'd_size', range: [2, 100], },
+      { name: 'rsi_size', range: [6, 6], },
+      { name: 'k_size', range: [41, 41], },
+      { name: 'd_size', range: [30, 30], },
       // { name: 'stoch_size', range: [21, 21], },
       // { name: 'fast_size', range: [2, 100], },
       // { name: 'slow_size', range: [2, 100], },
