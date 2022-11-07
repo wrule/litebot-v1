@@ -40,23 +40,23 @@ extends SpotRobot<IParams, IOHLCV, ISignal, ISnapshot> {
       },
     );
     let k: number[] = [];
-    let d: number[] = [];
-    tulind.indicators.stoch.indicator(
-      [rsi, rsi, rsi],
-      [options.stoch_size, options.k_size, options.d_size],
+    tulind.indicators.sma.indicator(
+      [rsi],
+      [options.k_size],
       (error: any, data: any) => {
         if (error) throw error;
         k = data[0];
-        d = data[1];
       },
     );
-    const diff = k.map((num, index) => num - d[index]);
-    const fill_num = close.length - k.length;
-    return {
-      k: Array(fill_num).fill(null).concat(k),
-      d: Array(fill_num).fill(null).concat(d),
-      diff: Array(fill_num).fill(null).concat(diff),
-    };
+    let d: number[] = [];
+    tulind.indicators.sma.indicator(
+      [k],
+      [options.d_size],
+      (error: any, data: any) => {
+        if (error) throw error;
+        d = data[0];
+      },
+    );
   }
 
   protected ready_length() {
