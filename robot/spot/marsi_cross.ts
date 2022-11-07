@@ -19,7 +19,7 @@ extends IOHLCV {
 }
 
 export
-class MARSI_Cross
+class KDRSI
 extends SpotRobot<IParams, IOHLCV, ISignal, ISnapshot> {
   public constructor(config: ISpotRobotConfig<IParams, IOHLCV, ISignal, ISnapshot>) {
     super(config);
