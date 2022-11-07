@@ -31,6 +31,7 @@ extends SpotRobot<IParams, IOHLCV, ISignal, ISnapshot> {
     d_size: number,
   }) {
     let rsi: number[] = [];
+    const rsi_start = tulind.indicators.rsi.start([options.rsi_size]);
     tulind.indicators.rsi.indicator(
       [close],
       [options.rsi_size],
@@ -40,6 +41,7 @@ extends SpotRobot<IParams, IOHLCV, ISignal, ISnapshot> {
       },
     );
     let k: number[] = [];
+    const k_start = tulind.indicators.sma.start([options.k_size]);
     tulind.indicators.sma.indicator(
       [rsi],
       [options.k_size],
@@ -49,6 +51,7 @@ extends SpotRobot<IParams, IOHLCV, ISignal, ISnapshot> {
       },
     );
     let d: number[] = [];
+    const d_start = tulind.indicators.sma.start([options.d_size]);
     tulind.indicators.sma.indicator(
       [k],
       [options.d_size],
