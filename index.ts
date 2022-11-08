@@ -13,8 +13,9 @@ import { Kama } from './robot/spot/karma';
 import { Nums, nums } from './utils/nums';
 import { MemoryReport } from './report/memory_report';
 import { KDRSI } from './robot/spot/kdrsi';
+import { KD_SMA_DIFF } from './robot/spot/kd_sma_diff';
 
-const HistData = require('../data/ETH_USDT-30m.json');
+const HistData = require('../data/BTC_USDT-1h.json');
 const secret = require('../.secret.json');
 
 async function main() {
@@ -33,20 +34,27 @@ async function main() {
     init_funds_amount: 100,
   });
   const report = new MemoryReport();
-  const robot = new KDRSI({ params: {
-    rsi_size: 6,
-    k_size: 41,
-    d_size: 30,
+  const robot = new KD_SMA_DIFF({ params: {
+    fast_size: 15,
+    slow_size: 29,
+    k_size: 4,
+    d_size: 7,
   }, executor, report: report as any });
   const kline = ArrayToKLine(HistData);
-  const a = robot.GenerateSignalData(kline);
-  console.log(a[a.length - 1]);
-  return;
+  // const a = robot.GenerateSignalData(kline);
+  // console.log(a[a.length - 1]);
+  // return;
   await robot.BackTesting(kline);
   const valuation = await executor.Valuation(kline[kline.length - 1].close);
   console.log(valuation);
-  const rate = await report.WinRate();
-  console.log(rate);
+  const games = await report.Games();
+  const hc = games.filter((item) => item.length >= 2).map((item) =>
+    (item[1].price - item[0].price) / item[0].price);
+  console.log(hc.length);
+  console.log(Math.max(...hc));
+  console.log(Math.min(...hc));
+  fs.writeFileSync('hc.json', JSON.stringify(hc.map((item) => `${Number((item * 100).toFixed(4))}%`), null, 2));
+  console.log(hc);
 
   // const tns = await report.Transactions?.All();
   // if (tns) {
