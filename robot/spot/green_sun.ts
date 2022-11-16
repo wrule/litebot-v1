@@ -55,8 +55,8 @@ extends SpotRobot<IParams, IOHLCV, ISignal, ISnapshot> {
     return this.fill_signal_data(historical_data, (signal, index) => {
       const diff_last = diff[index];
       const diff_prev = diff[index - 1];
-      signal.fast_ma = fast_line[index];
-      signal.slow_ma = slow_line[index];
+      // signal.fast_ma = fast_line[index];
+      // signal.slow_ma = slow_line[index];
       signal.diff = diff[index];
       if (diff_last > 0 && diff_prev <= 0) signal.buy = true;
       if (diff_last < 0 && diff_prev >= 0) signal.sell = true;
